@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarRentingSystem.Data
+namespace CarRentingSystem.Infrastucture.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
@@ -11,3 +11,5 @@ namespace CarRentingSystem.Data
         }
     }
 }
+
+
