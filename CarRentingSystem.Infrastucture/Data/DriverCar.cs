@@ -23,7 +23,7 @@ namespace CarRentingSystem.Infrastucture.Data
 
             [ForeignKey(nameof(UserId))]
             public ApplicationUser User { get; set; } = null!;
-        // public IdentityUser User { get; set; } = null!;
+            //public IdentityUser User { get; set; } = null!;
 
     }
 }
