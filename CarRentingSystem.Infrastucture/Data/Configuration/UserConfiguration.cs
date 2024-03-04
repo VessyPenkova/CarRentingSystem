@@ -1,15 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace CarRentingSystem.Infrastucture.Data.Configuration
 {
-    public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>//IdentityUser
+    public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
@@ -24,7 +19,7 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
             var users = new List<ApplicationUser>();
             var hasher = new PasswordHasher<ApplicationUser>();
 
-            var carDriver = new ApplicationUser()
+            var user = new ApplicationUser()
             {
                 Id = "dea1286-c198-4129-b3f3-b89d839581",
                 UserName = "agent@mail.com",
@@ -33,12 +28,12 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                 NormalizedEmail = "agent@mail.com",
 
             };
-            carDriver.PasswordHash =
-            hasher.HashPassword(carDriver, "agent123");
+            user.PasswordHash =
+            hasher.HashPassword(user, "agent123");
 
-            users.Add(carDriver);
+            users.Add(user);
 
-            var guest = new ApplicationUser()
+            user = new ApplicationUser()
             {
                 Id = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",
                 UserName = "guest@mail.com",
@@ -46,10 +41,10 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                 Email = "guest@mail.com",
                 NormalizedEmail = "guest@mail.com",
             };
-            guest.PasswordHash =
-            hasher.HashPassword(guest, "guest123");
+            user.PasswordHash =
+            hasher.HashPassword(user, "guest123");
 
-            users.Add(guest);
+            users.Add(user);
             return users;
         }
     }

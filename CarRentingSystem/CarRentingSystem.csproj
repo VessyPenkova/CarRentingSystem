@@ -8,6 +8,35 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Identity\Pages\Account\Login.cshtml.cs" />
+    <Compile Remove="Areas\Identity\Pages\Account\_ViewImports.cshtml.cs" />
+    <Compile Remove="Areas\Identity\Pages\ViewImports.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Properties\profile.arm.json" />
+    <Content Remove="Properties\serviceDependacies.local.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Areas\Identity\Pages\Account\Login.cshtml.cs" />
+    <Content Include="Areas\Identity\Pages\_ViewImports.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Properties\profile.arm.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+    <None Include="Properties\serviceDependacies.local.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.24" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.24" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.24" />

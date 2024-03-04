@@ -1,9 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 
 namespace CarRentingSystem.Infrastucture.Data

@@ -1,5 +1,7 @@
 using CarRentingSystem.Infrastucture.Data;
+using CarRentingSystem.ModelBinders;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarRentingSystem
@@ -14,16 +16,27 @@ namespace CarRentingSystem
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
             {
-                options.SignIn.RequireConfirmedAccount = builder.Configuration.GetValue<bool>("Identity:RequireConfirmedAccount");
-                options.SignIn.RequireConfirmedEmail = builder.Configuration.GetValue<bool>("Identity:RequireConfirmedEmail");
-                options.SignIn.RequireConfirmedPhoneNumber = builder.Configuration.GetValue<bool>("Identity:RequireConfirmedPhoneNumber");
-                options.Password.RequiredLength = builder.Configuration.GetValue<int>("Identity:RequiredLength");
-                options.Password.RequireNonAlphanumeric = builder.Configuration.GetValue<bool>("Identity:RequireNonAlphanumeric");
+                options.SignIn.RequireConfirmedAccount = false;
+                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
             })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.AddControllersWithViews();
+
+            builder.Services.AddControllersWithViews()
+            .AddMvcOptions(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+                options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+            });
+
+            builder.Services.AddApplicationServices();
+            builder.Services.AddResponseCaching();
 
             var app = builder.Build();
 
@@ -45,10 +58,9 @@ namespace CarRentingSystem
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapDefaultControllerRoute();
             app.MapRazorPages();
+            app.UseResponseCaching();
 
             app.Run();
         }

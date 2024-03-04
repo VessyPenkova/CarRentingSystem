@@ -1,8 +1,83 @@
-﻿@{
+﻿@using CarRentingSystem.Core.Models.CarRoute
+
+﻿@model IEnumerable<CarRouteHomeModel>
+
+@{
     ViewData["Title"] = "Home Page";
+    bool first = true;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@if (Model.Count() == 0)
+{
+    <div class="mt-4 p-5 bg-light">
+        <h1 class="display-4">Welcome to the best place for renting carRoutes!</h1>
+        <p class="lead">
+            There are no carRoutes in the system currently available
+            so why don't you just add one?
+        </p>
+        <hr class="my-4">
+        <p class="lead">
+            @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="CarRoute" asp-action="Add" class="btn btn-primary btn-lg"
+           role="button">Add CarRoute</a>
+            }
+        </p>
+    </div>
+}
+
+<div class="mb-5"></div>
+
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        @foreach (var carRoute in Model)
+        {
+            <div class="carousel-item @(first ? "active" : string.Empty)">
+
+                <img class="d-block w-100" style="height:500px"
+                 src="@carRoute.ImageUrl" alt="@carRoute.Title">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>
+                        <a class="btn btn-primary" asp-controller="CarRoute" asp-action="Details"
+                       asp-route-id="@carRoute.Id" asp-route-information="@carRoute.GetInformation()" > @carRoute.Title</a>
+                    </h5>
+                </div>
+            </div>
+
+            first = false;
+        }
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
+<div class="mb-5"></div>
+<div class="row">
+    <div class="col-12 text-center">
+        <button class="btn btn-primary" id="statistics-button">Show Statistics</button>
+    </div>
+</div>
+
+<div class="mt-4 p-5 bg-light d-none" id="statistics">
+    <div class="row">
+        <h2 class="col-md-6 text-center" id="total-carRoutes"></h2>
+    <h2 class="col-md-6 text-center" id="total-rents"></h2>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $('#statistics-button').on('click', ev => {
+            $.get('https://localhost:7035/api/statistics', (data) => {
+                $('#total-CarRoutes').text(data.CarRoutes + "CarRoutes");
+                $('#total-rents').text(data.totalRents + " Rents");
+                $('#statistics').removeClass('d-none');
+                $('#statistics-button').hide();
+            });
+        });
+    </script>
+}

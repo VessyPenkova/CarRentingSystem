@@ -1,10 +1,11 @@
 ﻿using CarRentingSystem.Infrastucture.Data.Configuration;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarRentingSystem.Infrastucture.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -19,13 +20,11 @@ namespace CarRentingSystem.Infrastucture.Data
 
             base.OnModelCreating(builder);
         }
-
         public DbSet<CarRoute> CarRoutes { get; set; } = null!;
 
         public DbSet<Category> Categories { get; set; } = null!;
 
         public DbSet<DriverCar> DriversCars { get; set; } = null!;
-
     }
 }
 

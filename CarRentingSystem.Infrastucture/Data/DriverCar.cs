@@ -1,29 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarRentingSystem.Infrastucture.Data
 {
     public class DriverCar
     {
-        
-            [Key]
-            public int DriverCarId { get; set; }
+        [Key]
+        public int DriverCarId { get; set; }
 
-            [Required]
-            [StringLength(15)]
-            public string PhoneNumber { get; set; } = null!;
+        [Required]
+        [StringLength(15)]
+        public string PhoneNumber { get; set; } = null!;
 
-            [Required]
-            public string UserId { get; set; } = null!;
+        [Required]
+        public string UserId { get; set; } = null!;
 
-            [ForeignKey(nameof(UserId))]
-            public ApplicationUser User { get; set; } = null!;
-            //public IdentityUser User { get; set; } = null!;
-
+        [ForeignKey(nameof(UserId))]
+        public ApplicationUser User { get; set; } = null!;
     }
 }
