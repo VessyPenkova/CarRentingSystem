@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Identity\Pages\Account\Login.cshtml.cs" />
     <Compile Remove="Areas\Identity\Pages\Account\_ViewImports.cshtml.cs" />
     <Compile Remove="Areas\Identity\Pages\ViewImports.cshtml.cs" />
+    <Compile Remove="Controllers\Login.cshtml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Content Include="Areas\Identity\Pages\Account\Login.cshtml.cs" />
-    <Content Include="Areas\Identity\Pages\_ViewImports.cshtml.cs" />
   </ItemGroup>
 
   <ItemGroup>

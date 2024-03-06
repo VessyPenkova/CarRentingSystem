@@ -58,8 +58,26 @@ namespace CarRentingSystem
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapDefaultControllerRoute();
-            app.MapRazorPages();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                  name: "default",
+                  pattern: "{controller=Home}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapControllerRoute(
+                  name: "areas",
+                  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapControllerRoute(
+                  name: "houseDetails",
+                  pattern: "House/Details/{id}/{information}"
+                );
+
+                endpoints.MapRazorPages();
+            });
+
             app.UseResponseCaching();
 
             app.Run();

@@ -34,14 +34,14 @@
                     @if (!Model.IsRented)
                     {
                         <form class="ml-2" asp-controller="CarRoute"
-                              asp-action="Rent" asp-route-id="@Model.Id" method="post">
+                              asp-action="Rent" asp-route-id="@Model.CarRouteId" method="post">
                             <input class="btn btn-primary" type="submit" value="Rent" />
                         </form>
                     }
                     else
                     {
                         <form class="ml-2" asp-controller="CarRoute" asp-action="Leave"
-                              asp-route-id="@Model.Id" method="post">
+                              asp-route-id="@Model.CarRouteId" method="post">
                             <input class="btn btn-primary" type="submit" value="Leave" />
                         </form>
                     }
@@ -51,8 +51,8 @@
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title">Agent Info</h5>
-                    <p class="card-text">Email:  @Model.Agent.Email</p>
-                    <p class="card-text">Phone Number: @Model.Agent.PhoneNumber</p>
+                    <p class="card-text">Email:  @Model.DriverCar.Email</p>
+                    <p class="card-text">Phone Number: @Model.DriverCar.PhoneNumber</p>
                 </div>
             </div>
         </div>

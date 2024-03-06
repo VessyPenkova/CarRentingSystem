@@ -1,7 +1,6 @@
 ﻿using CarRentingSystem.Areas.Admin.Models;
 using CarRentingSystem.Core.Contracts;
 using CarRentingSystem.Extensions;
-using CarRentingSystem.Infrastucture.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRentingSystem.Areas.Admin.Controllers

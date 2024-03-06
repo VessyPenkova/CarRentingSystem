@@ -1,27 +1,23 @@
 ﻿using CarRentingSystem.Core.Contracts;
-using CarRentingSystem.Core.Services;
 using CarRentingSystem.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Diagnostics;
-using CarRentingSystem.Areas.Admin.Constants;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using static CarRentingSystem.Areas.Admin.Constants.AdminConstants;
 
 namespace CarRentingSystem.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ICarRouteService carRouteService;
-
-        private readonly ICarDriverService driverCarService;
+        private readonly ICarRouteService carRouteService;       
 
         private readonly ILogger logger;
 
         public HomeController(
-            ICarRouteService _carRouteService,
-            ICarDriverService _driverCarService,
+            ICarRouteService _carRouteService,           
             ILogger<HomeController> _logger)
         {
-            carRouteService = _carRouteService;
-            driverCarService = _driverCarService;
+            carRouteService = _carRouteService;         
             logger = _logger;
         }
         public async Task< IActionResult> Index()
@@ -38,6 +34,10 @@ namespace CarRentingSystem.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            var feature = this.HttpContext.Features.Get<IExceptionHandlerFeature>();
+
+            logger.LogError(feature.Error, "TraceIdentifier: {0}", Activity.Current?.Id ?? HttpContext.TraceIdentifier);
+
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
