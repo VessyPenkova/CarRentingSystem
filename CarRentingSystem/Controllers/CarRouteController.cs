@@ -211,30 +211,30 @@ namespace CarRentingSystem.Controllers
             return RedirectToAction(nameof(Details), new { id = model.Id, information = model.GetInformation() });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(int id)
-        {
-            if ((await carRouteService.Exists(id)) == false)
-            {
-                return RedirectToAction(nameof(All));
-            }
+        //[HttpGet]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    if ((await carRouteService.Exists(id)) == false)
+        //    {
+        //        return RedirectToAction(nameof(All));
+        //    }
 
-            if ((await carRouteService.HasDriverCarWithId(id, User.Id())) == false)
-            {
-                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
-            }
+        //    if ((await carRouteService.HasDriverCarWithId(id, User.Id())) == false)
+        //    {
+        //        return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+        //    }
 
-            var carRoute = await carRouteService.CarRouteDetailsByCarRouteId(id);
-            var model = new CarRouteDetailsViewModel()
-            {
-                PickUpAddress = carRoute.PickUpAddress,
-                DeliveryAddress = carRoute.DeliveryAddress,
-                Title = carRoute.Title,
-                ImageImageUrlRouteGoogleMapsUrl = carRoute.ImageUrlRouteGoogleMaps
-            };
+        //    var carRoute = await carRouteService.CarRouteDetailsByCarRouteId(id);
+        //    var model = new CarRouteDetailsViewModel()
+        //    {
+        //        PickUpAddress = carRoute.PickUpAddress,
+        //        DeliveryAddress = carRoute.DeliveryAddress,
+        //        Title = carRoute.Title,
+        //        ImageImageUrlRouteGoogleMapsUrl = carRoute.ImageUrlRouteGoogleMaps
+        //    };
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
 
         [HttpPost]

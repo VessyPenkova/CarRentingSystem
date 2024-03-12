@@ -19,6 +19,12 @@ namespace CarRentingSystem.Core.Services
             repo = _repo;
         }
 
+        public async Task<bool> ExistsById(string userId)
+        {
+            return await repo.All<DriverCar>()
+                .AnyAsync(dc => dc.UserId == userId);
+        }
+
         public async Task Create(string userId, string phoneNumber)
         {
             var driverCar = new DriverCar()
@@ -31,17 +37,11 @@ namespace CarRentingSystem.Core.Services
             await repo.SaveChangesAsync();
         }
 
-        public async Task<bool> ExistsById(string userId)
-        {
-            return await repo.All<DriverCar>()
-                .AnyAsync(dc => dc.UserId == userId);
-        }
-
-        public async Task<int> GetDriverId(string userId)
-        {
-            return (await repo.AllReadonly<DriverCar>()
-                .FirstOrDefaultAsync(dc => dc.UserId == userId))?.DriverCarId ?? 0;
-        }
+        //public async Task<int> GetDriverId(string userId)
+        //{
+        //    return (await repo.AllReadonly<DriverCar>()
+        //        .FirstOrDefaultAsync(dc => dc.UserId == userId))?.DriverCarId ?? 0;
+        //}
 
         public async Task<bool> UserHasRents(string userId)
         {

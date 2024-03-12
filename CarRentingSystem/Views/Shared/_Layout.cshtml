@@ -1,16 +1,26 @@
-﻿﻿<!DOCTYPE html>
+﻿﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Car Renting System</title>
-
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CarRentingSystem.styles.css" asp-append-version="true" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #09223c;
+        }
+    </style>
+    <style>
+        text {
+            color: #ffd500;
+        }
+    </style>
 </head>
 <body>
     <partial name="_UserMessages" />
@@ -25,20 +35,20 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="CarRoute" asp-action="All">All Car Routes</a>
+                                <a class="nav-link text-#ffd500" asp-area="" asp-controller="CarRoute" asp-action="All">All Car Routes</a>//I have changed the color of the letters to  yellow here
                         </li>
-                     @if  (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
-                     {
-                          <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="CarRoute" asp-action="Mine">My Car Routes</a>
-                        </li>
-                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="CarRoute" asp-action="Add">Add Car Route</a>
-                        </li>
-                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="CarDriver" asp-action="Become">Become DriverCar</a>
-                        </li>
-                     }
+                        @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="CarRoute" asp-action="Mine">My Car Routes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="CarRoute" asp-action="Add">Add Car Route</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="CarDriver" asp-action="Become">Become DriverCar</a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -54,10 +64,10 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; @DateTime.UtcNow.Year - Car Renting System
-       </div>
+        </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

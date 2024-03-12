@@ -7,7 +7,6 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<DriverCar> builder)
         {
-
             builder.HasData(new DriverCar()
             {
                 DriverCarId = 1,

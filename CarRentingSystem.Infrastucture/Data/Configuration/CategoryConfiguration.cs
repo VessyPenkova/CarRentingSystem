@@ -16,22 +16,23 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                 new Category()
                 {
                     CategoryId = 1,
-                    Name = "InterCitySingle"
+                    Name = "InterCity Single"
                 },
                 new Category()
                 {
                      CategoryId = 2,
-                     Name = "InterCityShared"
+                     Name = "InterCity Shared"
                 },
                 new Category()
                 {
                      CategoryId = 3,
-                     Name = "OneWayLocal"
+                     Name = "OneWay Local"
                 },
                 new Category()
                 {
                      CategoryId = 4,
-                     Name = "RoundTripLocal"
+                     Name = "RoundTrip" +
+                     "Local"
                 },
                 new Category()
                 {

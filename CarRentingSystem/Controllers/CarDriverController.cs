@@ -35,7 +35,7 @@ namespace CarRentingSystem.Controllers
         {
             if (await carDriverService.ExistsById(User.Id()))
             {
-                TempData[MessageConstant.ErrorMessage] = "You are already registered";
+                TempData[MessageConstant.ErrorMessage] = "You are already registered as driver";
 
                 return RedirectToAction("Index", "Home");
             }
@@ -58,7 +58,7 @@ namespace CarRentingSystem.Controllers
 
             if (await carDriverService.ExistsById(userId))
             {
-                TempData[MessageConstant.ErrorMessage] = "You are already registered";
+                TempData[MessageConstant.ErrorMessage] = "You are already registered as driver";
 
                 return RedirectToAction("Index", "Home");
             }
@@ -72,7 +72,7 @@ namespace CarRentingSystem.Controllers
 
             if (await carDriverService.UserHasRents(userId))
             {
-                TempData[MessageConstant.ErrorMessage] = "You must not have a booking to become driver";
+                TempData[MessageConstant.ErrorMessage] = "You must not have a rents to become driver";
 
                 return RedirectToAction("Index", "Home");
             }

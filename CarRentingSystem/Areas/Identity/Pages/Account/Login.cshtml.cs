@@ -24,12 +24,14 @@ namespace CarRentingSystem.Areas.Identity.Pages.Account
 
         public LoginModel(
             SignInManager<ApplicationUser> signInManager,
-            ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            ILogger<LoginModel> logger
+            )
         {
             _signInManager = signInManager;
-            _logger = logger;
             _userManager = userManager;
+            _logger = logger;
+           
         }
 
         [BindProperty]

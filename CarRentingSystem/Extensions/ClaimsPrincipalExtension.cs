@@ -8,6 +8,5 @@ namespace CarRentingSystem.Extensions
         {
             return user.FindFirstValue(ClaimTypes.NameIdentifier);
         }
-
     }
 }

@@ -29,7 +29,7 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                     Price = 316.80M,
                     CategoryId = 5,
                     DriverCarId = 1,
-                    RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",               
+                    //RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",               
                 },
                 new CarRoute()
                 {
@@ -42,7 +42,7 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                     Price = 316.80M,
                     CategoryId = 2,
                     DriverCarId = 1,
-                    RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",                 
+                    //RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",                 
                 },
                 new CarRoute()
                 {
@@ -55,7 +55,7 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                     Price = 158.40M,
                     CategoryId = 2,
                     DriverCarId = 1,
-                    RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",           
+                    //RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",           
                 },
                 new CarRoute()
                 {
@@ -68,12 +68,12 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                     Price = 6.20M,
                     CategoryId = 3,
                     DriverCarId = 1,
-                    RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",                 
+                    //RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",                 
                 },
                 new CarRoute()
                 {
                     CarRouteId = 55,
-                    Title ="RoundTripLocal",
+                    Title ="RoundTrip Local",
                     PickUpAddress = "Bulgaria, Plovdiv, Bul.Kniyaginya Maria Luiza, 31",
                     DeliveryAddress = "Antique Theater, str. Tsar Ivaylo 4, Plovdiv, Bulgaria",
                     Description = "Whether you want a tourist tour in Plovdiv, or simply busyness trip, this trip is will satisfy your expectation with a luxury limousine",
@@ -81,7 +81,7 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                     Price = 10.20M,
                     CategoryId = 4,
                     DriverCarId = 1,
-                    RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",                 
+                    //RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",                 
                 },
                 new CarRoute()
                 {
@@ -94,7 +94,7 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                     Price = 10.20M,
                     CategoryId = 6,
                     DriverCarId = 1,
-                    RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",
+                    //RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",
                 },
             };
             return carRoutes;

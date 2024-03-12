@@ -10,6 +10,6 @@
 
         Task Create(string userId, string phoneNumber);
 
-        Task<int> GetDriverId(string userId);
+        //Task<int> GetDriverId(string userId);
     }
 }

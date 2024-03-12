@@ -1,5 +1,4 @@
-﻿using CarRentingSystem.Core.Contracts;
-using CarRentingSystem.Core.Contracts.Admin;
+﻿using CarRentingSystem.Core.Contracts.Admin;
 using CarRentingSystem.Core.Models.Admin;
 using CarRentingSystem.Infrastucture.Data;
 using CarRentingSystem.Infrastucture.Data.Common;
@@ -22,8 +21,9 @@ namespace CarRentingSystem.Core.Services.Admin
         public async Task<IEnumerable<UserServiceModel>> All()
         {
             List<UserServiceModel> result;
+
             result = await repo.AllReadonly<DriverCar>()
-            .Where(dc => (bool)dc.User.IsActive)
+            .Where(dc => dc.User.IsActive)
             .Select(dc => new UserServiceModel()
             {
                 UserId = dc.UserId,
@@ -32,6 +32,7 @@ namespace CarRentingSystem.Core.Services.Admin
                 PhoneNumber = dc.PhoneNumber
             })
             .ToListAsync();
+
             string[] driverCarIds = result.Select(dc => dc.UserId).ToArray();
 
             result.AddRange(await repo.AllReadonly<ApplicationUser>()
@@ -44,7 +45,7 @@ namespace CarRentingSystem.Core.Services.Admin
                    FullName = $"{u.FirstName} {u.LastName}"
                }).ToListAsync());
 
-            return result;
+            return  result;
         }
 
         public async Task<bool> Forget(string userId)

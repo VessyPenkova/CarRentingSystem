@@ -4,22 +4,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CarRentingSystem.Infrastucture.Data.Configuration
 {
-    public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
+    public class UserConfiguration : IEntityTypeConfiguration<IdentityUser>
     {
-        public void Configure(EntityTypeBuilder<ApplicationUser> builder)
-        {
-            builder
-               .Property(p => p.IsActive)
-               .HasDefaultValue(true);
-
+        public void Configure(EntityTypeBuilder<IdentityUser> builder)
+        {          
             builder.HasData(CreateUser());
         }
-        private List<ApplicationUser> CreateUser()
+        private List<IdentityUser> CreateUser()
         {
-            var users = new List<ApplicationUser>();
-            var hasher = new PasswordHasher<ApplicationUser>();
+            var users = new List<IdentityUser>();
+            var hasher = new PasswordHasher<IdentityUser>();
 
-            var user = new ApplicationUser()
+            var user = new IdentityUser()
             {
                 Id = "dea1286-c198-4129-b3f3-b89d839581",
                 UserName = "agent@mail.com",
@@ -33,7 +29,7 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
 
             users.Add(user);
 
-            user = new ApplicationUser()
+            user = new IdentityUser()
             {
                 Id = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",
                 UserName = "guest@mail.com",
