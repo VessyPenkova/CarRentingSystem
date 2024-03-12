@@ -10,7 +10,7 @@ namespace CarRentingSystem.Core.Models.CarRoute
 {
     public class CarRouteModel: ICarRouteModel
     {
-        public int Id { get; set; }
+       // public int Id { get; set; }
 
         [Required]
         [StringLength(50, MinimumLength = 10)]
@@ -33,8 +33,8 @@ namespace CarRentingSystem.Core.Models.CarRoute
         public string ImageUrlRouteGoogleMaps { get; set; } = null!;
 
         [Required]
-        [Display(Name = "Price per month")]
-        [Range(0.00, 2000.00, ErrorMessage = "Price must be a positive number and less than {2} leva")]
+        [Display(Name = "Price")]
+        [Range(0.00, 2000.00, ErrorMessage = "Price must be a positive number and more than {2} leva")]
         public decimal Price { get; set; }
 
         [Display(Name = "Category")]

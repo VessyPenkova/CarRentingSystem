@@ -37,11 +37,11 @@ namespace CarRentingSystem.Core.Services
             await repo.SaveChangesAsync();
         }
 
-        //public async Task<int> GetDriverId(string userId)
-        //{
-        //    return (await repo.AllReadonly<DriverCar>()
-        //        .FirstOrDefaultAsync(dc => dc.UserId == userId))?.DriverCarId ?? 0;
-        //}
+        public async Task<int> GetDriverId(string userId)
+        {
+            return (await repo.AllReadonly<DriverCar>()
+                .FirstOrDefaultAsync(dc => dc.UserId == userId))?.DriverCarId ?? 0;
+        }
 
         public async Task<bool> UserHasRents(string userId)
         {

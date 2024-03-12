@@ -98,13 +98,17 @@ namespace CarRentingSystem.Core.Services
                 })
                 .ToListAsync();
         }
-
         public async Task<IEnumerable<string>> AllCategoriesNames()
         {
             return await repo.AllReadonly<Category>()
                 .Select(c => c.Name)
                 .Distinct()
                 .ToListAsync();
+        }
+        public async Task<bool> CategoryExists(int categoryId)
+        {
+            return await repo.AllReadonly<Category>()
+                .AnyAsync(c => c.CategoryId == categoryId);
         }
         public async Task<IEnumerable<CarRouteServiceModel>> AllCarRoutesByDriverId(int driverCarId)
         {
@@ -143,11 +147,6 @@ namespace CarRentingSystem.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> CategoryExists(int categoryId)
-        {
-            return await repo.AllReadonly<Category>()
-                .AnyAsync(c => c.CategoryId == categoryId);
-        }
 
         public async Task<int> Create(CarRouteModel model, int driverCarId)
         {
@@ -160,9 +159,7 @@ namespace CarRentingSystem.Core.Services
                 ImageUrlRouteGoogleMaps = model.ImageUrlRouteGoogleMaps,
                 Price = model.Price,
                 Title = model.Title,
-
-                DriverCarId = driverCarId,
-                                  
+                DriverCarId = driverCarId,                               
             };
 
             try
