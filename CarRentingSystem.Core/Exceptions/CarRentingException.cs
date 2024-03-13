@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace CarRentingSystem.Core.Exceptions
 {
-    public class CarRouteException: ApplicationException
+   
+    public class CarRentingException : ApplicationException
     {
-        public CarRouteException()
+        public CarRentingException()
         {
 
         }
 
-        public CarRouteException(string errorMessage)
+        public CarRentingException(string errorMessage)
             : base(errorMessage)
         {
 

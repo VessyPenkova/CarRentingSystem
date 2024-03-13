@@ -10,7 +10,7 @@ namespace CarRentingSystem.Core.Models.CarRoute
 {
     public class CarRouteModel: ICarRouteModel
     {
-       // public int Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(50, MinimumLength = 10)]

@@ -10,8 +10,6 @@ namespace CarRentingSystem.Models
 
         public string? SearchTerm { get; set; }
 
-
-
         public CarRouteSorting Sorting { get; set; }
 
         public int CurrentPage { get; set; } = 1;

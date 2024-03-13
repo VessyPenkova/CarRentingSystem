@@ -1,4 +1,5 @@
 ﻿using CarRentingSystem.Core.Models.CarRoute;
+
 namespace CarRentingSystem.Core.Contracts
 {
     public interface ICarRouteService

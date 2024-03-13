@@ -102,14 +102,14 @@ namespace CarRentingSystem.Infrastucture.Migrations
                         {
                             Id = "dea1286-c198-4129-b3f3-b89d839581",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c0ce6761-529f-4e09-a56f-0b1700a25974",
+                            ConcurrencyStamp = "92d895d2-3e9c-40d6-80e6-508a258e8563",
                             Email = "agent@mail.com",
                             EmailConfirmed = false,
                             IsActive = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "agent@mail.com",
                             NormalizedUserName = "agent@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAED7mAHh4q4SMvAYU4wmbYZVgJuV7c0vJ50Md6qwGY+KMyrnW3EwN08VYarAkuKrJlg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEANSdAAEBFpzVCh+SE/OkAtaWys+l7afcPxH9qs8gOnQQqGIb9Nr1oMX/goMfhOgnQ==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "agent@mail.com"
@@ -118,14 +118,14 @@ namespace CarRentingSystem.Infrastucture.Migrations
                         {
                             Id = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "abc85a61-992f-4a51-891b-1376ff130d11",
+                            ConcurrencyStamp = "591b74f9-7c26-4110-99b0-08265ea55e77",
                             Email = "guest@mail.com",
                             EmailConfirmed = false,
                             IsActive = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "guest@mail.com",
                             NormalizedUserName = "guest@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGXHYFb38kiJ41owjYuiGnGiYYH5TKswWf50ngyhYFGwZkd+61uwZf/zhejT4dL3KA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEItCQPkWw1hou4xrAPhZ+EMUZMikh0eR2AcbDZA4iksuJOiwmI+RjvUk6LFcxepEYQ==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "guest@mail.com"
@@ -202,7 +202,6 @@ namespace CarRentingSystem.Infrastucture.Migrations
                             IsActive = true,
                             PickUpAddress = "Bulgaria, Plovdiv, Bul.Kniyaginya Maria Luiza, 31",
                             Price = 316.80m,
-                            RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",
                             Title = "Private Luxury"
                         },
                         new
@@ -216,7 +215,6 @@ namespace CarRentingSystem.Infrastucture.Migrations
                             IsActive = true,
                             PickUpAddress = "Bulgaria, Sofia, Bul, Alexander malinov, 78",
                             Price = 316.80m,
-                            RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",
                             Title = "Shared"
                         },
                         new
@@ -230,7 +228,6 @@ namespace CarRentingSystem.Infrastucture.Migrations
                             IsActive = true,
                             PickUpAddress = "Bulgaria, Sofia, Bul, Alexander malinov, 78",
                             Price = 158.40m,
-                            RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",
                             Title = "Shared with One"
                         },
                         new
@@ -244,7 +241,6 @@ namespace CarRentingSystem.Infrastucture.Migrations
                             IsActive = true,
                             PickUpAddress = "Bulgaria, Plovdiv, Bul.Kniyaginya Maria Luiza, 31",
                             Price = 6.20m,
-                            RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",
                             Title = "OneWayLocal"
                         },
                         new
@@ -258,8 +254,7 @@ namespace CarRentingSystem.Infrastucture.Migrations
                             IsActive = true,
                             PickUpAddress = "Bulgaria, Plovdiv, Bul.Kniyaginya Maria Luiza, 31",
                             Price = 10.20m,
-                            RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",
-                            Title = "RoundTripLocal"
+                            Title = "RoundTrip Local"
                         },
                         new
                         {
@@ -272,7 +267,6 @@ namespace CarRentingSystem.Infrastucture.Migrations
                             IsActive = true,
                             PickUpAddress = "Krumovo 4009, Rodopi Municipality, Plovdiv District",
                             Price = 10.20m,
-                            RenterId = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",
                             Title = "Charter"
                         });
                 });
@@ -298,17 +292,17 @@ namespace CarRentingSystem.Infrastucture.Migrations
                         new
                         {
                             CategoryId = 1,
-                            Name = "InterCitySingle"
+                            Name = "InterCity Single"
                         },
                         new
                         {
                             CategoryId = 2,
-                            Name = "InterCityShared"
+                            Name = "InterCity Shared"
                         },
                         new
                         {
                             CategoryId = 3,
-                            Name = "OneWayLocal"
+                            Name = "OneWay Local"
                         },
                         new
                         {

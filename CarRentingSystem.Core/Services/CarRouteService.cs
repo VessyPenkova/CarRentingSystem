@@ -31,12 +31,8 @@ namespace CarRentingSystem.Core.Services
             guard = _guard;
             logger = _logger;
         }
-
-        public async Task<CarRoutesQueryModel> All(
-            string? category = null,
-            string? searchTerm = null,
-            CarRouteSorting sorting = CarRouteSorting.Newest,
-            int currentPage = 1, int carRoutesPerPage = 1)
+        public async Task<CarRoutesQueryModel> All(string? category = null, string? searchTerm = null,
+        CarRouteSorting sorting = CarRouteSorting.Newest, int currentPage = 1, int carRoutesPerPage = 1)
         {
             var result = new CarRoutesQueryModel();
             var carRoutes = repo.AllReadonly<CarRoute>()
@@ -86,7 +82,6 @@ namespace CarRentingSystem.Core.Services
 
             return result;
         }
-
         public async Task<IEnumerable<CarRouteCategoryModel>> AllCategories()
         {
             return await repo.AllReadonly<Category>()
@@ -110,6 +105,10 @@ namespace CarRentingSystem.Core.Services
             return await repo.AllReadonly<Category>()
                 .AnyAsync(c => c.CategoryId == categoryId);
         }
+
+
+
+
         public async Task<IEnumerable<CarRouteServiceModel>> AllCarRoutesByDriverId(int driverCarId)
         {
             return await repo.AllReadonly<CarRoute>()

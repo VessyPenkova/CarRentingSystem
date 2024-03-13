@@ -23,7 +23,7 @@ namespace CarRentingSystem.Core.Services.Admin
             List<UserServiceModel> result;
 
             result = await repo.AllReadonly<DriverCar>()
-            .Where(dc => dc.User.IsActive)
+            .Where(dc =>(bool) dc.User.IsActive)
             .Select(dc => new UserServiceModel()
             {
                 UserId = dc.UserId,

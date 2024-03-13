@@ -17,15 +17,15 @@ namespace CarRentingSystem.Core.Services
 
         public async Task<StatisticsServiceModel> Total()
         {
-            int totalHouses = await repo.AllReadonly<CarRoute>()
-                .CountAsync(h => h.IsActive);
-            int rentedHouses = await repo.AllReadonly<CarRoute>()
-                .CountAsync(h => h.IsActive && h.RenterId != null);
+            int totalCarRoutes = await repo.AllReadonly<CarRoute>()
+                .CountAsync(cr => cr.IsActive);
+            int rentedCarRoutes = await repo.AllReadonly<CarRoute>()
+                .CountAsync(cr => cr.IsActive && cr.RenterId != null);
 
             return new StatisticsServiceModel()
             {
-                TotalCarRoutes = totalHouses,
-                TotalRents = rentedHouses
+                TotalCarRoutes = totalCarRoutes,
+                TotalRents = rentedCarRoutes
             };
         }
     }

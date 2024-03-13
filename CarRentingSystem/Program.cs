@@ -16,7 +16,7 @@ namespace CarRentingSystem
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
@@ -37,7 +37,6 @@ namespace CarRentingSystem
 
             builder.Services.AddApplicationServices();
             builder.Services.AddResponseCaching();
-
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -71,8 +70,8 @@ namespace CarRentingSystem
                 );
 
                 endpoints.MapControllerRoute(
-                  name: "houseDetails",
-                  pattern: "House/Details/{id}/{information}"
+                  name: "carRouteDetails",
+                  pattern: "CarRoute/Details/{id}/{information}"
                 );
 
                 endpoints.MapRazorPages();

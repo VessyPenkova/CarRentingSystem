@@ -21,7 +21,7 @@ namespace CarRentingSystem.Core.Models.CarRoute
         [Display(Name = "Image URL")]
         public string ImageUrlRouteGoogleMaps { get; init; } = null!;
 
-        [Display(Name = "Price per trip")]
+        [Display(Name = "Price")]
         public decimal Price { get; init; }
 
         [Display(Name = "Is Rented")]
