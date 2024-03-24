@@ -1,0 +1,35 @@
+﻿@using CarRentingSystem.Core.Models.Driver
+@model BecomeDriverModel
+
+@{
+    ViewBag.Title = "Become Driver";
+}
+
+<h2 class="text-center" style="color: yellow;">@ViewBag.Title</h2>
+<hr />
+
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"] != null)
+{
+    <div class="alert alert-danger" role="alert" style="background-color: #09223c; color: yellow;">
+        @ViewData.ModelState["Error"].Errors.First().ErrorMessage
+    </div>
+}
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="PhoneNumber" style="color: yellow;"></label>
+                <input asp-for="PhoneNumber" class="form-control" placeholder="+35911111111" style="background-color: lightgray; color: black;">
+                <span asp-validation-for="PhoneNumber" class="small text-danger" style="color: yellow;"></span>
+            </div>
+            <div class="text-center">
+                <input class="btn btn-primary mt-3" type="submit" value="Save" style="background-color: lightgray; color: black;">
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

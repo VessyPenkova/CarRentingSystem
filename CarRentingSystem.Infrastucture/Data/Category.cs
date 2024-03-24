@@ -1,25 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using static CarRentingSystem.Infrastucture.Constants.ModelsConstants;
 
 
 namespace CarRentingSystem.Infrastucture.Data
 {
+    [Comment("Shipment category")]
     public class Category
     {
-        public Category()
-        {
-            CarRoutes = new List<CarRoute>();
-        }
-
         [Key]
+        [Comment("Category Identifier")]
         public int CategoryId { get; set; }
 
-
         [Required]
-        [StringLength(50)]
-        public string Name { get; set; } = null!;
+        [MaxLength(NameLength)]
+        [Comment("Category name")]
+        public string Name { get; set; } = string.Empty;
 
-
-        public List<CarRoute> CarRoutes  { get; set; }
+        public List<Shipment> Shipments { get; set; } = new List<Shipment>();
     }
 }
 

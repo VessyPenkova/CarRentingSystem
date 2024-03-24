@@ -12,8 +12,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IRepository, Repository>();
-            services.AddScoped<ICarRouteService, CarRouteService>();
-            services.AddScoped<ICarDriverService, DriverCarService>();
+            services.AddScoped<IShipmentService, ShipmentService>();
+            services.AddScoped<IDriverService, DriverService>();
             services.AddScoped<IGuard, Guard>();
             services.AddScoped<IUserService, UserService>();
 

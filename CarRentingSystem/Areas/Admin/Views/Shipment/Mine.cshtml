@@ -1,0 +1,38 @@
+﻿@using CarRentingSystem.Areas.Admin.Models
+@model MyShipmentsViewModel
+@{
+    ViewBag.Title = "My Shipments";
+}
+
+<h2 class="text-center" style="color: yellow;">@ViewBag.Title</h2>
+<hr />
+
+<h4 style="color: yellow;">My Added Shipments</h4>
+
+@if (!Model.AddedShipments.Any())
+{
+    <h2 class="text-center" style="color: yellow;">You have nothing booked yet!</h2>
+}
+
+<div class="row">
+
+    @foreach (var shipment in Model.AddedShipments)
+    {
+        @await Html.PartialAsync("~/Views/Shared/_ShipmentPartial.cshtml", shipment)
+    }
+
+</div>
+
+<h4 style="color: yellow;">My Booked Shipments</h4>
+
+@if (!Model.RentedShipments.Any())
+{
+    <h2 class="text-center" style="color: yellow;">You have nothing booked yet!</h2>
+}
+
+<div class="row">
+    @foreach (var shipment in Model.RentedShipments)
+    {
+        @await Html.PartialAsync("~/Views/Shared/_ShipmentPartial.cshtml", shipment)
+    }
+</div>

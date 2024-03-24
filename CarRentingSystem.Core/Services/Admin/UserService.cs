@@ -11,9 +11,9 @@ namespace CarRentingSystem.Core.Services.Admin
     {
         private readonly IRepository repo;
 
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly UserManager<IdentityUser> userManager;
 
-        public UserService(IRepository _repo, UserManager<ApplicationUser> _userManager)
+        public UserService(IRepository _repo, UserManager<IdentityUser> _userManager)
         {
             repo = _repo;
             userManager = _userManager;
@@ -22,27 +22,25 @@ namespace CarRentingSystem.Core.Services.Admin
         {
             List<UserServiceModel> result;
 
-            result = await repo.AllReadonly<DriverCar>()
-            .Where(dc =>(bool) dc.User.IsActive)
+            result = await repo.AllReadonly<Driver>()
             .Select(dc => new UserServiceModel()
             {
                 UserId = dc.UserId,
                 Email = dc.User.Email,
-                FullName = $"{dc.User.FirstName} {dc.User.LastName}",
+                FullName = dc.User.UserName,
                 PhoneNumber = dc.PhoneNumber
             })
             .ToListAsync();
 
-            string[] driverCarIds = result.Select(dc => dc.UserId).ToArray();
+            string[] driverIds = result.Select(dc => dc.UserId).ToArray();
 
-            result.AddRange(await repo.AllReadonly<ApplicationUser>()
-               .Where(u => driverCarIds.Contains(u.Id) == false)
-               .Where(u => (bool)u.IsActive)
+            result.AddRange(await repo.AllReadonly<IdentityUser>()
+               .Where(u => driverIds.Contains(u.Id) == false)
                .Select(u => new UserServiceModel()
                {
                    UserId = u.Id,
                    Email = u.Email,
-                   FullName = $"{u.FirstName} {u.LastName}"
+                   FullName = u.UserName
                }).ToListAsync());
 
             return  result;
@@ -53,10 +51,8 @@ namespace CarRentingSystem.Core.Services.Admin
             var user = await userManager.FindByIdAsync(userId);
 
             user.PhoneNumber = null;
-            user.FirstName = null;
+            user.UserName = null;
             user.Email = null;
-            user.IsActive = false;
-            user.LastName = null;
             user.NormalizedEmail = null;
             user.NormalizedUserName = null;
             user.PasswordHash = null;
@@ -69,9 +65,9 @@ namespace CarRentingSystem.Core.Services.Admin
 
         public async Task<string> UserFullName(string userId)
         {
-            var user = await repo.GetByIdAsync<ApplicationUser>(userId);
+            var user = await repo.GetByIdAsync<IdentityUser>(userId);
 
-            return $"{user?.FirstName} {user?.LastName}".Trim();
+            return $"{user?.UserName}".Trim();
         }
     }
 }

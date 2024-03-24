@@ -9,15 +9,15 @@ namespace CarRentingSystem.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ICarRouteService carRouteService;       
+        private readonly IShipmentService shipmentService;       
 
         private readonly ILogger logger;
 
         public HomeController(
-            ICarRouteService _carRouteService,           
+            IShipmentService _shipmentService,           
             ILogger<HomeController> _logger)
         {
-            carRouteService = _carRouteService;         
+            shipmentService = _shipmentService;         
             logger = _logger;
         }
         public async Task< IActionResult> Index()
@@ -26,7 +26,7 @@ namespace CarRentingSystem.Controllers
             {
                 return RedirectToAction("Index", "Admin", new { area = "Admin" });
             }
-            var model = await carRouteService.LastThreeRoutes();
+            var model = await shipmentService.LastThreeShipments();
 
             return View(model);
         }

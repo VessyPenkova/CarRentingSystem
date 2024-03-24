@@ -1,18 +1,17 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
-
 
 body {
     /* Margin bottom by footer height */
@@ -22,3 +21,6 @@ body {
     text-emphasis-color: #ffc107;
 }
 
+.text-yellow {
+    color: #ffd500; /* Yellow color */
+}

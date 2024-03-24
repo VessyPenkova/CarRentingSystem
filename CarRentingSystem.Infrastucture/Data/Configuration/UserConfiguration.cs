@@ -4,36 +4,35 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CarRentingSystem.Infrastucture.Data.Configuration
 {
-    public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
+    public class UserConfiguration : IEntityTypeConfiguration<IdentityUser>
     {
-        public void Configure(EntityTypeBuilder<ApplicationUser> builder)
+        private IdentityUser DriverUser;
+        private IdentityUser GuestUser;
+        public void Configure(EntityTypeBuilder<IdentityUser> builder)
         {
-            builder
-                .Property(p => p.IsActive)
-                .HasDefaultValue(true);
-
-            builder.HasData(CreateUser());
+            CreateUser();
+            builder.HasData(DriverUser, GuestUser);
         }
-        private List<ApplicationUser> CreateUser()
+        private List<IdentityUser> CreateUser()
         {
-            var users = new List<ApplicationUser>();
-            var hasher = new PasswordHasher<ApplicationUser>();
+            var users = new List<IdentityUser>();
+            var hasher = new PasswordHasher<IdentityUser>();
 
-            var user = new ApplicationUser()
+            this.DriverUser = new IdentityUser()
             {
-                Id = "dea1286-c198-4129-b3f3-b89d839581",
-                UserName = "agent@mail.com",
-                NormalizedUserName = "agent@mail.com",
-                Email = "agent@mail.com",
-                NormalizedEmail = "agent@mail.com",
+                Id = "dea12856-c198-4129-b3f3-b893d8395082",
+                UserName = "Driver@mail.com",
+                NormalizedUserName = "Driver@mail.com",
+                Email = "Driver@mail.com",
+                NormalizedEmail = "Driver@mail.com",
 
             };
-            user.PasswordHash =
-            hasher.HashPassword(user, "agent123");
+            DriverUser.PasswordHash =
+            hasher.HashPassword(DriverUser, "Driver123");
 
-            users.Add(user);
+            users.Add(DriverUser);
 
-            user = new ApplicationUser()
+            this.GuestUser = new IdentityUser()
             {
                 Id = "6d5800-d726-4fc8-83d9-d6b3ac1f582e",
                 UserName = "guest@mail.com",
@@ -41,10 +40,10 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                 Email = "guest@mail.com",
                 NormalizedEmail = "guest@mail.com",
             };
-            user.PasswordHash =
-            hasher.HashPassword(user, "guest123");
+            GuestUser.PasswordHash =
+            hasher.HashPassword(GuestUser, "guest123");
 
-            users.Add(user);
+            users.Add(GuestUser);
             return users;
         }
     }

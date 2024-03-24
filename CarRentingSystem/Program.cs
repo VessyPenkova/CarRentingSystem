@@ -16,7 +16,7 @@ namespace CarRentingSystem
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => 
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
@@ -70,8 +70,8 @@ namespace CarRentingSystem
                 );
 
                 endpoints.MapControllerRoute(
-                  name: "carRouteDetails",
-                  pattern: "CarRoute/Details/{id}/{information}"
+                  name: "ShipmentDetails",
+                  pattern: "Shipment/Details/{id}/{information}"
                 );
 
                 endpoints.MapRazorPages();

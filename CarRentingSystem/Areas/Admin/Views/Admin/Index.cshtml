@@ -1,32 +1,41 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Home Page";
 }
-<style>
-   label.yellowtext {
-        color: #ffc107;
-   }
-</style>
-<div class="mt-4 p-5 bg-light text-center">
+
+<div class="mt-4 p-5 bg-lightgray text-yellow text-center">
     <h2 class="display-4">Hello, Admin!</h2>
     <p class="lead mb-1 mt-3">
         This is your administrator area - you can <b>read</b>, <b>create</b>,
-        <b>delete</b> and <b>edit</b> carRoutes.
+        <b>delete</b> and <b>edit</b> Shipments.
         <br />You can <b>rent</b> and <b>leave</b> the free ones, too!
     </p>
     <p class="lead mt-1">
-        You can also see <b>all users and driversCars</b> and <b>all rents</b> in the system.
+        You can also see <b>all users and shipments</b> and <b>All bookings</b> in the system.
     </p>
     <hr class="my-4">
-    <a asp-area="" asp-controller="CarRoute" asp-action="All"
-       class="btn btn-primary btn-lg">All CarRoute</a>
-    <a asp-area="" asp-controller="CarRoute" asp-action="Add"
-       class="btn btn-primary btn-lg">Add CarRoute</a>
+    <a asp-area="" asp-controller="Shipment" asp-action="All"
+
+       class="btn btn-lightgray btn-lg text-black">All Shipments</a>
+
+    <a asp-area="" asp-controller="Shipment" asp-action="Add"
+
+       class="btn btn-lightgray btn-lg text-black">Add Shipment</a>
+
     <span>  |   </span>
-    <a asp-area="Admin" asp-controller="CarRoute" asp-action="Mine"
-       class="btn btn-primary btn-lg">My CarRoute</a>
+
+    <a asp-area="Admin" asp-controller="Shipment" asp-action="Mine"
+
+       class="btn btn-lightgray btn-lg text-black">My Shipments</a>
+
     <span>  |   </span>
+
     <a asp-area="Admin" asp-controller="Rents" asp-action="All"
-       class="btn btn-primary btn-lg">All Rents</a>
+
+       class="btn btn-lightgray btn-lg text-black">All Bookings</a>
+
     <a asp-area="Admin" asp-controller="User" asp-action="All"
-       class="btn btn-primary btn-lg">All Users</a>
+
+       class="btn btn-lightgray btn-lg text-black">All Users</a>
+
 </div>

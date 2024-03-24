@@ -1,43 +1,43 @@
-﻿@using CarRentingSystem.Core.Models.Admin﻿
+﻿@using CarRentingSystem.Core.Models.Admin
 @model IEnumerable<UserServiceModel>
 
 @{
     ViewBag.Title = "All Users";
 }
 
-<h2 class="text-center">@ViewBag.Title</h2>
+<h2 class="text-center" style="color: yellow;">@ViewBag.Title</h2>
 <hr />
 
-<table class="table table-striped">
+<table class="table table-striped" style="background-color: lightgray;">
     <thead>
         <tr>
-            <th><label>Email</label></th>
-            <th><label>Full Name</label></th>
-            <th><label>Phone Number</label></th>
-            <th><label>User Is Agent</label></th>
-            <th><label>Actions</label></th>
+            <th><label style="color: yellow;">Email</label></th>
+            <th><label style="color: yellow;">Full Name</label></th>
+            <th><label style="color: yellow;">Phone Number</label></th>
+            <th><label style="color: yellow;">User Is Driver</label></th>
+            <th><label style="color: yellow;">Actions</label></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var user in Model)
         {
             <tr>
-                <td><label>@user.Email</label></td>
-                <td><label>@user.FullName</label></td>
-                <td><label>@user.PhoneNumber</label></td>
+                <td><label style="color: yellow;">@user.Email</label></td>
+                <td><label style="color: yellow;">@user.FullName</label></td>
+                <td><label style="color: yellow;">@user.PhoneNumber</label></td>
                 <td>
                     @if (string.IsNullOrEmpty(user.PhoneNumber) == false)
                     {
-                        <label>✔</label>
+                        <label style="color: yellow;">✔</label>
                     }
                     else
                     {
-                        <label class="text-center">❌</label>
+                        <label class="text-center" style="color: yellow;">❌</label>
                     }
                 </td>
                 <td>
-                    <form asp-area="Admin" asp-controller="User" asp-action="Forget" asp-route-userId="@user.UserId"  method="post">
-                        <button type="submit" class="btn btn-danger">Forget</button>
+                    <form asp-area="Admin" asp-controller="User" asp-action="Forget" asp-route-userId="@user.UserId" method="post">
+                        <button type="submit" class="btn btn-danger" style="background-color: lightgray; color: black;">Forget</button>
                     </form>
                 </td>
             </tr>

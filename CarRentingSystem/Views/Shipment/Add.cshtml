@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Add Shipment";
+}
+
+<h2 class="text-center" style="color: yellow;">@ViewBag.Title </h2>
+<hr />
+
+<partial name="_ShipmentFormPartial" model="@Model" />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

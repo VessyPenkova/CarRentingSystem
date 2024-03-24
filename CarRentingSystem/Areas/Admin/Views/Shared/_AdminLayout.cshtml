@@ -1,21 +1,35 @@
-﻿﻿<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Car Renting System - Administrator</title>
+    <title>@ViewData["Title"] - Renting System - Administrator</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CarRentingSystem.styles.css" asp-append-version="true" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: lightgray; /* Light gray background */
+            color: yellow; /* Yellow text */
+        }
+        .navbar {
+            background-color: lightgray; /* Light gray background for navbar */
+            color: black; /* Black text for navbar links */
+        }
+        .footer {
+            background-color: lightgray; /* Light gray background for footer */
+            color: black; /* Black text for footer */
+        }
+    </style>
 </head>
 <body>
     <partial name="_UserMessages" />
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Car Renting Worldwide</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Renting Worldwide</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -23,18 +37,18 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="CarRoute" asp-action="All">All CarRoute</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Shipment" asp-action="All">All Shipments</a>
                         </li>
                         @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="CarRoute" asp-action="Mine">My CarRoutes</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Shipment" asp-action="Mine">My Shipments</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="CarRoute" asp-action="Add">Add CarRoute</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Shipment" asp-action="Add">Add Shipment</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="CarDriver" asp-action="Become">Become DriverCar</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Driver" asp-action="Become">Become Driver</a>
                             </li>
                         }
                     </ul>
@@ -44,7 +58,7 @@
         </nav>
     </header>
     <div class="container">
-        <h1>Administaration area</h1>
+        <h1>Administration area</h1> 
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -52,7 +66,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; @DateTime.UtcNow.Year - CarRentingSystem
+            &copy; @DateTime.UtcNow.Year - Renting System
         </div>
     </footer>
 

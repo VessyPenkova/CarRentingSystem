@@ -1,42 +1,71 @@
-﻿﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>@ViewData["Title"] - Car Renting System</title>
-            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-            <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
-            <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-            <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-            <link rel="stylesheet" href="~/CarRentingSystem.styles.css" asp-append-version="true" />
-            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <title>@ViewData["Title"] - Car Renting System</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CarRentingSystem.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #09223c;
+            color: #ffd500;
+        }
+
+        .navbar-yellow {
+            background-color: #09223c;
+            border-bottom: 1px solid #ffd500;
+        }
+
+            .navbar-yellow .nav-link {
+                color: #ffd500;
+            }
+
+            .navbar-yellow .navbar-brand {
+                color: #ffd500;
+            }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30' width='30' height='30'%3e%3cpath stroke='%23ffd500' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .footer {
+            color: #ffd500;
+        }
+
+            .footer a {
+                color: #ffd500;
+            }
+    </style>
 </head>
 <body>
     <partial name="_UserMessages" />
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-yellow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Car Renting System</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Renting System</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-#ffd500" asp-area="" asp-controller="CarRoute" asp-action="All">All Car Routes</a>
+                            <a class="nav-link" asp-area="" asp-controller="Shipment" asp-action="All">All Shipments</a>
                         </li>
                         @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="CarRoute" asp-action="Mine">My Car Routes</a>
+                                <a class="nav-link" asp-area="" asp-controller="Shipment" asp-action="Mine">My Car Shipments</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="CarRoute" asp-action="Add">Add Car Route</a>
+                                <a class="nav-link" asp-area="" asp-controller="Shipment" asp-action="Add">Add Car Shipment</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="CarDriver" asp-action="Become">Become DriverCar</a>
+                                <a class="nav-link" asp-area="" asp-controller="Driver" asp-action="Become">Become Driver</a>
                             </li>
                         }
                     </ul>
@@ -53,7 +82,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; @DateTime.UtcNow.Year - Car Renting System
+            &copy; @DateTime.UtcNow.Year - Renting System
         </div>
     </footer>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
