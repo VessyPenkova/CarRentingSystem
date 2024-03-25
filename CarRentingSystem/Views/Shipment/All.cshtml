@@ -90,8 +90,8 @@
 }
 
 <div class="row">
-    @foreach (var Shipment in Model.Shipments)
+    @foreach (var shipment in Model.Shipments)
     {
-        <partial name="_ShipmentPartial" model="@Shipment" />
+        <partial name="_ShipmentPartial" model="@shipment" />
     }
 </div>

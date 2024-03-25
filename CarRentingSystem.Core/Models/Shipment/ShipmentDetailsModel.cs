@@ -8,6 +8,6 @@ namespace CarRentingSystem.Core.Models.Shipment
 
         public string Category { get; set; } = null!;
 
-        public DriverServiceModel Driver { get; set; } = null!;
+        public DriverServiceModel Driver { get; set; } 
     }
 }

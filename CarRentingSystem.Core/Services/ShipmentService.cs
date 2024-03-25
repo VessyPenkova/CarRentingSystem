@@ -99,8 +99,6 @@ namespace CarRentingSystem.Core.Services
             return await repo.AllReadonly<Category>()
                 .AnyAsync(c => c.CategoryId == categoryId);
         }
-
-
         public async Task<IEnumerable<ShipmentServiceModel>> AllShipmentsByDriverId(int driverId)
         {
             return await repo.AllReadonly<Shipment>()
@@ -117,7 +115,6 @@ namespace CarRentingSystem.Core.Services
                 })
                 .ToListAsync();
         }
-
         public async Task<IEnumerable<ShipmentServiceModel>> AllShipmentsByUserId(string userId)
         {
             return await repo.AllReadonly<Shipment>()
@@ -135,8 +132,6 @@ namespace CarRentingSystem.Core.Services
                 })
                 .ToListAsync();
         }
-
-
         public async Task<int> Create(ShipmentModel model, int driverId)
         {
             var shipment = new Shipment()
@@ -164,14 +159,12 @@ namespace CarRentingSystem.Core.Services
 
             return shipment.ShipmentId;
         }
-
         public async Task Delete(int shipmentId)
         {
             var shipment = await repo.GetByIdAsync<Shipment>(shipmentId);
 
             await repo.SaveChangesAsync();
         }
-
         public async Task Edit(int shipmentId, ShipmentModel model)
         {
             var shipment = await repo.GetByIdAsync<Shipment>(shipmentId);
@@ -186,18 +179,15 @@ namespace CarRentingSystem.Core.Services
 
             await repo.SaveChangesAsync();
         }
-
         public async Task<bool> Exists(int shipmentId)
         {
             return await repo.AllReadonly<Shipment>()
                 .AnyAsync(cr => cr.ShipmentId == shipmentId );
         }
-
         public async Task<int> GetShipmentCategoryId(int shipmentId)
         {
             return (await repo.GetByIdAsync<Shipment>(shipmentId)).CategId;
         }
-
         public async Task<bool> HasDriverWithId(int shipmentId, string currentUserId)
         {
             bool result = false;
@@ -213,7 +203,6 @@ namespace CarRentingSystem.Core.Services
 
             return result;
         }
-
         public async Task<ShipmentDetailsModel> ShipmentDetailsByShipmentId(int shipmentId)
         {
             return await repo.AllReadonly<Shipment>()
@@ -242,7 +231,6 @@ namespace CarRentingSystem.Core.Services
         {
             return (await repo.GetByIdAsync<Shipment>(shipmentId)).RenterId != null;
         }
-
         public async Task<bool> IsRentedByUserWithId(int shipmentId, string currentUserId)
         {
             bool result = false;
@@ -257,7 +245,6 @@ namespace CarRentingSystem.Core.Services
 
             return result;
         }
-
         public async Task<IEnumerable<ShipmentHomeModel>> LastThreeShipments()
         {
             return await repo.AllReadonly<Shipment>()
@@ -273,7 +260,6 @@ namespace CarRentingSystem.Core.Services
                 .Take(3)
                 .ToListAsync();
         }
-
         public async Task Leave(int shipmentId)
         {
             var shipment = await repo.GetByIdAsync<Shipment>(shipmentId);
@@ -282,7 +268,6 @@ namespace CarRentingSystem.Core.Services
 
             await repo.SaveChangesAsync();
         }
-
         public async Task Rent(int shipmentId, string currentUserId)
         {
             var shipment = await repo.GetByIdAsync<Shipment>(shipmentId);

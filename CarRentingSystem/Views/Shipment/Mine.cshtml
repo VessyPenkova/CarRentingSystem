@@ -10,9 +10,9 @@
 @if (Model.Any())
 {
     <div class="row">
-        @foreach (var Shipment in Model)
+        @foreach (var shipment in Model)
         {
-            <partial name="_ShipmentPartial" model="@Shipment" />
+            <partial name="_ShipmentPartial" model="@shipment" />
         }
     </div>
 }

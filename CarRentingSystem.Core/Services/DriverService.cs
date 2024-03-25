@@ -17,13 +17,13 @@ namespace CarRentingSystem.Core.Services
 
         public async Task Create(string userId, string phoneNumber)
         {
-            var Driver = new Driver()
+            var driver = new Driver()
             {
                 UserId = userId,
                 PhoneNumber = phoneNumber
             };
 
-            await repo.AddAsync(Driver);
+            await repo.AddAsync(driver);
             await repo.SaveChangesAsync();
         }
 

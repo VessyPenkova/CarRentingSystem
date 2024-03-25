@@ -24,8 +24,8 @@ namespace CarRentingSystem.Areas.Admin.Controllers
             var myShipments = new MyShipmentsViewModel();
             var adminId = User.Id();
             myShipments.RentedShipments = await ShipmentService.AllShipmentsByUserId(adminId);
-            var DriverId = await DriverService.GetDriverId(adminId);
-            myShipments.AddedShipments = await ShipmentService.AllShipmentsByDriverId(DriverId);
+            var driverId = await DriverService.GetDriverId(adminId);
+            myShipments.AddedShipments = await ShipmentService.AllShipmentsByDriverId(driverId);
 
             return View(myShipments);
         }

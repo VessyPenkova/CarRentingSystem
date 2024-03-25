@@ -129,11 +129,12 @@ namespace CarRentingSystem.Controllers
                 return View(model);
             }
 
-            int driverId = await driverService.GetDriverId(User.Id());
+            var driverId = await driverService.GetDriverId(User.Id());
 
-            int id = await shipmentService.Create(model, driverId);
+            int newShipmentId = await shipmentService.Create(model, driverId);
 
-            return RedirectToAction(nameof(Details), new { id = id, information = model.GetInformation() });
+            return RedirectToAction(nameof(Details), 
+            new { id = newShipmentId, information = model.GetInformation() });
         }
 
         [HttpGet]
