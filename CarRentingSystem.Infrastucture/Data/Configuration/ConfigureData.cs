@@ -45,16 +45,16 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
             this.DriverUser = new User()
             {
                 Id = "dea12856-c198-4129-b3f3-b893d8395082",
-                UserName = "agent@mail.com",
-                NormalizedUserName = "agent@mail.com",
-                Email = "agent@mail.com",
-                NormalizedEmail = "agent@mail.com",
+                UserName = "driver@mail.com",
+                NormalizedUserName = "driver@mail.com",
+                Email = "driver@mail.com",
+                NormalizedEmail = "driver@mail.com",
                 FirstName = "Ekaterina",
                 LastName = "TheGreat"
             };
 
             this.DriverUser.PasswordHash =
-                hasher.HashPassword(this.DriverUser, "agent123");
+                hasher.HashPassword(this.DriverUser, "driver123");
 
             this.GuestUser = new User()
             {
