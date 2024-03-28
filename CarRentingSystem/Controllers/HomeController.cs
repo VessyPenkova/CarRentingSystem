@@ -23,13 +23,13 @@ namespace CarRentingSystem.Controllers
         }
         public async Task< IActionResult> Index()
         {
-            if (User.IsInRole(AdminRolleName))
+            if (User.IsInRole(AdminRoleName))
             {
-                return RedirectToAction("Index", "Admin", new { area = "Admin" });
+                return RedirectToAction("Index", "Home", new { area = "Admin" });
             }
-            var model = await shipmentService.LastThreeShipments();
+            var collectionOfLastShipmentsModel = await shipmentService.LastThreeShipments();
 
-            return View(model);
+            return View(collectionOfLastShipmentsModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

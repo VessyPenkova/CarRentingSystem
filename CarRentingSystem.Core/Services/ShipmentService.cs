@@ -101,7 +101,7 @@ namespace CarRentingSystem.Core.Services
         }
         public async Task<IEnumerable<ShipmentServiceModel>> AllShipmentsByDriverId(int driverId)
         {
-            return await repo.AllReadonly<Shipment>()
+            var shipments = await repo.AllReadonly<Shipment>()
                 .Where(c => c.DriverId == driverId)
                 .Select(c => new ShipmentServiceModel()
                 {
@@ -114,10 +114,11 @@ namespace CarRentingSystem.Core.Services
                     IsRented = c.RenterId !=null,
                 })
                 .ToListAsync();
+            return shipments;
         }
         public async Task<IEnumerable<ShipmentServiceModel>> AllShipmentsByUserId(string userId)
         {
-            return await repo.AllReadonly<Shipment>()
+            var shipments =  await repo.AllReadonly<Shipment>()
                 .Where(c => c.RenterId == userId)
                 .Select(c => new ShipmentServiceModel()
                 {
@@ -131,6 +132,7 @@ namespace CarRentingSystem.Core.Services
 
                 })
                 .ToListAsync();
+            return shipments;
         }
         public async Task<int> Create(ShipmentModel model, int driverId)
         {
@@ -161,8 +163,9 @@ namespace CarRentingSystem.Core.Services
         }
         public async Task Delete(int shipmentId)
         {
-            var shipment = await repo.GetByIdAsync<Shipment>(shipmentId);
-
+            var shipment = await repo.AllReadonly<Shipment>()
+                .AnyAsync(sh => sh.ShipmentId == shipmentId);
+            await repo.DeleteAsync<Shipment>(shipment);
             await repo.SaveChangesAsync();
         }
         public async Task Edit(int shipmentId, ShipmentModel model)

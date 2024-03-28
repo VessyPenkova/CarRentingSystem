@@ -46,7 +46,7 @@ namespace CarRentingSystem.Core.Services.Admin
             return  result;
         }
 
-        public async Task<bool> Forget(string userId)
+        public async Task<bool> UserHasRents(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
 

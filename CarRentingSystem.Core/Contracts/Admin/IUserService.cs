@@ -8,6 +8,6 @@ namespace CarRentingSystem.Core.Contracts.Admin
 
         Task<IEnumerable<UserServiceModel>> All();
 
-        Task<bool> Forget(string userId);
+        Task<bool> UserHasRents(string userId);
     }
 }

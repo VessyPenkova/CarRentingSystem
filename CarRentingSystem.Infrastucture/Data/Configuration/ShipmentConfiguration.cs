@@ -12,16 +12,17 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Shipment> builder)
         {
+
             builder
-               .HasOne(h => h.Category)
+               .HasOne(sh => sh.Category)
                 .WithMany(c => c.Shipments)
-                .HasForeignKey(h => h.CategId)
+                .HasForeignKey(sh => sh.CategId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
-                .HasOne(h => h.Driver)
-                    .WithMany(a => a.Shipments)
-                    .HasForeignKey(h => h.DriverId)
+                .HasOne(sh => sh.Driver)
+                    .WithMany(d => d.Shipments)
+                    .HasForeignKey(sh => sh.DriverId)
                     .OnDelete(DeleteBehavior.Restrict);
 
             var data = new ConfigureData();

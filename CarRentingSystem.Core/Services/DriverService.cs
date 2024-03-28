@@ -45,7 +45,7 @@ namespace CarRentingSystem.Core.Services
                 .AnyAsync(cr => cr.RenterId == userId);
         }
 
-        public async Task<bool> UserWithPhoneNumberExists(string phoneNumber)
+        public async Task<bool> DriverWithPhoneNumberExists(string phoneNumber)
         {
             return await repo.All<Driver>()
                 .AnyAsync(dc => dc.PhoneNumber == phoneNumber);

@@ -2,14 +2,13 @@
 {
     public interface IDriverService
     {
+        Task<bool> DriverWithPhoneNumberExists(string phoneNumber);
+
         Task<bool> ExistsById(string userId);
 
-        Task<bool> UserWithPhoneNumberExists(string phoneNumber);
-
-        Task<bool> UserHasRents(string userId);
+        Task<int> GetDriverId(string userId);      
 
         Task Create(string userId, string phoneNumber);
 
-        Task<int> GetDriverId(string userId);
     }
 }

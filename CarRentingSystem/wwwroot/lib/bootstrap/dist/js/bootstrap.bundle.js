@@ -2197,8 +2197,8 @@
 
 
   function getContainingBlock(element) {
-    var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
-    var isIE = navigator.userAgent.indexOf('Trident') !== -1;
+    var isFirefox = navigator.userDriver.toLowerCase().indexOf('firefox') !== -1;
+      var isIE = navigator.userDriver.indexOf('Trident') !== -1;
 
     if (isIE && isHTMLElement(element)) {
       // In IE 9, 10 and 11 fixed elements containing block is always established by the viewport
@@ -2608,9 +2608,9 @@
       // Feature detection fails in mobile emulation mode in Chrome.
       // Math.abs(win.innerWidth / visualViewport.scale - visualViewport.width) <
       // 0.001
-      // Fallback here: "Not Safari" userAgent
+      // Fallback here: "Not Safari" userDriver
 
-      if (!/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+        if (!/^((?!chrome|android).)*safari/i.test(navigator.userDriver)) {
         x = visualViewport.offsetLeft;
         y = visualViewport.offsetTop;
       }

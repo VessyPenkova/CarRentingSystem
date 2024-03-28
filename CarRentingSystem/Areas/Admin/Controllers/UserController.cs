@@ -1,40 +1,41 @@
-﻿using CarRentingSystem.Core.Constants;
-using CarRentingSystem.Core.Contracts.Admin;
+﻿using CarRentingSystem.Core.Contracts.Admin;
+using CarRentingSystem.Core.Models.Admin;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using static CarRentingSystem.Areas.Admin.Constants.AdminConstants;
 
 namespace CarRentingSystem.Areas.Admin.Controllers
 {
-    public class UserController : BaseController
+    public class UserController : AdminController
     {
-        private readonly IUserService userService;
+        private readonly IUserService userServices;
+        private readonly IMemoryCache cache;
 
-        public UserController(IUserService _userService)
+        public UserController(IUserService _userServices,  IMemoryCache _cache)
         {
-            userService = _userService;
+            this.userServices = _userServices;
+            this.cache = _cache;
         }
 
+     
+        [Route("Users/All")]
         public async Task<IActionResult> All()
         {
-            var model = await userService.All();
 
-            return View(model);
-        }
+            var users = this.cache
+                .Get<IEnumerable<UserServiceModel>>(UsersCacheKey);
 
-        [HttpPost]
-        public async Task<IActionResult> Forget(string userId)
-        {
-            bool result = await userService.Forget(userId);
-
-            if (result)
+            if (users == null)
             {
-                TempData[MessageConstant.SuccessMessage] = "User is now forgotten";
-            }
-            else
-            {
-                TempData[MessageConstant.ErrorMessage] = "User is unforgettable";
+                users = await this.userServices.All();
+
+                var cacheOptions = new MemoryCacheEntryOptions()
+                   .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
+
+                this.cache.Set(UsersCacheKey, users, cacheOptions);
             }
 
-            return RedirectToAction(nameof(All));
+            return View(users);
         }
     }
 }

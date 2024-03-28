@@ -1,104 +1,130 @@
-﻿using CarRentingSystem.Infrastucture.Data;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using static CarRentingSystem.Infrastucture.Constants.Constants;
 
 namespace CarRentingSystem.Infrastucture.Data.Configuration
 {
-    internal class ConfigureData
+    public class ConfigureData
     {
-        public IdentityUser DriverUser { get; set; }
+        public User AdminUser { get; set; } = null!;
+        public User DriverUser { get; set; } = null!;
+        public User GuestUser { get; set; } = null!;
 
-        public IdentityUser GuestUser { get; set; }
+        public Driver AdminDriver { get; set; } = null!;
+        public Driver UserDriver { get; set; } = null!;
 
-        public Driver Driver { get; set; }
+        public Category InterCityCategory { get; set; } = null!;
 
-        public Category InterCityCategory { get; set; }
+        public Category OneWayCategory { get; set; } = null!;
 
-        public Category OneWayCategory { get; set; }
+        public Category RoundShipmentCategory { get; set; } = null!;
 
-        public Category RoundShipmentCategory { get; set; }
+        public Category LuxuryCategory { get; set; } = null!;
 
-        public Category LuxuryCategory { get; set; }
+        public Category CharterCategory { get; set; } = null!;
 
-        public Category CharterCategory { get; set; }
 
-        public Shipment OneWayShipment { get; set; }
+        public Shipment OneWayShipment { get; set; } = null!;
 
-        public Shipment RoundShipment { get; set; }
+        public Shipment RoundShipment { get; set; } = null!;
 
-        public Shipment LuxuryShipment { get; set; }
+        public Shipment LuxuryShipment { get; set; } = null!;
 
-        public Shipment CharterShipment { get; set; }
+        public Shipment CharterShipment { get; set; } = null!;
 
         public ConfigureData()
         {
             ConfigureUsers();
-            ConfigureDriver();
+            ConfigureDrivers();
             ConfigureCategories();
             ConfigureShipments();
         }
         private void ConfigureUsers()
         {
-            var hasher = new PasswordHasher<IdentityUser>();
+            var hasher = new PasswordHasher<User>();
 
-            DriverUser = new IdentityUser()
+            this.DriverUser = new User()
             {
                 Id = "dea12856-c198-4129-b3f3-b893d8395082",
-                UserName = "driver@mail.com",
-                NormalizedUserName = "driver@mail.com",
-                Email = "driver@mail.com",
-                NormalizedEmail = "driver@mail.com"
+                UserName = "agent@mail.com",
+                NormalizedUserName = "agent@mail.com",
+                Email = "agent@mail.com",
+                NormalizedEmail = "agent@mail.com",
+                FirstName = "Ekaterina",
+                LastName = "TheGreat"
             };
 
-            DriverUser.PasswordHash =
-                 hasher.HashPassword(DriverUser, "driver123");
+            this.DriverUser.PasswordHash =
+                hasher.HashPassword(this.DriverUser, "agent123");
 
-            GuestUser = new IdentityUser()
+            this.GuestUser = new User()
             {
                 Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
                 UserName = "guest@mail.com",
                 NormalizedUserName = "guest@mail.com",
                 Email = "guest@mail.com",
-                NormalizedEmail = "guest@mail.com"
+                NormalizedEmail = "guest@mail.com",
+                FirstName = "Fifcho",
+                LastName = "Lesly"
             };
 
-            GuestUser.PasswordHash =
-            hasher.HashPassword(GuestUser, "guest123");
+            this.GuestUser.PasswordHash =
+                hasher.HashPassword(this.DriverUser, "guest123");
+
+            this.AdminUser = new User()
+            {
+                Id = "bcb4f072-ecca-43c9-ab26-c060c6f364e4",
+                Email = AdminEmail,
+                NormalizedEmail = AdminEmail,
+                UserName = AdminEmail,
+                NormalizedUserName = AdminEmail,
+                FirstName = "SuperAdmin",
+                LastName = "Admin"
+            };
+
+            this.AdminUser.PasswordHash =
+                hasher.HashPassword(this.DriverUser, "admin123"); ;
         }
-        private void ConfigureDriver()
+        private void ConfigureDrivers()
         {
-            Driver = new Driver()
+            this.UserDriver = new Driver()
             {
                 DriverId = 1,
                 PhoneNumber = "+359770770770",
                 UserId = DriverUser.Id
             };
+            this.AdminDriver = new Driver()
+            {
+                DriverId = 1,
+                PhoneNumber = "+359770770770",
+                UserId = AdminUser.Id
+            };
         }
         private void ConfigureCategories()
         {
-            InterCityCategory = new Category()
+            this.InterCityCategory = new Category()
             {
                 CategoryId = 1,
                 Name = "Inter City"
             };
 
-            OneWayCategory = new Category()
+            this.OneWayCategory = new Category()
             {
                 CategoryId = 2,
                 Name = "One Way"
             };
 
-            RoundShipmentCategory = new Category()
+            this.RoundShipmentCategory = new Category()
             {
                 CategoryId = 3,
                 Name = "Round-Shipment"
             };
-            LuxuryCategory = new Category()
+            this.LuxuryCategory = new Category()
             {
                 CategoryId = 4,
                 Name = "Luxury"
             };
 
-            CharterCategory = new Category()
+            this.CharterCategory = new Category()
             {
                 CategoryId = 5,
                 Name = "Charter"
@@ -106,7 +132,7 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
         }
         private void ConfigureShipments()
         {
-            OneWayShipment = new Shipment()
+            this.OneWayShipment = new Shipment()
             {
                 ShipmentId = 1,
                 Title = "One Way",
@@ -116,9 +142,11 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                 ImageUrlShipmentGoogleMaps = "https://ekotaxi.bg/wp-content/uploads/2020/03/single_cab_redone-min-1-2048x1536.png",
                 Price = 10.00M,
                 CategId = InterCityCategory.CategoryId,
-                DriverId = Driver.DriverId,
+                DriverId = UserDriver.DriverId,
+                RenterId = this.GuestUser.Id
+
             };
-            RoundShipment = new Shipment()
+            this.RoundShipment = new Shipment()
             {
                 ShipmentId = 2,
                 Title = "Round",
@@ -128,9 +156,9 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                 ImageUrlShipmentGoogleMaps = "https://content.fortune.com/wp-content/uploads/2014/09/170030873.jpg?resize=1200,600",
                 Price = 50.00M,
                 CategId = RoundShipmentCategory.CategoryId,
-                DriverId = Driver.DriverId
+                DriverId = UserDriver.DriverId,
             };
-            LuxuryShipment = new Shipment()
+            this.LuxuryShipment = new Shipment()
             {
                 ShipmentId = 3,
                 Title = "Private-Luxury",
@@ -140,11 +168,11 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                 ImageUrlShipmentGoogleMaps = "https://le-cdn.hibuwebsites.com/8978d127e39b497da77df2a4b91f33eb/dms3rep/multi/opt/RSshutterstock_120889072-1920w.jpg",
                 Price = 316.80M,
                 CategId = LuxuryCategory.CategoryId,
-                DriverId = Driver.DriverId
+                DriverId = UserDriver.DriverId
             };
-            CharterShipment = new Shipment()
+            this.CharterShipment = new Shipment()
             {
-                ShipmentId =4,
+                ShipmentId = 4,
                 Title = "Charter",
                 LoadingAddress = "Plovdiv Airport",
                 DeliveryAddress = "Sofia Airport",
@@ -152,7 +180,7 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                 ImageUrlShipmentGoogleMaps = "https://www.luxuryaircraftsolutions.com/wp-content/uploads/2020/05/image-226.png",
                 Price = 2000.00M,
                 CategId = CharterCategory.CategoryId,
-                DriverId = Driver.DriverId
+                DriverId = UserDriver.DriverId
             };
         }
     }

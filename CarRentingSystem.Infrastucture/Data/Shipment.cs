@@ -16,12 +16,13 @@ namespace CarRentingSystem.Infrastucture.Data
     {
         [Key]
         [Comment("Shipment Identifier")]
-        public int ShipmentId { get; set; }
+        public int ShipmentId { get; init; }
 
         [Required]
         [MaxLength(ShipmentTitleMaxLength)]
         [Comment("Title")]
         public string Title { get; set; } = string.Empty;
+
 
         [Required]
         [MaxLength(ShipmentLoadingAddressMaxLength)]
@@ -32,6 +33,7 @@ namespace CarRentingSystem.Infrastucture.Data
         [MaxLength(ShipmentDeliveryAddressMaxLength)]
         [Comment("Delivery Address")]
         public string DeliveryAddress { get; set; } = string.Empty;
+
        
         [Required]
         [MaxLength(ShipmentDescriptionMaxLength)]
@@ -48,25 +50,26 @@ namespace CarRentingSystem.Infrastucture.Data
         //[Range(typeof(decimal), ShipmentRentingPriceMinimum, ShipmentRentingPriceMaximum, ConvertValueInInvariantCulture = true)]
         public decimal Price { get; set; }
 
+
         [Required]
         [Comment("Category identifier")]
         public int CategId { get; set; }
 
-
         [ForeignKey(nameof(CategId))]
-        public Category Category { get; set; } = null!;
+        public Category Category { get; init; } = null!;
+
 
 
         [Required]
         [Comment("Driver identifier")]
         public int DriverId { get; set; }
+        public Driver Driver { get; init; } = null!;
+
+
 
         [Comment("User id of the rentier")]
         public string? RenterId { get; set; }
-
-       
-
-        public Driver Driver { get; set; } = null!;
+        public User? Renter { get; init; }
         public bool IsActive { get; set; } = true;
     }
 }

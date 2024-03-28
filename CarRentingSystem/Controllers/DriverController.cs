@@ -1,5 +1,6 @@
 ﻿using CarRentingSystem.Core.Constants;
 using CarRentingSystem.Core.Contracts;
+using CarRentingSystem.Core.Contracts.Admin;
 using CarRentingSystem.Core.Models.Driver;
 using CarRentingSystem.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -10,16 +11,18 @@ namespace CarRentingSystem.Controllers
     [Authorize]
     public class DriverController : Controller
     {
-        private readonly IDriverService DriverService;
-        public DriverController(IDriverService _DriverService)
+        private readonly IDriverService driverService;
+        private readonly IUserService usersService;
+        public DriverController(IDriverService _driverService,  IUserService _usersService)
         {
-            DriverService = _DriverService;
+            driverService = _driverService;
+            usersService = _usersService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Become()
         {
-            if (await DriverService.ExistsById(User.Id()))
+            if (await driverService.ExistsById(User.Id()))
             {
                 TempData[MessageConstant.ErrorMessage] = "You are already registered as driver";
 
@@ -41,30 +44,32 @@ namespace CarRentingSystem.Controllers
                 return View(model);
             }
 
-            if (await DriverService.ExistsById(userId))
+
+            if (await usersService.UserHasRents(userId))
             {
-                TempData[MessageConstant.ErrorMessage] = "You are already registered as driver";
+                TempData[MessageConstant.ErrorMessage] = "You can not have booked shipments to become driver";
 
                 return RedirectToAction("Index", "Home");
             }
 
-            if (await DriverService.UserWithPhoneNumberExists(model.PhoneNumber))
+            if (await driverService.ExistsById(userId))
+            {
+                TempData[MessageConstant.ErrorMessage] = "Phone number already exists. Enter another one.";
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (await driverService.DriverWithPhoneNumberExists(model.PhoneNumber))
             {
                 TempData[MessageConstant.ErrorMessage] = "The phone already exist";
 
                 return RedirectToAction("Index", "Home");
             }
 
-            if (await DriverService.UserHasRents(userId))
-            {
-                TempData[MessageConstant.ErrorMessage] = "You must not have a rents to become driver";
 
-                return RedirectToAction("Index", "Home");
-            }
+            await driverService.Create(userId, model.PhoneNumber);
 
-            await DriverService.Create(userId, model.PhoneNumber);
-
-            return RedirectToAction("All", "Shipment");
+            return RedirectToAction(nameof(ShipmentController.All), "Shipments");
         }
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarRentingSystem.Areas.Admin.Controllers
 {
-    public class ShipmentController : BaseController
+    public class ShipmentController : AdminController
     {
         private readonly IShipmentService ShipmentService;
 
@@ -22,9 +22,11 @@ namespace CarRentingSystem.Areas.Admin.Controllers
         public async Task<IActionResult> Mine()
         {
             var myShipments = new MyShipmentsViewModel();
+
             var adminId = User.Id();
             myShipments.RentedShipments = await ShipmentService.AllShipmentsByUserId(adminId);
             var driverId = await DriverService.GetDriverId(adminId);
+
             myShipments.AddedShipments = await ShipmentService.AllShipmentsByDriverId(driverId);
 
             return View(myShipments);
