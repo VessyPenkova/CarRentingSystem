@@ -1,8 +1,12 @@
-﻿using CarRentingSystem.Core.Contracts;
-using CarRentingSystem.Core.Contracts.Admin;
+﻿using CarRentingSystem.Core.Contracts.Drivers;
+using CarRentingSystem.Core.Contracts.Rents;
+using CarRentingSystem.Core.Contracts.Shipments;
+using CarRentingSystem.Core.Contracts.Users;
 using CarRentingSystem.Core.Exceptions;
-using CarRentingSystem.Core.Services;
-using CarRentingSystem.Core.Services.Admin;
+using CarRentingSystem.Core.Services.Drivers;
+using CarRentingSystem.Core.Services.Rent;
+using CarRentingSystem.Core.Services.Shipments;
+using CarRentingSystem.Core.Services.Users;
 using CarRentingSystem.Infrastucture.Data.Common;
 
 namespace Microsoft.Extensions.DependencyInjection

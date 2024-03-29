@@ -1,9 +1,9 @@
 ﻿using CarRentingSystem.Core.Models.Shipment;
-using CarRentingSystem.Core.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
 using static CarRentingSystem.Areas.Admin.Constants.AdminConstants;
+using CarRentingSystem.Core.Contracts.Rents;
 
 namespace CarRentingSystem.Areas.Admin.Controllers
 {

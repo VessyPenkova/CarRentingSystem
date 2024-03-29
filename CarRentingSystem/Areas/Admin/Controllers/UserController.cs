@@ -1,5 +1,5 @@
-﻿using CarRentingSystem.Core.Contracts.Admin;
-using CarRentingSystem.Core.Models.Admin;
+﻿using CarRentingSystem.Core.Contracts.Users;
+using CarRentingSystem.Core.Models.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using static CarRentingSystem.Areas.Admin.Constants.AdminConstants;

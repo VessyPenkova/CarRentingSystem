@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using static  CarRentingSystem.Areas.Admin.Constants.AdminConstants;
+using System.Security.Claims;
 
 namespace CarRentingSystem.Extensions
 {
@@ -8,5 +9,9 @@ namespace CarRentingSystem.Extensions
         {
             return user.FindFirstValue(ClaimTypes.NameIdentifier);
         }
+
+        public static bool IsAdmin(this ClaimsPrincipal user) 
+            => user.IsInRole(AdminRoleName);
+
     }
 }

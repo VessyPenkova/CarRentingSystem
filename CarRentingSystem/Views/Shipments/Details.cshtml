@@ -1,0 +1,63 @@
+﻿@model ShipmentDetailsServiceModel
+
+@inject IShipmentService shipment
+@inject IDriverService driver
+
+@{
+    ViewBag.Title = "Shipment Details";
+}
+
+<h2 class="text-center" style="color: yellow;">@ViewBag.Title</h2>
+<hr />
+
+<div class="container" style="display:inline">
+    <div class="row">
+        <div class="col-4">
+            <img class="card-img-top" style="width: 20rem;"
+                 src="@Model.ImageUrlShipmentGoogleMaps" alt="Shipment Image">
+        </div>
+        <div class="card col-8 border-0" style="background-color: lightgray;">
+            <p style="font-size:25px; color: yellow;"><u>@Model.Title</u></p>
+            <p style="color: yellow;">Located in: <b>@Model.LoadingAddress</b></p>
+            <p style="color: yellow;">Located in: <b>@Model.DeliveryAddress</b></p>
+            <p style="color: yellow;">
+                Price:
+                <b>@String.Format("{0:f2}", Model.Price) BGN</b>
+            </p>
+            <p style="color: yellow;">@Model.Description</p>
+            <p style="color: yellow;">Category: <b>@Model.Category</b></p>
+            <p style="color: yellow;"><i>(@(Model.IsRented ? "Rented" : "Not Rented"))</i></p>
+            <div class="form-inline">
+                @if (this.User.Identity.IsAuthenticated)
+                {
+                    <a class="btn btn-warning" asp-controller="Shipment" asp-action="Edit"
+                       asp-route-id="@Model.ShipmentId" style="background-color: lightgray; color: black;">Edit</a>
+                    <a class="ml-2 btn btn-danger" asp-controller="Shipment" asp-action="Delete"
+                       asp-route-id="@Model.ShipmentId" style="background-color: lightgray; color: black;">Delete</a>
+                    @if (!Model.IsRented)
+                    {
+                        <form class="ml-2" asp-controller="Shipment"
+                              asp-action="Rent" asp-route-id="@Model.ShipmentId" method="post">
+                            <input class="btn btn-primary" type="submit" value="Rent" style="background-color: lightgray; color: black;" />
+                        </form>
+                    }
+                    else
+                    {
+                        <form class="ml-2" asp-controller="Shipment" asp-action="Leave"
+                              asp-route-id="@Model.ShipmentId" method="post">
+                            <input class="btn btn-primary" type="submit" value="Leave" style="background-color: lightgray; color: black;" />
+                        </form>
+                    }
+                }
+            </div>
+            <p></p>
+            <div class="card" style="width: 18rem; background-color: lightgray;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: yellow;">Driver Info</h5>
+                    <p class="card-text" style="color: yellow;">Email:  @Model.Driver.Email</p>
+                    <p class="card-text" style="color: yellow;">Phone Number: @Model.Driver.PhoneNumber</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

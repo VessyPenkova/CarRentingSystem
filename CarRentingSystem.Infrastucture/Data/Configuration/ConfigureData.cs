@@ -94,8 +94,8 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
             };
             this.AdminDriver = new Driver()
             {
-                DriverId = 1,
-                PhoneNumber = "+359770770770",
+                DriverId = 2,
+                PhoneNumber = "+359770770772",
                 UserId = AdminUser.Id
             };
         }

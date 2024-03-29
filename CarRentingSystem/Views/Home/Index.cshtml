@@ -1,6 +1,6 @@
 ﻿@using CarRentingSystem.Core.Extensions
 @using CarRentingSystem.Core.Models.Shipment
-@model IEnumerable<ShipmentHomeModel>
+@model IEnumerable<ShipmentIndexServiceModel>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -35,7 +35,7 @@
         {
             <div class="carousel-item @(first ? "active" : string.Empty)">
                 <img class="d-block w-100" style="height:500px"
-                     src="@Shipment.ImageUrlShipmentGoogleMapsUrl" alt="@Shipment.Title">
+                     src="@Shipment.ImageUrlShipmentGoogleMaps" alt="@Shipment.Title">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>
                         <a class="btn btn-primary" asp-controller="Shipments" asp-action="Details"

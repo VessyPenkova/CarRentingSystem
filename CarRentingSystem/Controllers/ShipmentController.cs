@@ -1,10 +1,10 @@
-﻿using CarRentingSystem.Core.Contracts;
+﻿using CarRentingSystem.Core.Contracts.Drivers;
+using CarRentingSystem.Core.Contracts.Shipments;
 using CarRentingSystem.Core.Extensions;
 using CarRentingSystem.Core.Models.Shipment;
 
 using CarRentingSystem.Extensions;
-using CarRentingSystem.Models;
-
+using CarRentingSystem.Models.Shipments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -112,7 +112,7 @@ namespace CarRentingSystem.Controllers
                 return RedirectToAction(nameof(DriverController.Become), "Driver");
             }
 
-            var model = new ShipmentModel()
+            var model = new ShipmentFormModel()
             {
                 ShipmentCategories = await shipmentService.AllCategories()
             };
@@ -122,16 +122,16 @@ namespace CarRentingSystem.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Add(ShipmentModel model)
+        public async Task<IActionResult> Add(ShipmentFormModel model)
         {
             if ((await driverService.ExistsById(User.Id()) == false))
             {
                 return RedirectToAction(nameof(DriverController.Become), "Driver");
             }
 
-            if ((await shipmentService.CategoryExists(model.CategId)) == false)
+            if ((await shipmentService.CategoryExists(model.CategoryId)) == false)
             {
-                ModelState.AddModelError(nameof(model.CategId), "Category does not exists");
+                ModelState.AddModelError(nameof(model.CategoryId), "Category does not exists");
             }
 
             if (!ModelState.IsValid)
@@ -143,12 +143,15 @@ namespace CarRentingSystem.Controllers
 
             var driverId = await driverService.GetDriverId(User.Id());
 
-            int newShipmentId = await shipmentService.Create(model, driverId);
+            model = new ShipmentFormModel()
+            {
+                ShipmentCategories = await shipmentService.AllCategories()
+            };
 
             TempData["message"] = "You have created new shipment!";
 
             return RedirectToAction(nameof(Details), 
-            new { id = newShipmentId, information = model.GetInformation() });
+            new { id = model.Id, information = model.GetInformation() });
         }
 
         [Authorize]
@@ -171,12 +174,12 @@ namespace CarRentingSystem.Controllers
 
             var categoryId = await shipmentService.GetShipmentCategoryId(shipment.ShipmentId);
 
-            var model = new ShipmentModel()
+            var model = new ShipmentCreateEditFormModel()
             {
                 Id = shipment.ShipmentId,
                 LoadingAddress = shipment.LoadingAddress,
                 DeliveryAddress = shipment.DeliveryAddress,
-                CategId = categoryId,
+                CategoryId = categoryId,
                 Description = shipment.Description,
                 Price = shipment.Price,
                 ImageUrlShipmentGoogleMaps = shipment.ImageUrlShipmentGoogleMaps,
@@ -189,7 +192,7 @@ namespace CarRentingSystem.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, ShipmentModel model)
+        public async Task<IActionResult> Edit(int id, ShipmentCreateEditFormModel model)
         {
             if ((await shipmentService.Exists(id)) == false)
             {
@@ -204,9 +207,9 @@ namespace CarRentingSystem.Controllers
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
             }
 
-            if ((await shipmentService.CategoryExists(model.CategId)) == false)
+            if ((await shipmentService.CategoryExists(model.CategoryId)) == false)
             {
-                ModelState.AddModelError(nameof(model.CategId), "Category does not exist");
+                ModelState.AddModelError(nameof(model.CategoryId), "Category does not exist");
                 model.ShipmentCategories = await shipmentService.AllCategories();
 
                 return View(model);

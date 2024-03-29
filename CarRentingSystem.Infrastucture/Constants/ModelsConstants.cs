@@ -26,6 +26,8 @@ namespace CarRentingSystem.Infrastucture.Constants
         public const int ShipmentDeliveryAddressMaxLength = 150;
         public const int ShipmentDeliveryMinLength = 30;
 
+    
+
         public const int ShipmentDescriptionMaxLength = 500;
         public const int ShipmentDescriptionMinLength = 50;
 

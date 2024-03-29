@@ -1,8 +1,9 @@
 ﻿using CarRentingSystem.Core.Constants;
-using CarRentingSystem.Core.Contracts;
-using CarRentingSystem.Core.Contracts.Admin;
-using CarRentingSystem.Core.Models.Driver;
+using CarRentingSystem.Core.Contracts.Drivers;
+using CarRentingSystem.Core.Contracts.Users;
+using CarRentingSystem.Core.Models.Drivers;
 using CarRentingSystem.Extensions;
+using CarRentingSystem.Models.Drivers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,13 +30,13 @@ namespace CarRentingSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var model = new BecomeDriverModel();
+            var model = new BecomeDriverFormModel();
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Become(BecomeDriverModel model)
+        public async Task<IActionResult> Become(BecomeDriverFormModel model)
         {
             var userId = User.Id();
 
@@ -45,7 +46,7 @@ namespace CarRentingSystem.Controllers
             }
 
 
-            if (await usersService.UserHasRents(userId))
+            if (usersService.UserHasRents(userId))
             {
                 TempData[MessageConstant.ErrorMessage] = "You can not have booked shipments to become driver";
 

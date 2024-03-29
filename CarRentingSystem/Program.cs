@@ -16,6 +16,8 @@ namespace CarRentingSystem
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+
+
             builder.Services.AddDefaultIdentity<User>(options => 
             {
                 options.SignIn.RequireConfirmedAccount = false;

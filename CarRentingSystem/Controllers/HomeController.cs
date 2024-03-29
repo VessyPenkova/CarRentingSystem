@@ -1,4 +1,4 @@
-﻿using CarRentingSystem.Core.Contracts;
+﻿using CarRentingSystem.Core.Contracts.Shipments;
 using CarRentingSystem.Models;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
