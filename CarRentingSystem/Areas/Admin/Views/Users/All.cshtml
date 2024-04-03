@@ -4,39 +4,39 @@
     ViewBag.Title = "All Users";
 }
 
-<h2 class="text-center" style="color: yellow;">@ViewBag.Title</h2>
+<h2 class="text-center" style="background-color: #09223c; color: #ffd500;">@ViewBag.Title</h2>
 <hr />
 
-<table class="table table-striped" style="background-color: lightgray;">
+<table class="table table-striped" style="background-color: #09223c; color: #ffd500;">
     <thead>
         <tr>
-            <th><label style="color: yellow;">Email</label></th>
-            <th><label style="color: yellow;">Full Name</label></th>
-            <th><label style="color: yellow;">Phone Number</label></th>
-            <th><label style="color: yellow;">User Is Driver</label></th>
-            <th><label style="color: yellow;">Actions</label></th>
+            <th><label style="background-color: #09223c; color: #ffd500;">Email</label></th>
+            <th><label style="background-color: #09223c; color: #ffd500;">Full Name</label></th>
+            <th><label style="background-color: #09223c; color: #ffd500;">Phone Number</label></th>
+            <th><label style="background-color: #09223c; color: #ffd500;">User Is Driver</label></th>
+            <th><label style="background-color: #09223c; color: #ffd500;">Actions</label></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var user in Model)
         {
             <tr>
-                <td><label style="color: yellow;">@user.Email</label></td>
-                <td><label style="color: yellow;">@user.FullName</label></td>
-                <td><label style="color: yellow;">@user.PhoneNumber</label></td>
+                <td><label style="background-color: #09223c; color: #ffd500;">@user.Email</label></td>
+                <td><label style="background-color: #09223c; color: #ffd500;">@user.FullName</label></td>
+                <td><label style="background-color: #09223c; color: #ffd500;">@user.PhoneNumber</label></td>
                 <td>
                     @if (string.IsNullOrEmpty(user.PhoneNumber) == false)
                     {
-                        <label style="color: yellow;">✔</label>
+                        <label style="background-color: #09223c; color: #ffd500;">✔</label>
                     }
                     else
                     {
-                        <label class="text-center" style="color: yellow;">❌</label>
+                        <label class="text-center" style="background-color: #09223c; color: #ffd500;">❌</label>
                     }
                 </td>
                 <td>
-                    <form asp-area="Admin" asp-controller="User" asp-action="Forget" asp-route-userId="@user." method="post">
-                        <button type="submit" class="btn btn-danger" style="background-color: lightgray; color: black;">Forget</button>
+                    <form asp-area="Admin" asp-controller="Users" asp-action="Forget" asp-route-userId="@user." method="post">
+                        <button type="submit" class="btn btn-danger" style="background-color: #09223c; color: #ffd500;">Forget</button>
                     </form>
                 </td>
             </tr>

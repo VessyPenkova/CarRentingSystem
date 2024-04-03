@@ -16,7 +16,7 @@ namespace CarRentingSystem.Infrastucture.Data
     {
         [Key]
         [Comment("Shipment Identifier")]
-        public int ShipmentId { get; init; }
+        public int ShipmentId { get; set; }
 
         [Required]
         [MaxLength(ShipmentTitleMaxLength)]
@@ -56,20 +56,20 @@ namespace CarRentingSystem.Infrastucture.Data
         public int CategId { get; set; }
 
         [ForeignKey(nameof(CategId))]
-        public Category Category { get; init; } = null!;
+        public Category Category { get; set; } = null!;
 
 
 
         [Required]
         [Comment("Driver identifier")]
         public int DriverId { get; set; }
-        public Driver Driver { get; init; } = null!;
+        public Driver Driver { get; set; } = null!;
 
 
 
         [Comment("User id of the rentier")]
         public string? RenterId { get; set; }
-        public User? Renter { get; init; }
+        public User? Renter { get; set; }
         public bool IsActive { get; set; } = true;
     }
 }

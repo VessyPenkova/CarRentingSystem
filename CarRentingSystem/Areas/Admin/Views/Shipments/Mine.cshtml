@@ -3,14 +3,14 @@
     ViewBag.Title = "My Shipments";
 }
 
-<h2 class="text-center" style="color: yellow;">@ViewBag.Title</h2>
+<h2 class="text-center" style="background-color: #09223c; color: #ffd500;">@ViewBag.Title</h2>
 <hr />
 
-<h4 style="color: yellow;">My Added Shipments</h4>
+<h4 style="background-color: #09223c; color: #ffd500;">My Added Shipments</h4>
 
 @if (!Model.AddedShipments.Any())
 {
-    <h2 class="text-center" style="color: yellow;">You have nothing booked yet!</h2>
+    <h2 class="text-center" style="background-color: #09223c; color: #ffd500;">You have nothing booked yet!</h2>
 }
 
 <div class="row">
@@ -22,11 +22,11 @@
 
 </div>
 
-<h4 style="color: yellow;">My Booked Shipments</h4>
+<h4 style="background-color: #09223c; color: #ffd500;">My Booked Shipments</h4>
 
 @if (!Model.RentedShipments.Any())
 {
-    <h2 class="text-center" style="color: yellow;">You have nothing booked yet!</h2>
+    <h2 class="text-center" style="background-color: #09223c; color: #ffd500;">You have nothing booked yet!</h2>
 }
 
 <div class="row">

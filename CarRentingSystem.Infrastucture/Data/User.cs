@@ -18,5 +18,7 @@ namespace CarRentingSystem.Infrastucture.Data
         [Required]
         [MaxLength(UserLastNameMaxLength)]
         public string LastName { get; init; } = null!;
+
+        public bool IsActive { get; set; } = true;
     }
 }

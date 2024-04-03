@@ -5,9 +5,11 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
 {
     public class ConfigureData
     {
-        public User AdminUser { get; set; } = null!;
         public User DriverUser { get; set; } = null!;
+
         public User GuestUser { get; set; } = null!;
+
+        public User AdminUser { get; set; } = null!;
 
         public Driver AdminDriver { get; set; } = null!;
         public Driver UserDriver { get; set; } = null!;
@@ -40,7 +42,7 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
         }
         private void ConfigureUsers()
         {
-            var hasher = new PasswordHasher<User>();
+            var hasher = new PasswordHasher<IdentityUser>();
 
             this.DriverUser = new User()
             {
@@ -49,8 +51,8 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                 NormalizedUserName = "driver@mail.com",
                 Email = "driver@mail.com",
                 NormalizedEmail = "driver@mail.com",
-                FirstName = "Ekaterina",
-                LastName = "TheGreat"
+                FirstName = "Driviot",
+                LastName = "Drivilov"
             };
 
             this.DriverUser.PasswordHash =
@@ -63,8 +65,8 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                 NormalizedUserName = "guest@mail.com",
                 Email = "guest@mail.com",
                 NormalizedEmail = "guest@mail.com",
-                FirstName = "Fifcho",
-                LastName = "Lesly"
+                FirstName = "Gestiot",
+                LastName = "Gestiotev"
             };
 
             this.GuestUser.PasswordHash =
@@ -77,8 +79,8 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
                 NormalizedEmail = AdminEmail,
                 UserName = AdminEmail,
                 NormalizedUserName = AdminEmail,
-                FirstName = "SuperAdmin",
-                LastName = "Admin"
+                FirstName = "Adminiot",
+                LastName = "Adminov"
             };
 
             this.AdminUser.PasswordHash =

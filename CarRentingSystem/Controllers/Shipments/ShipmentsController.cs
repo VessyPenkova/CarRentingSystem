@@ -1,4 +1,5 @@
-﻿using CarRentingSystem.Core.Contracts.Drivers;
+﻿using CarRentingSystem.Controllers.Drivers;
+using CarRentingSystem.Core.Contracts.Drivers;
 using CarRentingSystem.Core.Contracts.Shipments;
 using CarRentingSystem.Core.Extensions;
 using CarRentingSystem.Core.Models.Shipment;
@@ -12,12 +13,12 @@ using Microsoft.Extensions.Caching.Memory;
 using static CarRentingSystem.Areas.Admin.Constants.AdminConstants;
 
 
-namespace CarRentingSystem.Controllers
+namespace CarRentingSystem.Controllers.Shipments
 {
     [Authorize]
-    public class ShipmentController : Controller
+    public class ShipmentsController : Controller
     {
-       
+
         private readonly IShipmentService shipmentService;
 
         private readonly IDriverService driverService;
@@ -26,10 +27,10 @@ namespace CarRentingSystem.Controllers
 
         private readonly IMemoryCache cache;
 
-        public ShipmentController(
+        public ShipmentsController(
             IShipmentService _shipmentService,
             IDriverService _driverService,
-            ILogger<ShipmentController> _logger,
+            ILogger<ShipmentsController> _logger,
             IMemoryCache cache)
         {
             shipmentService = _shipmentService;
@@ -38,7 +39,6 @@ namespace CarRentingSystem.Controllers
             this.cache = cache;
         }
 
-        [Authorize]
         public async Task<IActionResult> Mine()
         {
             if (User.IsInRole(AdminRoleName))
@@ -63,8 +63,6 @@ namespace CarRentingSystem.Controllers
 
             return View(myShipments);
         }
-
-
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> All([FromQuery] AllShipmentsQueryModel query)
@@ -83,12 +81,11 @@ namespace CarRentingSystem.Controllers
 
             return View(query);
         }
-      
 
         [AllowAnonymous]
         public async Task<IActionResult> Details(int shipmentId, string information)
         {
-            if ((await shipmentService.Exists(shipmentId)) == false)
+            if (await shipmentService.Exists(shipmentId) == false)
             {
                 return RedirectToAction(nameof(All));
             }
@@ -103,13 +100,12 @@ namespace CarRentingSystem.Controllers
             return View(model);
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            if ((await driverService.ExistsById(User.Id()) == false))
+            if (await driverService.ExistsById(User.Id()) == false)
             {
-                return RedirectToAction(nameof(DriverController.Become), "Driver");
+                return RedirectToAction(nameof(DriversController.Become), "Drivers");
             }
 
             var model = new ShipmentFormModel()
@@ -120,16 +116,16 @@ namespace CarRentingSystem.Controllers
             return View(model);
         }
 
-        [Authorize]
         [HttpPost]
+
         public async Task<IActionResult> Add(ShipmentFormModel model)
         {
-            if ((await driverService.ExistsById(User.Id()) == false))
+            if (await driverService.ExistsById(User.Id()) == false)
             {
-                return RedirectToAction(nameof(DriverController.Become), "Driver");
+                return RedirectToAction(nameof(DriversController.Become), "Drivers");
             }
 
-            if ((await shipmentService.CategoryExists(model.CategoryId)) == false)
+            if (await shipmentService.CategoryExists(model.CategoryId) == false)
             {
                 ModelState.AddModelError(nameof(model.CategoryId), "Category does not exists");
             }
@@ -143,27 +139,25 @@ namespace CarRentingSystem.Controllers
 
             var driverId = await driverService.GetDriverId(User.Id());
 
-            model = new ShipmentFormModel()
-            {
-                ShipmentCategories = await shipmentService.AllCategories()
-            };
+            var newShipmentId = shipmentService.Create(model.Title, model.LoadingAddress, model.DeliveryAddress,
+               model.Description, model.ImageUrlShipmentGoogleMaps, model.Price,
+            model.CategoryId, driverId);
 
             TempData["message"] = "You have created new shipment!";
 
-            return RedirectToAction(nameof(Details), 
-            new { id = model.Id, information = model.GetInformation() });
+            return RedirectToAction(nameof(Details),
+            new { id = driverId, information = model.GetInformation() });
         }
-
-        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            if ((await shipmentService.Exists(id)) == false)
+            if (await shipmentService.Exists(id) == false)
             {
                 TempData["message"] = "This shipment already exist!";
                 return RedirectToAction(nameof(All));
             }
 
-            if ((await shipmentService.HasDriverWithId(id, User.Id())) == false)
+            if (await shipmentService.HasDriverWithId(id, User.Id()) == false)
             {
                 logger.LogInformation("User with id {0} attempted to open other Driver shipment", User.Id());
 
@@ -191,10 +185,9 @@ namespace CarRentingSystem.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Edit(int id, ShipmentCreateEditFormModel model)
         {
-            if ((await shipmentService.Exists(id)) == false)
+            if (await shipmentService.Exists(id) == false)
             {
                 ModelState.AddModelError("", "Shipment not available");
                 model.ShipmentCategories = await shipmentService.AllCategories();
@@ -202,12 +195,12 @@ namespace CarRentingSystem.Controllers
                 return View(model);
             }
 
-            if ((await shipmentService.HasDriverWithId(id, User.Id())) == false && !User.IsInRole("Admin"))
+            if (await shipmentService.HasDriverWithId(id, User.Id()) == false && !User.IsInRole("Admin"))
             {
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
             }
 
-            if ((await shipmentService.CategoryExists(model.CategoryId)) == false)
+            if (await shipmentService.CategoryExists(model.CategoryId) == false)
             {
                 ModelState.AddModelError(nameof(model.CategoryId), "Category does not exist");
                 model.ShipmentCategories = await shipmentService.AllCategories();
@@ -222,23 +215,24 @@ namespace CarRentingSystem.Controllers
                 return View(model);
             }
 
-            await shipmentService.Edit(model.Id, model);
+            await shipmentService.Edit(id, model.Title, model.LoadingAddress, model.DeliveryAddress,
+                model.Description, model.ImageUrlShipmentGoogleMaps, model.Price, model.CategoryId);
 
             TempData["message"] = "Details updated!";
 
             return RedirectToAction(nameof(Details), new { id = model.Id, information = model.GetInformation() });
         }
 
-        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            if ((await shipmentService.Exists(id)) == false)
+            if (await shipmentService.Exists(id) == false)
             {
                 TempData["message"] = "This shipment is not available!";
                 return RedirectToAction(nameof(All));
             }
 
-            if ((await shipmentService.HasDriverWithId(id, User.Id())) == false && !User.IsInRole("Admin"))
+            if (await shipmentService.HasDriverWithId(id, User.Id()) == false && !User.IsInRole("Admin"))
             {
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
             }
@@ -257,16 +251,16 @@ namespace CarRentingSystem.Controllers
         }
 
         [HttpPost]
-        [HttpPost]
+
         public async Task<IActionResult> Delete(int id, ShipmentDetailsViewModel model)
         {
-            if ((await shipmentService.Exists(id)) == false)
+            if (await shipmentService.Exists(id) == false)
             {
                 TempData["message"] = "This shipment is not available!";
                 return RedirectToAction(nameof(All));
             }
 
-            if ((await shipmentService.HasDriverWithId(id, User.Id())) == false && !User.IsInRole("Admin"))
+            if (await shipmentService.HasDriverWithId(id, User.Id()) == false && !User.IsInRole("Admin"))
             {
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
             }
@@ -279,10 +273,10 @@ namespace CarRentingSystem.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+
         public async Task<IActionResult> Rent(int id)
         {
-            if ((await shipmentService.Exists(id)) == false)
+            if (await shipmentService.Exists(id) == false)
             {
                 return RedirectToAction(nameof(All));
             }
@@ -303,23 +297,23 @@ namespace CarRentingSystem.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+
         public async Task<IActionResult> Leave(int id)
         {
-            if ((await shipmentService.Exists(id)) == false ||
-                (await shipmentService.IsRented(id)) == false)
+            if (await shipmentService.Exists(id) == false ||
+                await shipmentService.IsRented(id) == false)
             {
                 return RedirectToAction(nameof(All));
             }
 
-            if ((await shipmentService.IsRentedByUserWithId(id, User.Id())) == false)
+            if (await shipmentService.IsRentedByUserWithId(id, User.Id()) == false)
             {
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
             }
 
             await shipmentService.Leave(id);
 
-            this.cache.Remove(RentsCacheKey);
+            cache.Remove(RentsCacheKey);
 
             TempData["message"] = "You have successfully left the car!";
 

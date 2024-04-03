@@ -1,10 +1,9 @@
-﻿
-@model IEnumerable<ShipmentServiceModel>
+﻿@model IEnumerable<ShipmentServiceModel>
 @{
     ViewBag.Title = "My Shipments";
 }
 
-<h2 class="text-center" style="color: yellow;">@ViewBag.Title</h2>
+<h2 class="text-center" style="background-color: #09223c; color: #ffd500;">@ViewBag.Title</h2>
 <hr />
 
 @if (Model.Any())
@@ -12,11 +11,11 @@
     <div class="row">
         @foreach (var shipment in Model)
         {
-            <partial name="_ShipmentPartial" model="@shipment" />
+            <partial name="ShipmentPartial" model="@shipment" />
         }
     </div>
 }
 else
 {
-    <h3 class="text-center" style="color: yellow;">You have no car or routes yet!</h3>
+    <h3 class="text-center" style="background-color: #09223c; color: #ffd500;">You have no car or routes yet!</h3>
 }

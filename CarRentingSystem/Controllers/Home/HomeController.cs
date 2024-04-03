@@ -6,22 +6,22 @@ using Microsoft.AspNetCore.Routing;
 using System.Diagnostics;
 using static CarRentingSystem.Areas.Admin.Constants.AdminConstants;
 
-namespace CarRentingSystem.Controllers
+namespace CarRentingSystem.Controllers.Home
 {
     public class HomeController : Controller
     {
-        private readonly IShipmentService shipmentService;       
+        private readonly IShipmentService shipmentService;
 
         private readonly ILogger logger;
 
         public HomeController(
-            IShipmentService _shipmentService,           
+            IShipmentService _shipmentService,
             ILogger<HomeController> _logger)
         {
-            shipmentService = _shipmentService;         
+            shipmentService = _shipmentService;
             logger = _logger;
         }
-        public async Task< IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
             if (User.IsInRole(AdminRoleName))
             {
@@ -35,7 +35,7 @@ namespace CarRentingSystem.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            var feature = this.HttpContext.Features.Get<IExceptionHandlerFeature>();
+            var feature = HttpContext.Features.Get<IExceptionHandlerFeature>();
 
             logger.LogError(feature.Error, "TraceIdentifier: {0}", Activity.Current?.Id ?? HttpContext.TraceIdentifier);
 

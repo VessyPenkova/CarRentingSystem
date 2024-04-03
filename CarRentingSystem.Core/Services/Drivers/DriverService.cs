@@ -2,6 +2,9 @@
 using CarRentingSystem.Infrastucture.Data;
 using CarRentingSystem.Infrastucture.Data.Common;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 
 namespace CarRentingSystem.Core.Services.Drivers
 {
@@ -25,6 +28,7 @@ namespace CarRentingSystem.Core.Services.Drivers
 
             await repo.AddAsync(driver);
             await repo.SaveChangesAsync();
+
         }
 
         public async Task<bool> ExistsById(string userId)

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CarRentingSystem.Infrastucture.Migrations
 {
-    public partial class IntitialMigration : Migration
+    public partial class InitialMigration01 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,6 +30,7 @@ namespace CarRentingSystem.Infrastucture.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -233,12 +234,12 @@ namespace CarRentingSystem.Infrastucture.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "IsActive", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", 0, "d62b0c2d-4222-43b0-a4af-01505d37dd5f", "guest@mail.com", false, "Fifcho", "Lesly", false, null, "guest@mail.com", "guest@mail.com", "AQAAAAEAACcQAAAAEIHxYTfvcJ6EGjZ/XAQH0g0evAX7zJ2mXPAaxMYwH4mYtqt6LfNbwEe1d8kSAMz1UQ==", null, false, "bd3ff794-36b7-4fde-b612-98bc43a32bc4", false, "guest@mail.com" },
-                    { "bcb4f072-ecca-43c9-ab26-c060c6f364e4", 0, "9b3f08a6-ec15-47af-a489-1f203d4420a3", "admin@mail.com", false, "SuperAdmin", "Admin", false, null, "admin@mail.com", "admin@mail.com", "AQAAAAEAACcQAAAAEGqvu4QtI/Wa+k8H7DCPiQ9G3SVxFR8lWgPuWOyPlmIYiAgZ/HlOQL5IYnyON7ahSQ==", null, false, "feb6b56a-6a0f-46d4-b857-fa7fa0189b89", false, "admin@mail.com" },
-                    { "dea12856-c198-4129-b3f3-b893d8395082", 0, "d6e7ca73-c167-41d3-9a99-3514dd2e5581", "driver@mail.com", false, "Ekaterina", "TheGreat", false, null, "driver@mail.com", "driver@mail.com", "AQAAAAEAACcQAAAAEKJWNDRlj7bKlcbVZxBaomD1iKmdRVcH7A3CQ665StKH9nb0evHrLuOUdpI+xMDxxQ==", null, false, "405d169f-f915-44bb-8c78-6b44029ebd61", false, "driver@mail.com" }
+                    { "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", 0, "a97d1d41-2ab1-4cdc-9ca4-219fa33f4a9b", "guest@mail.com", false, "Gestiot", true, "Gestiotev", false, null, "guest@mail.com", "guest@mail.com", "AQAAAAEAACcQAAAAEKDyh83CZhRmSJxTCr++hGMbciHTmZO6OH+k7f3yV8Pho9ITC+qvYj7tTOE+q0NtWw==", null, false, "c811deac-bb8a-43a0-9bbc-7fb31732b0fa", false, "guest@mail.com" },
+                    { "bcb4f072-ecca-43c9-ab26-c060c6f364e4", 0, "441f5f1b-20e8-40f3-ab31-86b72db1f740", "admin@mail.com", false, "Adminiot", true, "Adminov", false, null, "admin@mail.com", "admin@mail.com", "AQAAAAEAACcQAAAAECbi3cXkEf+A92PM/7DddnbflRYX94T4zTH5R1MifIPpGeAGADR/c75XonZ5/CFx4g==", null, false, "25c2b9ef-0aa3-41b1-ae48-0afeddec9d4a", false, "admin@mail.com" },
+                    { "dea12856-c198-4129-b3f3-b893d8395082", 0, "2893c10a-765f-40de-9486-b056be4c2679", "driver@mail.com", false, "Driviot", true, "Drivilov", false, null, "driver@mail.com", "driver@mail.com", "AQAAAAEAACcQAAAAEI09SWX26uwumfJNOfKTpT0mQD984El0affgU7D49fthMWLwgq5+K+2AtaM2vGmhMQ==", null, false, "0ac5f1b1-a04c-441f-af03-ed2943f2c941", false, "driver@mail.com" }
                 });
 
             migrationBuilder.InsertData(

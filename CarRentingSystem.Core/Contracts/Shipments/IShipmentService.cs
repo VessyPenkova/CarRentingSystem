@@ -1,4 +1,5 @@
 ﻿using CarRentingSystem.Core.Models.Shipment;
+using CarRentingSystem.Infrastucture.Data;
 
 namespace CarRentingSystem.Core.Contracts.Shipments
 {
@@ -7,7 +8,9 @@ namespace CarRentingSystem.Core.Contracts.Shipments
         Task<IEnumerable<ShipmentIndexServiceModel>> LastThreeShipments();
         Task<IEnumerable<ShipmentCategoryServiceModel>> AllCategories();
         Task<bool> CategoryExists(int categoryId);
-        Task<int> Create(ShipmentCreateEditFormModel model, int driverId);
+        Task<int> Create(string title, string loadingAddress, string deliveryAddress,
+               string description, string imageUrlShipmentGoogleMaps, decimal price,
+            int categoryId,int driverId);
         Task<ShipmentQueryServiceModel> All(
             string? category = null,
             string? searchTerm = null,
@@ -20,7 +23,8 @@ namespace CarRentingSystem.Core.Contracts.Shipments
         Task<IEnumerable<ShipmentServiceModel>> AllShipmentsByDriverId(int driverId);
         Task<ShipmentDetailsServiceModel> ShipmentDetailsByShipmentId(int shipmentId);
         Task<bool> Exists(int shipmentId);
-        Task Edit(int shipmentId, ShipmentCreateEditFormModel model);
+        Task Edit(int shipmentId, string title, string loadingAddress, string deliveryAddress,
+           string description, string imageUrlShipmentGoogleMaps, decimal price, int categoryId);
         Task<bool> HasDriverWithId(int shipmentId, string currentUserId);
         Task<int> GetShipmentCategoryId(int shipmentId);
         Task Delete(int shipmentId);

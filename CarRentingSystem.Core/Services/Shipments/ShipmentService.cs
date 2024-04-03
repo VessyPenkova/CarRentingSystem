@@ -26,6 +26,36 @@ namespace CarRentingSystem.Core.Services.Shipments
             guard = _guard;
             logger = _logger;
         }
+
+        public async Task<bool> Exists(int shipmentId)
+        {
+            return await repo.AllReadonly<Shipment>()
+                .AnyAsync(cr => cr.ShipmentId == shipmentId);
+        }
+
+        public async Task<ShipmentDetailsServiceModel> ShipmentDetailsByShipmentId(int shipmentId)
+        {
+            return await repo.AllReadonly<Shipment>()
+                .Where(sh => sh.ShipmentId == shipmentId)
+                .Select(sh => new ShipmentDetailsServiceModel()
+                {
+                    ShipmentId = shipmentId,
+                    LoadingAddress = sh.LoadingAddress,
+                    DeliveryAddress = sh.DeliveryAddress,
+                    Category = sh.Category.Name,
+                    Description = sh.Description,
+                    ImageUrlShipmentGoogleMaps = sh.ImageUrlShipmentGoogleMaps,
+                    IsRented = sh.RenterId != null,
+                    Price = sh.Price,
+                    Title = sh.Title,
+                    Driver = new DriverServiceModel()
+                    {
+                        Email = sh.Driver.User.Email,
+                        PhoneNumber = sh.Driver.PhoneNumber
+                    }
+                })
+                .FirstAsync();
+        }
         public async Task<ShipmentQueryServiceModel> All(string? category = null, string? searchTerm = null,
         ShipmentSorting sorting = ShipmentSorting.Newest, int currentPage = 1, int ShipmentsPerPage = 1)
         {
@@ -77,29 +107,8 @@ namespace CarRentingSystem.Core.Services.Shipments
 
             return result;
         }
-        public async Task<IEnumerable<ShipmentCategoryServiceModel>> AllCategories()
-        {
-            return await repo.AllReadonly<Category>()
-                .OrderBy(c => c.Name)
-                .Select(c => new ShipmentCategoryServiceModel()
-                {
-                    CategoryId = c.CategoryId,
-                    Name = c.Name
-                })
-                .ToListAsync();
-        }
-        public async Task<IEnumerable<string>> AllCategoriesNames()
-        {
-            return await repo.AllReadonly<Category>()
-                .Select(c => c.Name)
-                .Distinct()
-                .ToListAsync();
-        }
-        public async Task<bool> CategoryExists(int categoryId)
-        {
-            return await repo.AllReadonly<Category>()
-                .AnyAsync(c => c.CategoryId == categoryId);
-        }
+
+
         public async Task<IEnumerable<ShipmentServiceModel>> AllShipmentsByDriverId(int driverId)
         {
             var shipments = await repo.AllReadonly<Shipment>()
@@ -135,17 +144,50 @@ namespace CarRentingSystem.Core.Services.Shipments
                 .ToListAsync();
             return shipments;
         }
-        public async Task<int> Create(ShipmentCreateEditFormModel model, int driverId)
+
+
+
+        public async Task<bool> CategoryExists(int categoryId)
+        {
+            return await repo.AllReadonly<Category>()
+                .AnyAsync(c => c.CategoryId == categoryId);
+        }
+        public async Task<IEnumerable<ShipmentCategoryServiceModel>> AllCategories()
+        {
+            return await repo.AllReadonly<Category>()
+                .OrderBy(c => c.Name)
+                .Select(c => new ShipmentCategoryServiceModel()
+                {
+                    CategoryId = c.CategoryId,
+                    Name = c.Name
+                })
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<string>> AllCategoriesNames()
+        {
+            return await repo.AllReadonly<Category>()
+                .Select(c => c.Name)
+                .Distinct()
+                .ToListAsync();
+        }
+        public async Task<int> GetShipmentCategoryId(int shipmentId)
+        {
+            return (await repo.GetByIdAsync<Shipment>(shipmentId)).CategId;
+
+        }
+
+        public async Task<int> Create(string title, string loadingAddress, string deliveryAddress,
+        string description, string imageUrlShipmentGoogleMaps, decimal price, int categoryId, int driverId)
         {
             var shipment = new Shipment()
             {
-                LoadingAddress = model.LoadingAddress,
-                DeliveryAddress = model.DeliveryAddress,
-                CategId = model.CategoryId,
-                Description = model.Description,
-                ImageUrlShipmentGoogleMaps = model.ImageUrlShipmentGoogleMaps,
-                Price = model.Price,
-                Title = model.Title,
+                LoadingAddress = loadingAddress,
+                DeliveryAddress = deliveryAddress,
+                CategId = categoryId,
+                Description = description,
+                ImageUrlShipmentGoogleMaps = imageUrlShipmentGoogleMaps,
+                Price = price,
+                Title = title,
                 DriverId = driverId,
             };
 
@@ -162,6 +204,22 @@ namespace CarRentingSystem.Core.Services.Shipments
 
             return shipment.ShipmentId;
         }
+        public async Task Edit(int shipmentId, string title, string loadingAddress, string deliveryAddress,
+        string description, string imageUrlShipmentGoogleMaps, decimal price, int categoryId)
+        {
+            var shipment = await repo.GetByIdAsync<Shipment>(shipmentId);
+
+            shipment.ShipmentId = shipmentId;
+            shipment.Description = description;
+            shipment.ImageUrlShipmentGoogleMaps = imageUrlShipmentGoogleMaps;
+            shipment.Price = price;
+            shipment.Title = title;
+            shipment.LoadingAddress = loadingAddress;
+            shipment.DeliveryAddress = deliveryAddress;
+            shipment.CategId = categoryId;
+
+            await repo.SaveChangesAsync();
+        }
         public async Task Delete(int shipmentId)
         {
             var shipment = await repo.AllReadonly<Shipment>()
@@ -169,29 +227,8 @@ namespace CarRentingSystem.Core.Services.Shipments
             await repo.DeleteAsync<Shipment>(shipment);
             await repo.SaveChangesAsync();
         }
-        public async Task Edit(int shipmentId, ShipmentCreateEditFormModel model)
-        {
-            var shipment = await repo.GetByIdAsync<Shipment>(shipmentId);
 
-            shipment.Description = model.Description;
-            shipment.ImageUrlShipmentGoogleMaps = model.ImageUrlShipmentGoogleMaps;
-            shipment.Price = model.Price;
-            shipment.Title = model.Title;
-            shipment.LoadingAddress = model.LoadingAddress;
-            shipment.DeliveryAddress = model.DeliveryAddress;
-            shipment.CategId = model.CategoryId;
 
-            await repo.SaveChangesAsync();
-        }
-        public async Task<bool> Exists(int shipmentId)
-        {
-            return await repo.AllReadonly<Shipment>()
-                .AnyAsync(cr => cr.ShipmentId == shipmentId);
-        }
-        public async Task<int> GetShipmentCategoryId(int shipmentId)
-        {
-            return (await repo.GetByIdAsync<Shipment>(shipmentId)).CategId;
-        }
         public async Task<bool> HasDriverWithId(int shipmentId, string currentUserId)
         {
             bool result = false;
@@ -206,30 +243,6 @@ namespace CarRentingSystem.Core.Services.Shipments
             }
 
             return result;
-        }
-        public async Task<ShipmentDetailsServiceModel> ShipmentDetailsByShipmentId(int shipmentId)
-        {
-            return await repo.AllReadonly<Shipment>()
-                .Where(cr => cr.ShipmentId == shipmentId)
-                .Select(cr => new ShipmentDetailsServiceModel()
-                {
-                    ShipmentId = shipmentId,
-                    LoadingAddress = cr.LoadingAddress,
-                    DeliveryAddress = cr.DeliveryAddress,
-                    Category = cr.Category.Name,
-                    Description = cr.Description,                 
-                    ImageUrlShipmentGoogleMaps = cr.ImageUrlShipmentGoogleMaps,
-                    IsRented = cr.RenterId != null,
-                    Price = cr.Price,
-                    Title = cr.Title,
-                    Driver = new DriverServiceModel()
-                    {
-                        Email = cr.Driver.User.Email,
-                        PhoneNumber = cr.Driver.PhoneNumber
-                    }
-
-                })
-                .FirstAsync();
         }
         public async Task<bool> IsRented(int shipmentId)
         {

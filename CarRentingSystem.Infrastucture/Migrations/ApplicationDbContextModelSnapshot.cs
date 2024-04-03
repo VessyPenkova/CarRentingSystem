@@ -263,6 +263,9 @@ namespace CarRentingSystem.Infrastucture.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(15)
@@ -318,17 +321,18 @@ namespace CarRentingSystem.Infrastucture.Migrations
                         {
                             Id = "bcb4f072-ecca-43c9-ab26-c060c6f364e4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9b3f08a6-ec15-47af-a489-1f203d4420a3",
+                            ConcurrencyStamp = "441f5f1b-20e8-40f3-ab31-86b72db1f740",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
-                            FirstName = "SuperAdmin",
-                            LastName = "Admin",
+                            FirstName = "Adminiot",
+                            IsActive = true,
+                            LastName = "Adminov",
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@mail.com",
                             NormalizedUserName = "admin@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGqvu4QtI/Wa+k8H7DCPiQ9G3SVxFR8lWgPuWOyPlmIYiAgZ/HlOQL5IYnyON7ahSQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECbi3cXkEf+A92PM/7DddnbflRYX94T4zTH5R1MifIPpGeAGADR/c75XonZ5/CFx4g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "feb6b56a-6a0f-46d4-b857-fa7fa0189b89",
+                            SecurityStamp = "25c2b9ef-0aa3-41b1-ae48-0afeddec9d4a",
                             TwoFactorEnabled = false,
                             UserName = "admin@mail.com"
                         },
@@ -336,17 +340,18 @@ namespace CarRentingSystem.Infrastucture.Migrations
                         {
                             Id = "dea12856-c198-4129-b3f3-b893d8395082",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d6e7ca73-c167-41d3-9a99-3514dd2e5581",
+                            ConcurrencyStamp = "2893c10a-765f-40de-9486-b056be4c2679",
                             Email = "driver@mail.com",
                             EmailConfirmed = false,
-                            FirstName = "Ekaterina",
-                            LastName = "TheGreat",
+                            FirstName = "Driviot",
+                            IsActive = true,
+                            LastName = "Drivilov",
                             LockoutEnabled = false,
                             NormalizedEmail = "driver@mail.com",
                             NormalizedUserName = "driver@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKJWNDRlj7bKlcbVZxBaomD1iKmdRVcH7A3CQ665StKH9nb0evHrLuOUdpI+xMDxxQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEI09SWX26uwumfJNOfKTpT0mQD984El0affgU7D49fthMWLwgq5+K+2AtaM2vGmhMQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "405d169f-f915-44bb-8c78-6b44029ebd61",
+                            SecurityStamp = "0ac5f1b1-a04c-441f-af03-ed2943f2c941",
                             TwoFactorEnabled = false,
                             UserName = "driver@mail.com"
                         },
@@ -354,17 +359,18 @@ namespace CarRentingSystem.Infrastucture.Migrations
                         {
                             Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d62b0c2d-4222-43b0-a4af-01505d37dd5f",
+                            ConcurrencyStamp = "a97d1d41-2ab1-4cdc-9ca4-219fa33f4a9b",
                             Email = "guest@mail.com",
                             EmailConfirmed = false,
-                            FirstName = "Fifcho",
-                            LastName = "Lesly",
+                            FirstName = "Gestiot",
+                            IsActive = true,
+                            LastName = "Gestiotev",
                             LockoutEnabled = false,
                             NormalizedEmail = "guest@mail.com",
                             NormalizedUserName = "guest@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIHxYTfvcJ6EGjZ/XAQH0g0evAX7zJ2mXPAaxMYwH4mYtqt6LfNbwEe1d8kSAMz1UQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKDyh83CZhRmSJxTCr++hGMbciHTmZO6OH+k7f3yV8Pho9ITC+qvYj7tTOE+q0NtWw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bd3ff794-36b7-4fde-b612-98bc43a32bc4",
+                            SecurityStamp = "c811deac-bb8a-43a0-9bbc-7fb31732b0fa",
                             TwoFactorEnabled = false,
                             UserName = "guest@mail.com"
                         });

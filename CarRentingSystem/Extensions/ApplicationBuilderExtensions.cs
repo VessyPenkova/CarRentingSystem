@@ -6,7 +6,7 @@ namespace CarRentingSystem.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder SeedAdmin(
+        public static IApplicationBuilder ConfigureAdmin(
            this IApplicationBuilder app)
         {
             using var scopedServices = app.ApplicationServices.CreateScope();

@@ -9,7 +9,6 @@ namespace CarRentingSystem.Models.Shipments
 {
     public class ShipmentFormModel : IShipmentModel
     {
-        public int Id { get; set; }
 
         [Required]
         [StringLength(50, MinimumLength = 10)]

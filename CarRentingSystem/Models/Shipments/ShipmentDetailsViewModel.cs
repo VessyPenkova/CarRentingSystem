@@ -2,7 +2,9 @@
 {
     public class ShipmentDetailsViewModel
     {
-        public string Title { get; set; } = null!;
+        public int Id { get; init; }
+
+        public string Title { get; set; }
 
         public string LoadingAddress { get; set; } = null!;
 

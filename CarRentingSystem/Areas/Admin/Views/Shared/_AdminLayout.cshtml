@@ -1,80 +1,75 @@
-﻿@inject IDriverService drivers
+﻿@using CarRentingSystem.Core.Contracts.Shipments
+@inject IShipmentService service
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Renting System - Administrator</title>
+
+    <meta charset="utf-8" style="background-color: #09223c; color: #ffd500;"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" style="background-color: #09223c; color: #ffd500;" />
+    <title>@ViewData["Title"]  Renting  System </title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/CarRentingSystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HouseRentingSystem.styles.css" asp-append-version="true" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <style>
-        body {
-            background-color: lightgray; /* Light gray background */
-            color: yellow; /* Yellow text */
-        }
-        .navbar {
-            background-color: lightgray; /* Light gray background for navbar */
-            color: black; /* Black text for navbar links */
-        }
-        .footer {
-            background-color: lightgray; /* Light gray background for footer */
-            color: black; /* Black text for footer */
-        }
-    </style>
 </head>
+
 <body>
-    <partial name="_UserMessages" />
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Renting Worldwide</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm"style="background-color: #09223c; color: #ffd500;" border-bottom box-shadow mb-3">
+            <div class="container-fluid" style="background-color: #09223c; color: #ffd500;">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" style="background-color: #09223c; color: #ffd500;"  asp-action="Index">Renting Worldwide</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" style="background-color: #09223c; color: #ffd500;"  data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" style=" background-color: #09223c; color: #ffd500;"">
+                    <ul class="navbar-nav flex-grow-1" style=" background-color: #09223c; color: #ffd500;">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Shipment" asp-action="All">All Shipments</a>
+                            <a class="nav-link" style=" background-color: #09223c; color: #ffd500;" asp-area="" asp-controller="Shipments" asp-action="All">All Houses</a>
                         </li>
                         @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Shipment" asp-action="Mine">My Shipments</a>
+                                <a class="nav-link text-dark" asp-area="" style="background-color: #09223c; color: #ffd500;" asp-controller="Shipments" asp-action="Mine">My Shipments</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Shipment" asp-action="Add">Add Shipment</a>
+                                <a class="nav-link text-dark" asp-area="" style="background-color: #09223c; color: #ffd500;" asp-controller="Shipments" asp-action="Add">Add Route</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Driver" asp-action="Become">Become Driver</a>
+                                <a class="nav-link text-dark" asp-area="" style="background-color: #09223c; color: #ffd500;" asp-controller="Drivers" asp-action="Become">Become Driver</a>
                             </li>
                         }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
+
             </div>
         </nav>
     </header>
     <div class="container">
-        <h1>Administration area</h1> 
+        <h1>Administration area </h1>
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
+        <div class="container" style="background-color: #09223c; color: #ffd500;">
             &copy; @DateTime.UtcNow.Year - Renting System
         </div>
     </footer>
 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
+
+

@@ -6,19 +6,19 @@ using static CarRentingSystem.Areas.Admin.Constants.AdminConstants;
 
 namespace CarRentingSystem.Areas.Admin.Controllers
 {
-    public class UserController : AdminController
+    public class UsersController : AdminController
     {
         private readonly IUserService userServices;
         private readonly IMemoryCache cache;
 
-        public UserController(IUserService _userServices,  IMemoryCache _cache)
+        public UsersController(IUserService _userServices,  IMemoryCache _cache)
         {
             this.userServices = _userServices;
             this.cache = _cache;
         }
 
-     
-        [Route("Users/All")]
+       // [Route("Users/All")]
+        [HttpPost]
         public async Task<IActionResult> All()
         {
 

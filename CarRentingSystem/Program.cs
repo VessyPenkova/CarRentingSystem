@@ -1,3 +1,4 @@
+using CarRentingSystem.Extensions;
 using CarRentingSystem.Infrastucture.Data;
 using CarRentingSystem.ModelBinders;
 using Microsoft.AspNetCore.Identity;
@@ -28,7 +29,8 @@ namespace CarRentingSystem
                 options.Password.RequireNonAlphanumeric = false;
             })
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             builder.Services.AddControllersWithViews()
             .AddMvcOptions(options =>
@@ -39,6 +41,7 @@ namespace CarRentingSystem
 
             builder.Services.AddApplicationServices();
             builder.Services.AddResponseCaching();
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())

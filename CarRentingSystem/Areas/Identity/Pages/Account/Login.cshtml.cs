@@ -18,34 +18,25 @@ namespace CarRentingSystem.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly ILogger<LoginModel> _logger;
-
-        public LoginModel(
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
-            ILogger<LoginModel> logger
-            )
+        private readonly SignInManager<User> signInManager;
+        
+        public LoginModel(SignInManager<User> _signInManager)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
-            _logger = logger;
-           
+            signInManager = _signInManager;      
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel Input { get; set; }//
 
      
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }//
 
        
-        public string ReturnUrl { get; set; }
+        public string ReturnUrl { get; set; }//
 
       
         [TempData]
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; }//
 
       
         public class InputModel
@@ -53,15 +44,15 @@ namespace CarRentingSystem.Areas.Identity.Pages.Account
             
             [Required]
             [EmailAddress]
-            public string Email { get; set; }
+            public string Email { get; set; }//
 
           
             [Required]
-            [DataType(DataType.Password)]
-            public string Password { get; set; }
+            [DataType(DataType.Password)]//
+            public string Password { get; set; }//
 
             [Display(Name = "Remember me?")]
-            public bool RememberMe { get; set; }
+            public bool RememberMe { get; set; }//
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -75,7 +66,7 @@ namespace CarRentingSystem.Areas.Identity.Pages.Account
 
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
         }
@@ -84,32 +75,16 @@ namespace CarRentingSystem.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
 
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            ExternalLogins = (await signInManager
+                .GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
             {
-               
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await this.signInManager.PasswordSignInAsync(Input.Email, Input.Password,
+                    Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    var user = await _userManager.FindByEmailAsync(Input.Email);
-                    
-                    if (user != null && await _userManager.IsInRoleAsync(user, "Administrator"))
-                    {
-                        return RedirectToAction("Index", "Admin", new { Area = "Admin" });
-                    }
-
-                    _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
                 }
                 else
                 {

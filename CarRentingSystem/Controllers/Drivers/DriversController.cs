@@ -1,4 +1,5 @@
-﻿using CarRentingSystem.Core.Constants;
+﻿using CarRentingSystem.Controllers.Shipments;
+using CarRentingSystem.Core.Constants;
 using CarRentingSystem.Core.Contracts.Drivers;
 using CarRentingSystem.Core.Contracts.Users;
 using CarRentingSystem.Core.Models.Drivers;
@@ -7,14 +8,14 @@ using CarRentingSystem.Models.Drivers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CarRentingSystem.Controllers
+namespace CarRentingSystem.Controllers.Drivers
 {
     [Authorize]
-    public class DriverController : Controller
+    public class DriversController : Controller
     {
         private readonly IDriverService driverService;
         private readonly IUserService usersService;
-        public DriverController(IDriverService _driverService,  IUserService _usersService)
+        public DriversController(IDriverService _driverService, IUserService _usersService)
         {
             driverService = _driverService;
             usersService = _usersService;
@@ -25,16 +26,13 @@ namespace CarRentingSystem.Controllers
         {
             if (await driverService.ExistsById(User.Id()))
             {
-                TempData[MessageConstant.ErrorMessage] = "You are already registered as driver";
-
-                return RedirectToAction("Index", "Home");
+                return BadRequest();
             }
 
-            var model = new BecomeDriverFormModel();
-
-            return View(model);
+            return View();
         }
 
+ 
         [HttpPost]
         public async Task<IActionResult> Become(BecomeDriverFormModel model)
         {
@@ -70,7 +68,7 @@ namespace CarRentingSystem.Controllers
 
             await driverService.Create(userId, model.PhoneNumber);
 
-            return RedirectToAction(nameof(ShipmentController.All), "Shipments");
+            return RedirectToAction(nameof(ShipmentsController.All), "Shipments");
         }
     }
 }

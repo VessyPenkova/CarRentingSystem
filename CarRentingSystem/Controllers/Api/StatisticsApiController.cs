@@ -2,7 +2,7 @@
 using CarRentingSystem.Core.Models.Statistics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HouseRentingSystem.Web.Controllers.Api
+namespace CarRentingSystem.Controllers.Api
 {
     [ApiController]
     [Route("api/statistics")]
@@ -17,7 +17,7 @@ namespace HouseRentingSystem.Web.Controllers.Api
 
         [HttpGet]
         public async Task<StatisticsServiceModel> GetStatistics()
-          => await this.statistics.Total();
+          => await statistics.Total();
     }
 }
 
