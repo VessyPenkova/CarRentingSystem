@@ -9,14 +9,14 @@
 <h2 class="text-center" style="background-color: #09223c; color: #ffd500;" ">@ViewBag.Title</h2>
 <hr />
 
-<div class="container" style="display:inline">
-    <div class="row">
-        <div class="col-4">
+<div class="container" style=" background-color: #09223c; color: #ffd500;" style="display:inline">
+    <div class="row" style=" background-color: #09223c; color: #ffd500;">
+        <div class="col-4" style=" background-color: #09223c; color: #ffd500;">
             <img class="card-img-top" style="width: 20rem;background-color: #09223c; color: #ffd500;"
                  src="@Model.ImageUrlShipmentGoogleMaps" alt="Shipment Image">
         </div>
         <div class="card col-8 border-0" style="background-color: #09223c; color: #ffd500;">
-            <p style="font-size:25px; color: yellow;"><u>@Model.Title</u></p>
+            <p style="font-size:25px; style=" background-color: #09223c; color: #ffd500;"><u>@Model.Title</u></p>
             <p style="background-color: #09223c; color: #ffd500;" ">Located in: <b>@Model.LoadingAddress</b></p>
             <p style="background-color: #09223c; color: #ffd500;">Located in: <b>@Model.DeliveryAddress</b></p>
             <p style="background-color: #09223c; color: #ffd500;">
@@ -26,23 +26,23 @@
             <p style="background-color: #09223c; color: #ffd500;">@Model.Description</p>
             <p style="background-color: #09223c; color: #ffd500;">Category: <b>@Model.Category</b></p>
             <p style="background-color: #09223c; color: #ffd500;"><i>(@(Model.IsRented ? "Rented" : "Not Rented"))</i></p>
-            <div class="form-inline">
+            <div class="form-inline" style=" background-color: #09223c; color: #ffd500;">
                 @if (this.User.Identity.IsAuthenticated)
                 {
-                    <a class="btn btn-warning" asp-controller="Shipments" asp-action="Edit"
-                       asp-route-id="@Model.ShipmentId" style="background-color: #09223c; color: #ffd500;">Edit</a>
+                    <a class="btn btn-warning" style=" background-color: #09223c; color: #ffd500;" asp-controller="Shipments" asp-action="Edit"
+                       asp-route-id="@Model.ShipmentId" >Edit</a>
                     <a class="ml-2 btn btn-danger" asp-controller="Shipments" asp-action="Delete"
                        asp-route-id="@Model.ShipmentId" style="background-color: #09223c; color: #ffd500;">Delete</a>
                     @if (!Model.IsRented)
                     {
-                        <form class="ml-2" asp-controller="Shipments"
-                              asp-action="Rent" asp-route-id="@Model.ShipmentId" method="post">
+                        <form class="ml-2" style=" background-color: #09223c; color: #ffd500;" asp-controller="Shipments"
+                              asp-action="Rent"  asp-route-id="@Model.ShipmentId" method="post">
                             <input class="btn btn-primary" type="submit" value="Rent" style="background-color: #09223c; color: #ffd500;" />
                         </form>
                     }
                     else
                     {
-                        <form class="ml-2" asp-controller="Shipments" asp-action="Leave"
+                        <form class="ml-2" style=" background-color: #09223c; color: #ffd500;" asp-controller="Shipments" asp-action="Leave"
                               asp-route-id="@Model.ShipmentId" method="post">
                             <input class="btn btn-primary" type="submit" value="Leave" style="background-color: #09223c; color: #ffd500;" />
                         </form>
@@ -50,11 +50,11 @@
                 }
             </div>
             <p></p>
-            <div class="card" style="width: 18rem; background-color: #d7d3e2;color: #09223c;">
+            <div class="card" style=" background-color: #09223c; color: #ffd500;" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title" style="background-color: #09223c; color: #ffd500;">Driver Info</h5>
-                    <p class="card-text" style="background-color: #09223c; color: #ffd500;">Email:  @Model.Driver.Email</p>
-                    <p class="card-text" style="background-color: #09223c; color: #ffd500;">Phone Number: @Model.Driver.PhoneNumber</p>
+                    <p class="card-text"   style="background-color: #09223c; color: #ffd500;">Email:  @Model.Driver.Email</p>
+                    <p class="card-text"   style="background-color: #09223c; color: #ffd500;">Phone Number: @Model.Driver.PhoneNumber</p>
                 </div>
             </div>
         </div>

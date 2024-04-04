@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/HouseRentingSystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CarRentingSystem.styles.css" asp-append-version="true" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
 
@@ -28,19 +28,19 @@
 
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" style=" background-color: #09223c; color: #ffd500;"">
                     <ul class="navbar-nav flex-grow-1" style=" background-color: #09223c; color: #ffd500;">
-                        <li class="nav-item">
-                            <a class="nav-link" style=" background-color: #09223c; color: #ffd500;" asp-area="" asp-controller="Shipments" asp-action="All">All Houses</a>
+                        <li class="nav-item" style="background-color: #09223c; color: #ffd500;">
+                            <a class="nav-link" style=" background-color: #09223c; color: #ffd500;" asp-area="" asp-controller="Shipments" asp-action="All">All Shipments</a>
                         </li>
                         @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" style="background-color: #09223c; color: #ffd500;" asp-controller="Shipments" asp-action="Mine">My Shipments</a>
+                            <li class="nav-item" style="background-color: #09223c; color: #ffd500;">
+                                <a class="nav-link " asp-area="" style="background-color: #09223c; color: #ffd500;" asp-controller="Shipments" asp-action="Mine">My Shipments</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" style="background-color: #09223c; color: #ffd500;" asp-controller="Shipments" asp-action="Add">Add Route</a>
+                            <li class="nav-item" style="background-color: #09223c; color: #ffd500;">
+                                <a class="nav-link " asp-area="" style="background-color: #09223c; color: #ffd500;" asp-controller="Shipments" asp-action="Add">Add Route</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" style="background-color: #09223c; color: #ffd500;" asp-controller="Drivers" asp-action="Become">Become Driver</a>
+                            <li class="nav-item" style="background-color: #09223c; color: #ffd500;">
+                                <a class="nav-link " asp-area="" style="background-color: #09223c; color: #ffd500;" asp-controller="Drivers" asp-action="Become">Become Driver</a>
                             </li>
                         }
                     </ul>
@@ -50,14 +50,14 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container" style="background-color: #09223c; color: #ffd500;">
         <h1>Administration area </h1>
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3" style="background-color: #09223c; color: #ffd500;">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted" style="background-color: #09223c; color: #ffd500;">
         <div class="container" style="background-color: #09223c; color: #ffd500;">
             &copy; @DateTime.UtcNow.Year - Renting System
         </div>

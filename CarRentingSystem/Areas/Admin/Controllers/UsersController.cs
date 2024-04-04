@@ -17,7 +17,7 @@ namespace CarRentingSystem.Areas.Admin.Controllers
             this.cache = _cache;
         }
 
-       // [Route("Users/All")]
+        [Route("Users/All")]
         [HttpPost]
         public async Task<IActionResult> All()
         {

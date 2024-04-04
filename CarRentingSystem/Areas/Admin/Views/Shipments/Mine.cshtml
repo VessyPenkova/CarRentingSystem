@@ -13,7 +13,7 @@
     <h2 class="text-center" style="background-color: #09223c; color: #ffd500;">You have nothing booked yet!</h2>
 }
 
-<div class="row">
+<div class="row" style="background-color: #09223c; color: #ffd500;">
 
     @foreach (var shipment in Model.AddedShipments)
     {
@@ -29,7 +29,7 @@
     <h2 class="text-center" style="background-color: #09223c; color: #ffd500;">You have nothing booked yet!</h2>
 }
 
-<div class="row">
+<div class="row" style="background-color: #09223c; color: #ffd500;">
     @foreach (var shipment in Model.RentedShipments)
     {
         @await Html.PartialAsync("~/Views/Shared/_ShipmentPartial.cshtml", shipment)

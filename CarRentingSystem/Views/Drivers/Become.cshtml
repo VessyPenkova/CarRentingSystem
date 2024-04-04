@@ -15,15 +15,15 @@
 }
 
 <div class="row">
-    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6" style=" background-color: #09223c; color: #ffd500;">
         <form method="post">
-            <div class="form-group">
+            <div class="form-group" style="background-color: #09223c; color: #ffd500;">
                 <label asp-for="PhoneNumber" style="background-color: #09223c; color: #ffd500;"></label>
-                <input asp-for="PhoneNumber" class="form-control" placeholder="+35911111111" style="background-color: lightgray; color: black;">
+                <input asp-for="PhoneNumber" class="form-control" placeholder="+35911111111" style="background-color: #09223c; color: #ffd500;">
                 <span asp-validation-for="PhoneNumber" class="small text-danger" style="color: yellow;"></span>
             </div>
-            <div class="text-center">
-                <input class="btn btn-primary mt-3" type="submit" value="Save" style="background-color: lightgray; color: black;">
+            <div class="text-center" style=" background-color: #09223c; color: #ffd500;">
+                <input class="btn btn-primary mt-3" type="submit" value="Save" style="background-color: #09223c; color: #ffd500;">
             </div>
         </form>
     </div>

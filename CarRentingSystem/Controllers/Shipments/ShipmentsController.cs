@@ -63,6 +63,7 @@ namespace CarRentingSystem.Controllers.Shipments
 
             return View(myShipments);
         }
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> All([FromQuery] AllShipmentsQueryModel query)
@@ -148,6 +149,7 @@ namespace CarRentingSystem.Controllers.Shipments
             return RedirectToAction(nameof(Details),
             new { id = driverId, information = model.GetInformation() });
         }
+
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {

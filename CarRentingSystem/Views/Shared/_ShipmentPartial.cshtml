@@ -17,7 +17,7 @@
             <h6>(@(Model.IsRented ? "Rented" : "Not Rented"))</h6>
             <br />
             <a asp-area="" asp-controller="Shipments" style="background-color: #09223c; color: #ffd500;" asp-action="Details" asp-Shipment-id="@Model.Id"
-               asp-route-information="@Model.GetInformation()" class="btn btn-success" style="background-color: #09223c; color: #ffd500;;">Details</a>
+               asp-route-information="@Model.GetInformation()" class="btn btn-success" style="background-color: #09223c; color: #ffd500;">Details</a>
             @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
             {
                 <a asp-area="" asp-controller="Shipments" style="background-color: #09223c; color: #ffd500;" asp-action="Edit" asp-route-id="@Model.Id"
@@ -28,7 +28,7 @@
                 @if (!Model.IsRented)
                 {
                     <form class="input-group-sm" asp-area=""  style="background-color: #09223c; color: #ffd500;" asp-controller="Shipments"
-                          asp-action="Rent" asp-route-id="@Model.Id" method="post">
+                          asp-action="Rent"  asp-route-id="@Model.Id" method="post">
                         <input class="btn btn-primary" style="background-color: #09223c; color: #ffd500;" />
                     </form>
                 }

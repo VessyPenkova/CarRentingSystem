@@ -8,10 +8,10 @@
 
 @if (Model.Any())
 {
-    <div class="row">
+    <div class="row" style=" background-color: #09223c; color: #ffd500;">
         @foreach (var shipment in Model)
         {
-            <partial name="ShipmentPartial" model="@shipment" />
+            <partial style=" background-color: #09223c; color: #ffd500;" name="ShipmentPartial" model="@shipment" />
         }
     </div>
 }

@@ -26,10 +26,12 @@ namespace CarRentingSystem.Controllers.Drivers
         {
             if (await driverService.ExistsById(User.Id()))
             {
-                return BadRequest();
+                TempData[MessageConstant.ErrorMessage] = "You are already registered as driver";
+
+                return RedirectToAction("Index", "Home");
             }
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
  

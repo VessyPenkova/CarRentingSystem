@@ -7,11 +7,11 @@
 <h2 class="text-center" style="background-color: #09223c; color: #ffd500;">@ViewBag.Title </h2>
 <hr />
 
-<div class="row">
+<div class="row" style="background-color: #09223c; color: #ffd500;">
     @foreach (var rent in Model)
     {
-        <div class="card mb-3 col-4" style="background-color: #09223c; color: #ffd500;">
-            <img class="card-img-top" src="@rent.ShipmentImageURL" alt="Shipment Image">
+        <div class="card mb-3 col-4"  style="background-color: #09223c; color: #ffd500;">
+            <img class="card-img-top" style="background-color: #09223c; color: #ffd500;" src="@rent.ShipmentImageURL" alt="Shipment Image">
             <div class="card-body text-center" style="background-color: #09223c; color: #ffd500;">
                 <h4>@rent.ShipmentTitle  </h4>
                 <h6>Driver: <b>@rent.DriverFullName (@rent.DriverEmail)</b></h6>
