@@ -6,7 +6,7 @@
     ViewBag.Title = "Shipment Details";
 }
 
-<h2 class="text-center" style="background-color: #09223c; color: #ffd500;" ">@ViewBag.Title</h2>
+<h2 class="text-center" style="background-color: #09223c; color: #ffd500;">@ViewBag.Title</h2>
 <hr />
 
 <div class="container" style=" background-color: #09223c; color: #ffd500;" style="display:inline">
@@ -16,10 +16,10 @@
                  src="@Model.ImageUrlShipmentGoogleMaps" alt="Shipment Image">
         </div>
         <div class="card col-8 border-0" style="background-color: #09223c; color: #ffd500;">
-            <p style="font-size:25px; style=" background-color: #09223c; color: #ffd500;"><u>@Model.Title</u></p>
-            <p style="background-color: #09223c; color: #ffd500;" ">Located in: <b>@Model.LoadingAddress</b></p>
-            <p style="background-color: #09223c; color: #ffd500;">Located in: <b>@Model.DeliveryAddress</b></p>
-            <p style="background-color: #09223c; color: #ffd500;">
+            <p style="font-size:25px;" style="background-color: #09223c; color: #ffd500;"><u>@Model.Title</u></p>
+            <p>Located in: <b>@Model.LoadingAddress</b></p>
+            <p >Located in: <b>@Model.DeliveryAddress</b></p>
+            <p>
                 Price:
                 <b>@String.Format("{0:f2}", Model.Price) BGN</b>
             </p>

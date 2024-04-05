@@ -109,7 +109,7 @@ namespace CarRentingSystem.Controllers.Shipments
                 return RedirectToAction(nameof(DriversController.Become), "Drivers");
             }
 
-            var model = new ShipmentFormModel()
+            var model = new Core.Models.Shipment.ShipmentCoreFormModel()
             {
                 ShipmentCategories = await shipmentService.AllCategories()
             };
@@ -119,7 +119,7 @@ namespace CarRentingSystem.Controllers.Shipments
 
         [HttpPost]
 
-        public async Task<IActionResult> Add(ShipmentFormModel model)
+        public async Task<IActionResult> Add(Core.Models.Shipment.ShipmentCoreFormModel model)
         {
             if (await driverService.ExistsById(User.Id()) == false)
             {
@@ -170,7 +170,7 @@ namespace CarRentingSystem.Controllers.Shipments
 
             var categoryId = await shipmentService.GetShipmentCategoryId(shipment.ShipmentId);
 
-            var model = new ShipmentCreateEditFormModel()
+            var model = new Core.Models.Shipment.ShipmentCoreFormModel()
             {
                 Id = shipment.ShipmentId,
                 LoadingAddress = shipment.LoadingAddress,
@@ -187,7 +187,7 @@ namespace CarRentingSystem.Controllers.Shipments
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, ShipmentCreateEditFormModel model)
+        public async Task<IActionResult> Edit(int id, Core.Models.Shipment.ShipmentCoreFormModel model)
         {
             if (await shipmentService.Exists(id) == false)
             {

@@ -1,4 +1,4 @@
-﻿@model ShipmentCreateEditFormModel
+﻿
 @{
     ViewBag.Title = "Edit Shipments";
 }
@@ -6,7 +6,7 @@
 <h2 class="text-center" style="background-color: #09223c; color: #ffd500;">@ViewBag.Title</h2>
 <hr />
 
-<partial style=" background-color: #09223c; color: #ffd500;" name="ShipmentFormPartial" model="@Model" />
+<partial  name="_ShipmentFormPartial" model="@Model" />
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

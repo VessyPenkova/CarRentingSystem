@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CarRentingSystem.Core.Models.Shipment
 {
-    public  class ShipmentCreateEditFormModel : IShipmentModel
+    public  class ShipmentCoreFormModel : IShipmentModel
     {
         public int Id { get; set; }
 
