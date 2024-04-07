@@ -6,55 +6,55 @@
     ViewBag.Title = "Shipment Details";
 }
 
-<h2 class="text-center" style="background-color: #09223c; color: #ffd500;">@ViewBag.Title</h2>
+<h2 style="background-color: #09223c; color: #ffd500;" class="text-center" >@ViewBag.Title</h2>
 <hr />
 
-<div class="container" style=" background-color: #09223c; color: #ffd500;" style="display:inline">
-    <div class="row" style=" background-color: #09223c; color: #ffd500;">
-        <div class="col-4" style=" background-color: #09223c; color: #ffd500;">
-            <img class="card-img-top" style="width: 20rem;background-color: #09223c; color: #ffd500;"
+<div     style=" background-color: #09223c; color: #ffd500; display:inline" class="container">
+    <div style=" background-color: #09223c; color: #ffd500;" class="row" >
+        <div style=" background-color: #09223c; color: #ffd500;" class="col-4">
+            <img style=width: 20rem;" class="card-img-top"
                  src="@Model.ImageUrlShipmentGoogleMaps" alt="Shipment Image">
         </div>
-        <div class="card col-8 border-0" style="background-color: #09223c; color: #ffd500;">
-            <p style="font-size:25px;" style="background-color: #09223c; color: #ffd500;"><u>@Model.Title</u></p>
+        <div   style="background-color: #09223c; color: #ffd500;" class="card col-8 border-0" >
+            <p style="background-color: #09223c; color: #ffd500; font-size:25px;" ><u>@Model.Title</u></p>
             <p>Located in: <b>@Model.LoadingAddress</b></p>
-            <p >Located in: <b>@Model.DeliveryAddress</b></p>
+            <p>Located in: <b>@Model.DeliveryAddress</b></p>
             <p>
                 Price:
                 <b>@String.Format("{0:f2}", Model.Price) BGN</b>
             </p>
-            <p style="background-color: #09223c; color: #ffd500;">@Model.Description</p>
-            <p style="background-color: #09223c; color: #ffd500;">Category: <b>@Model.Category</b></p>
-            <p style="background-color: #09223c; color: #ffd500;"><i>(@(Model.IsRented ? "Rented" : "Not Rented"))</i></p>
-            <div class="form-inline" style=" background-color: #09223c; color: #ffd500;">
+            <p    style="background-color: #09223c; color: #ffd500;">@Model.Description</p>
+            <p    style="background-color: #09223c; color: #ffd500;">Category: <b>@Model.Category</b></p>
+            <p    style="background-color: #09223c; color: #ffd500;"><i>(@(Model.IsRented ? "Rented" : "Not Rented"))</i></p>
+            <div  style="background-color: #09223c; color: #ffd500;" class="form-inline">
                 @if (this.User.Identity.IsAuthenticated)
                 {
-                    <a class="btn btn-warning" style=" background-color: #09223c; color: #ffd500;" asp-controller="Shipments" asp-action="Edit"
+                    <a style=" background-color: #09223c; color: #ffd500;"  class="btn btn-warning" asp-controller="Shipments" asp-action="Edit"
                        asp-route-id="@Model.ShipmentId" >Edit</a>
-                    <a class="ml-2 btn btn-danger" asp-controller="Shipments" asp-action="Delete"
-                       asp-route-id="@Model.ShipmentId" style="background-color: #09223c; color: #ffd500;">Delete</a>
+                    <a style=" background-color: #09223c; color: #ffd500;"  class="ml-2 btn btn-danger" asp-controller="Shipments" asp-action="Delete"
+                       asp-route-id="@Model.ShipmentId" >Delete</a>
                     @if (!Model.IsRented)
                     {
-                        <form class="ml-2" style=" background-color: #09223c; color: #ffd500;" asp-controller="Shipments"
-                              asp-action="Rent"  asp-route-id="@Model.ShipmentId" method="post">
-                            <input class="btn btn-primary" type="submit" value="Rent" style="background-color: #09223c; color: #ffd500;" />
+                        <form     style=" background-color: #09223c; color: #ffd500;" class="ml-2" asp-controller="Shipments"
+                              asp-action="Rent" asp-route-id="@Model.ShipmentId" method="post">
+                            <input style="background-color: #09223c; color: #ffd500;" class="btn btn-primary" type="submit" value="Rent"  />
                         </form>
                     }
                     else
                     {
-                        <form class="ml-2" style=" background-color: #09223c; color: #ffd500;" asp-controller="Shipments" asp-action="Leave"
+                        <form     style=" background-color: #09223c; color: #ffd500;" class="ml-2" asp-controller="Shipments" asp-action="Leave"
                               asp-route-id="@Model.ShipmentId" method="post">
-                            <input class="btn btn-primary" type="submit" value="Leave" style="background-color: #09223c; color: #ffd500;" />
+                            <input style="background-color: #09223c; color: #ffd500;"class="btn btn-primary" type="submit" value="Leave"/>
                         </form>
                     }
                 }
             </div>
             <p></p>
-            <div class="card" style=" background-color: #09223c; color: #ffd500;" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title" style="background-color: #09223c; color: #ffd500;">Driver Info</h5>
-                    <p class="card-text"   style="background-color: #09223c; color: #ffd500;">Email:  @Model.Driver.Email</p>
-                    <p class="card-text"   style="background-color: #09223c; color: #ffd500;">Phone Number: @Model.Driver.PhoneNumber</p>
+            <div       style=" background-color: #09223c; color: #ffd500;width: 18rem;" class="card">
+                <div    style="background-color: #09223c; color: #ffd500;" class="card-body">
+                    <h5 style="background-color: #09223c; color: #ffd500;" class="card-title">Driver Info</h5>
+                    <p  style="background-color: #09223c; color: #ffd500;" class="card-text">Email:  @Model.Driver.Email</p>
+                    <p  style="background-color: #09223c; color: #ffd500;" class="card-text">Phone Number: @Model.Driver.PhoneNumber</p>
                 </div>
             </div>
         </div>

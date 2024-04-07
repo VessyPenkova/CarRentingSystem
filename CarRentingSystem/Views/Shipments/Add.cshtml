@@ -3,10 +3,10 @@
     ViewBag.Title = "Add Shipment";
 }
 
-<h2 class="text-center" style="background-color: #09223c; color: #ffd500;">@ViewBag.Title </h2>
-<hr style="background-color: #09223c; color: #ffd500;" />
+<h2 style="background-color: #09223c; color: #ffd500;" class="text-center">@ViewBag.Title </h2>
+<hr/>
 
-<partial name="_ShipmentFormPartial" model="@Model" />
+<partial style="background-color: #09223c; color: #ffd500;" name="_ShipmentFormPartial" model="@Model" />
 
 @section Scripts {
     <partial name="ValidationScriptsPartial" />

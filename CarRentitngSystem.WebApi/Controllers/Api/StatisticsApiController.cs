@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarRentitngSystem.WebApi.Controllers.Api
 {
-    [Route("api/statistics")]
+    [Route("api/statistic")]
     [ApiController]
     public class StatisticsApiController : ControllerBase
     {

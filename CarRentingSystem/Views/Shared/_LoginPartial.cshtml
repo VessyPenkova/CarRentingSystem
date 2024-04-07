@@ -7,25 +7,25 @@
 @inject IDriverService driverService
 @inject IUserService usersServices
 
-<ul class="navbar-nav" style="background-color: #09223c; color: #ffd500;">
+<ul style="background-color: #09223c; color: #ffd500;" class="navbar-nav" >
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item"   style="background-color: #09223c; color: #ffd500;">
-            <a class="nav-link style="background-color: #09223c; color: #ffd500;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+        <li    style="background-color: #09223c; color: #ffd500;" class="nav-item" >
+            <a style="background-color: #09223c; color: #ffd500;" class="nav-link asp-area="Identity" asp-page="/Account/Manage/Index"  title="Manage">Hello @User.Identity?.Name!</a>
         </li>
-        <li class="nav-item"          style="background-color: #09223c; color: #ffd500;">
-            <form class="form-inline" style="background-color: #09223c; color: #ffd500;"  asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" style="background-color: #09223c; color: #ffd500;" class="nav-link btn btn-link" >Logout</button>
+        <li       style="background-color: #09223c; color: #ffd500;" class="nav-item">
+            <form style="background-color: #09223c; color: #ffd500;"  class="form-inline"  asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button style="background-color: #09223c; color: #ffd500;" type="submit" class="nav-link btn btn-link">Logout</button>
             </form>
         </li>
     }
     else
     {
-        <li class="nav-item"   style="background-color: #09223c; color: #ffd500;">
-            <a class="nav-link style="background-color: #09223c; color: #ffd500;" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        <li    style="background-color: #09223c; color: #ffd500;" class="nav-item">
+            <a style="background-color: #09223c; color: #ffd500;" class="nav-link  asp-area="Identity"  asp-page="/Account/Register">Register</a>
         </li>
-        <li class="nav-item"   style="background-color: #09223c; color: #ffd500;">
-            <a class="nav-link style="background-color: #09223c; color: #ffd500;" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <li    style="background-color: #09223c; color: #ffd500;" class="nav-item"                        >
+            <a style="background-color: #09223c; color: #ffd500;"  class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
         </li>
     }
 </ul>

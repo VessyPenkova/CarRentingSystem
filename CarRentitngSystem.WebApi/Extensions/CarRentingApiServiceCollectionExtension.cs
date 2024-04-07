@@ -11,9 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<IRepository, Repository>();
             services.AddScoped<IStatisticsService, StatisticsService>();
-  
             services.AddScoped<IGuard, Guard>();
 
             return services;
