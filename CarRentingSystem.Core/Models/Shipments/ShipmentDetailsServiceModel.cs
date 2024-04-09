@@ -1,4 +1,5 @@
 ﻿using CarRentingSystem.Core.Models.Drivers;
+using CarRentingSystem.Infrastucture.Data;
 using System.ComponentModel;
 
 namespace CarRentingSystem.Core.Models.Shipment

@@ -1,6 +1,4 @@
 ﻿@model ShipmentDetailsServiceModel
-
-
 @{
     ViewBag.Title = "Shipment Details";
 }
@@ -15,17 +13,17 @@
             <img class="card-img-top" style="width: 20rem;"
                  src="@Model.ImageUrlShipmentGoogleMaps" alt="Shipment Image">
         </div>
-        <div   style="background-color: #09223c; color: #ffd500;" class="card col-8 border-0" >
+        <div style="background-color: #09223c; color: #ffd500;" class="card col-8 border-0" >
             <p style="background-color: #09223c; color: #ffd500; font-size:25px;" ><u>@Model.Title</u></p>
-            <p>Located in: <b>@Model.LoadingAddress</b></p>
-            <p>Located in: <b>@Model.DeliveryAddress</b></p>
+            <p>Pick up from: <b>@Model.LoadingAddress</b></p>
+            <p>Arrive <b>@Model.DeliveryAddress</b></p>
             <p>
                 Price:
                 <b>@String.Format("{0:f2}", Model.Price) BGN</b>
             </p>
             <p    style="background-color: #09223c; color: #ffd500;">@Model.Description</p>
             <p    style="background-color: #09223c; color: #ffd500;">Category: <b>@Model.Category</b></p>
-            <i>(@(Model.IsRented ? "Rented" : "Not Rented"))</i>
+            <p><i>(@(Model.IsRented ? "Rented" : "Not Rented"))</i></p>
             <div  style="background-color: #09223c; color: #ffd500;" class="form-inline">
                 @if (this.User.Identity.IsAuthenticated)
                 {

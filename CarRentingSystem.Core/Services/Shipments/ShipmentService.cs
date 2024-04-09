@@ -48,7 +48,7 @@ namespace CarRentingSystem.Core.Services.Shipments
                     IsRented = sh.RenterId != null,
                     Price = sh.Price,
                     Title = sh.Title,
-                    Driver = new DriverServiceModel()
+                    Driver = new Models.Drivers.DriverServiceModel()
                     {
                         Email = sh.Driver.User.Email,
                         PhoneNumber = sh.Driver.PhoneNumber

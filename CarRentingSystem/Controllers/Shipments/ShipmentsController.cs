@@ -91,7 +91,6 @@ namespace CarRentingSystem.Controllers.Shipments
             }
 
             var model = await shipmentService.ShipmentDetailsByShipmentId(shipmentId);
-        
 
             return View(model);
         }
