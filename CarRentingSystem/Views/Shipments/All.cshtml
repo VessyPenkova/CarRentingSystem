@@ -1,29 +1,29 @@
 ﻿@model AllShipmentsQueryModel
 @{
     ViewBag.Title = "All Shipments";
+   
 }
 
 <h2 style="background-color: #09223c; color: #ffd500;" class="text-center">@ViewBag.Title</h2>
 <hr />
 
-<form method="get">
-
-    <div style="background-color: #09223c; color: #ffd500;" class="row" >
-
-        <div style="background-color: #09223c; color: #ffd500;" class="form-group col-md-3 d-flex justify-content-between" >
-            <div style="background-color: #09223c; color: #ffd500;" class="form-group" >
+<form style="background-color: #09223c; color: #ffd500;" method="get">
+    <div style="background-color: #09223c; color: #ffd500;" class="row">
+        <div style="background-color: #09223c; color: #ffd500;" class="form-group col-md-3 d-flex justify-content-between">
+            <div style="background-color: #09223c; color: #ffd500;" class="form-group">
                 <label style="background-color: #09223c; color: #ffd500;" asp-for="Category"></label>
-                <select style="background-color: #09223c; color: #ffd500 " asp-for="Category" class="form-control">
-                    <option style="background-color: #09223c; color: #ffd500;"value="">All</option>
+                <select style="background-color: #09223c; color: #ffd500;"  asp-for="Category" class="form-control">
+                    <option style="background-color: #09223c; color: #ffd500;" value="">All</option>
                     @foreach (var category in Model.Categories)
                     {
-                        <option style=" background-color: #09223c; color: #ffd500;" value="@category">@category</option>
+                        <option value="@category">@category</option>
                     }
                 </select>
             </div>
         </div>
 
-        <div style="background-color: #09223c; color: #ffd500;" class="form-group col-md-3" >
+
+        <div  style="background-color: #09223c; color: #ffd500;" class="form-group col-md-3" >
             <label style="background-color: #09223c; color: #ffd500;" asp-for="SearchTerm" ></label>
             <input style="background-color: #09223c; color: #ffd500;" asp-for="SearchTerm"class="form-control" placeholder="...">
         </div>
@@ -98,6 +98,8 @@
 <div style="background-color: #09223c; color: #ffd500;" class="row">
     @foreach (var shipment in Model.Shipments)
     {
-        <partial style="background-color: #09223c; color: #ffd500;" name="ShipmentPartial" model="@shipment"  />
+        <partial style="background-color: #09223c; color: #ffd500;" name="_ShipmentPartial" model="@shipment"  />
     }
 </div>
+
+       

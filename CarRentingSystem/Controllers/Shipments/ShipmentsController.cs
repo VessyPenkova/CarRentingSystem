@@ -76,15 +76,14 @@ namespace CarRentingSystem.Controllers.Shipments
                 AllShipmentsQueryModel.ShipmentsPerPage);
 
             query.TotalShipmentsCount = result.TotalShipmentCount;
+            query.Categories = await shipmentService.AllCategoriesNames();
             query.Shipments = result.Shipments;
-
-            var shipmentCategories = await shipmentService.AllCategoriesNames();
 
             return View(query);
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Details(int shipmentId, string information)
+        public async Task<IActionResult> Details(int shipmentId)
         {
             if (await shipmentService.Exists(shipmentId) == false)
             {
@@ -92,11 +91,7 @@ namespace CarRentingSystem.Controllers.Shipments
             }
 
             var model = await shipmentService.ShipmentDetailsByShipmentId(shipmentId);
-
-            if (information != model.GetInformation())
-            {
-                return BadRequest();
-            }
+        
 
             return View(model);
         }

@@ -1,6 +1,5 @@
 ﻿@model ShipmentDetailsServiceModel
-@inject IShipmentService shipment
-@inject IDriverService driver
+
 
 @{
     ViewBag.Title = "Shipment Details";
@@ -9,10 +8,11 @@
 <h2 style="background-color: #09223c; color: #ffd500;" class="text-center" >@ViewBag.Title</h2>
 <hr />
 
-<div     style=" background-color: #09223c; color: #ffd500; display:inline" class="container">
+<div style=" background-color: #09223c; color: #ffd500; display:inline" class="container">
+    
     <div style=" background-color: #09223c; color: #ffd500;" class="row" >
-        <div style=" background-color: #09223c; color: #ffd500;" class="col-4">
-            <img style=width: 20rem;" class="card-img-top"
+        <div  class="col-4">
+            <img class="card-img-top" style="width: 20rem;"
                  src="@Model.ImageUrlShipmentGoogleMaps" alt="Shipment Image">
         </div>
         <div   style="background-color: #09223c; color: #ffd500;" class="card col-8 border-0" >
@@ -25,7 +25,7 @@
             </p>
             <p    style="background-color: #09223c; color: #ffd500;">@Model.Description</p>
             <p    style="background-color: #09223c; color: #ffd500;">Category: <b>@Model.Category</b></p>
-            <p    style="background-color: #09223c; color: #ffd500;"><i>(@(Model.IsRented ? "Rented" : "Not Rented"))</i></p>
+            <i>(@(Model.IsRented ? "Rented" : "Not Rented"))</i>
             <div  style="background-color: #09223c; color: #ffd500;" class="form-inline">
                 @if (this.User.Identity.IsAuthenticated)
                 {
@@ -33,6 +33,8 @@
                        asp-route-id="@Model.ShipmentId" >Edit</a>
                     <a style=" background-color: #09223c; color: #ffd500;"  class="ml-2 btn btn-danger" asp-controller="Shipments" asp-action="Delete"
                        asp-route-id="@Model.ShipmentId" >Delete</a>
+                    <a style=" background-color: #09223c; color: #ffd500;" class="ml-2 btn btn-green" asp-controller="Shipments" asp-action="Details"
+                       asp-route-id="@Model.ShipmentId">Details</a>
                     @if (!Model.IsRented)
                     {
                         <form     style=" background-color: #09223c; color: #ffd500;" class="ml-2" asp-controller="Shipments"

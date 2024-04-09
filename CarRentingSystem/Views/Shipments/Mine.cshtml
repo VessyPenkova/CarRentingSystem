@@ -11,7 +11,7 @@
     <div style=" background-color: #09223c; color: #ffd500;"  class="row">
         @foreach (var shipment in Model)
         {
-            <partial style=" background-color: #09223c; color: #ffd500;" name="ShipmentPartial" model="@shipment" />
+            <partial style=" background-color: #09223c; color: #ffd500;" name="_ShipmentPartial" model="@shipment" />
         }
     </div>
 }

@@ -8,7 +8,7 @@ namespace CarRentingSystem.Models.Shipments
 
         public string? Category { get; set; }
 
-        public string SearchTerm { get; set; }
+        public string? SearchTerm { get; set; }
 
         public ShipmentSorting Sorting { get; set; }
 

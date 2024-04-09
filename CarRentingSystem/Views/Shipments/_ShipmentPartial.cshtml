@@ -1,0 +1,51 @@
+﻿@model ShipmentServiceModel
+
+<div style=" background-color: #09223c; color: #ffd500;" class="col-md-4">
+    <div style=" background-color: #09223c; color: #ffd500;"  class="card mb-3">
+
+        <img style=" background-color: #09223c; color: #ffd500;" class="card-img-top" src="@Model.ImageUrlShipmentGoogleMaps" alt="Shipment Image">
+        <div style=" background-color: #09223c; color: #ffd500;" class="card-body text-left line">
+
+            <h5>@Model.Title</h5>
+            <h6>From:<b>@Model.LoadingAddress</b></h6>
+            <h6>To : <b>@Model.DeliveryAddress</b></h6>
+
+            <h6>
+                Price:
+                <b>@String.Format("{0:f2}", Model.Price) BGN</b>
+            </h6>
+
+            <h6>(@(Model.IsRented ? "Rented" : "Not Rented"))</h6>
+            <br />
+
+            <a style=" background-color: #09223c; color: #ffd500;" asp-controller="Shipments" asp-action="Details" asp-route-id="@Model.Id"
+               class="btn btn-success">Details</a>
+
+            @if (this.User.Identity.IsAuthenticated)
+            {
+                <a style=" background-color: #09223c; color: #ffd500;" asp-area="" asp-controller="Shipments" asp-action="Edit" asp-route-id="@Model.Id"
+                   class="btn btn-warning">Edit</a>
+
+                <a style=" background-color: #09223c; color: #ffd500;" asp-area="" asp-controller="Shipments" asp-action="Delete" asp-route-id="@Model.Id"
+                   class="btn btn-danger">Delete</a>
+               
+                <p></p>
+                @if (!Model.IsRented)
+                {
+                    <form style=" background-color: #09223c; color: #ffd500;" class="input-group-sm" asp-controller="Shipments"
+                          asp-action="Rent" asp-route-id="@Model.Id" method="post">
+                        <input style=" background-color: #09223c; color: #ffd500;" class="btn btn-primary" type="submit" value="Rent" />
+                    </form>
+                }
+                else
+                {
+                    <form style=" background-color: #09223c; color: #ffd500;" asp-controller="Shipments" asp-action="Leave"
+                          asp-route-id="@Model.Id" method="post">
+                        <input style=" background-color: #09223c; color: #ffd500;" class="btn btn-primary" type="submit" value="Leave" />
+                    </form>
+                }
+            }
+        </div>
+    </div>
+</div>
+
