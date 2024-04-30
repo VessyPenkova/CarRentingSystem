@@ -64,7 +64,7 @@ namespace CarRentingSystem.Controllers.Shipments
             return View(myShipments);
         }
 
-        [HttpGet]
+        
         [AllowAnonymous]
         public async Task<IActionResult> All([FromQuery] AllShipmentsQueryModel query)
         {
@@ -83,7 +83,7 @@ namespace CarRentingSystem.Controllers.Shipments
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Details(int shipmentId)
+        public async Task<IActionResult> Details(int shipmentId, string information)
         {
             if (await shipmentService.Exists(shipmentId) == false)
             {
@@ -91,6 +91,13 @@ namespace CarRentingSystem.Controllers.Shipments
             }
 
             var model = await shipmentService.ShipmentDetailsByShipmentId(shipmentId);
+
+            if (information != model.GetInformation())
+            {
+                TempData["ErrorMessage"] = "Don't touch my slug!";
+
+                return RedirectToAction("Index", "Home");
+            }
 
             return View(model);
         }
