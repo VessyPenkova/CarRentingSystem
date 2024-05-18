@@ -29,5 +29,5 @@ Each category has specific roles and functionalities:
 
 The system is developed using C# with ASP.NET MVC, SQL Server, EF Core, and follows the MVC pattern. 
 
-
-https://github.com/VessyPenkova/Sertificates/blob/main/CarRentingSystemFirst%20Page.png
+Renting System First Page
+![alt tsxt](https://github.com/VessyPenkova/Sertificates/blob/main/CarRentingSystemFirst%20Page.png?raw=true) 
