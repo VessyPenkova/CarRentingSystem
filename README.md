@@ -28,3 +28,6 @@ Each category has specific roles and functionalities:
 		 - The statistics provides information about total  of routes and rented cars.
 
 The system is developed using C# with ASP.NET MVC, SQL Server, EF Core, and follows the MVC pattern. 
+
+
+https://github.com/VessyPenkova/Sertificates/blob/main/CarRentingSystemFirst%20Page.png
