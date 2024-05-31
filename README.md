@@ -35,3 +35,5 @@ First Page
 ![alt tsxt](https://github.com/VessyPenkova/Sertificates/blob/main/Charter.png?raw=true)
 
 ![alt tsxt](https://github.com/VessyPenkova/Sertificates/blob/main/NotRented.png?raw=true)
+
+![alt tsxt](https://github.com/VessyPenkova/Sertificates/blob/main/Lowest%20Price.png?raw=true)
