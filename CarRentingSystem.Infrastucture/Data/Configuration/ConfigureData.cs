@@ -6,33 +6,19 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
     public class ConfigureData
     {
         public User DriverUser { get; set; } = null!;
-
         public User GuestUser { get; set; } = null!;
-
         public User AdminUser { get; set; } = null!;
-
         public Driver AdminDriver { get; set; } = null!;
         public Driver UserDriver { get; set; } = null!;
-
         public Category InterCityCategory { get; set; } = null!;
-
         public Category OneWayCategory { get; set; } = null!;
-
         public Category RoundShipmentCategory { get; set; } = null!;
-
         public Category LuxuryCategory { get; set; } = null!;
-
         public Category CharterCategory { get; set; } = null!;
-
-
         public Shipment OneWayShipment { get; set; } = null!;
-
         public Shipment RoundShipment { get; set; } = null!;
-
         public Shipment LuxuryShipment { get; set; } = null!;
-
         public Shipment CharterShipment { get; set; } = null!;
-
         public ConfigureData()
         {
             ConfigureUsers();

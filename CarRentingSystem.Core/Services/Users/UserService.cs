@@ -35,11 +35,11 @@ namespace CarRentingSystem.Core.Services.Users
             var drivers = await repo.AllReadonly<Driver>()
             .Where(dr => dr.User.Id != null)
             .Select(dr => new UserServiceModel()
-             {
-                 UserId = dr.UserId,
-                 Email = dr.User.Email,
-                 FullName = dr.User.UserName,
-                 PhoneNumber = dr.PhoneNumber
+            {
+                UserId = dr.UserId,
+                Email = dr.User.Email,
+                FullName = dr.User.UserName,
+                PhoneNumber = dr.PhoneNumber
             })
             .ToListAsync();
 

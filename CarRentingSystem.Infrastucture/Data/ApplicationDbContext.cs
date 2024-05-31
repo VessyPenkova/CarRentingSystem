@@ -27,6 +27,3 @@ namespace CarRentingSystem.Infrastucture.Data
         public DbSet<Driver> Drivers { get; set; } = null!;
     }
 }
-
-
-

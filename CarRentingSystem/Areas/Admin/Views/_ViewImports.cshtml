@@ -1,12 +1,41 @@
 ﻿﻿@using CarRentingSystem
+@using CarRentingSystem.Areas.Admin.Models
+@using CarRentingSystem.Areas.Admin.Controllers
+@using CarRentingSystem.Extensions
+@using CarRentingSystem.Controllers
+@using CarRentingSystem.Controllers.Drivers
+@using CarRentingSystem.Controllers.Home
+@using CarRentingSystem.Controllers.Shipments
+
 @using CarRentingSystem.Models
+@using CarRentingSystem.Models.Home
+@using CarRentingSystem.Models.Shipments
+@using CarRentingSystem.Models.Drivers
+
+@using CarRentingSystem.Core.Contracts.Drivers
+@using CarRentingSystem.Core.Contracts.Shipments
+@using CarRentingSystem.Core.Contracts.Users
+
+@using CarRentingSystem.Core.Extensions
+@using CarRentingSystem.Core.Services
+@using CarRentingSystem.Core.Services.Drivers
+@using CarRentingSystem.Core.Services.Rent
+@using CarRentingSystem.Core.Services.Shipments
+@using CarRentingSystem.Core.Services.Statistic
+@using CarRentingSystem.Core.Services.Users
+
+@using CarRentingSystem.Core.Models
 @using CarRentingSystem.Core.Models.Drivers
 @using CarRentingSystem.Core.Models.Shipment
-@using CarRentingSystem.Core.Extensions
-@using CarRentingSystem.Areas.Admin.Models
-@using CarRentingSystem.Core.Models
-@using CarRentingSystem.Core.Contracts
+@using CarRentingSystem.Core.Models.Statistics
 @using CarRentingSystem.Core.Models.Users
-@using CarRentingSystem.Core.Contracts.Drivers
+
+@using CarRentingSystem.Infrastucture.Constants
+
+@using Microsoft.AspNetCore.Identity
+@using CarRentingSystem.Infrastucture.Data
+
+@using CarRentingSystem.Core.Constants
+
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

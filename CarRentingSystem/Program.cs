@@ -19,7 +19,7 @@ namespace CarRentingSystem
 
 
 
-            builder.Services.AddDefaultIdentity<User>(options => 
+            builder.Services.AddDefaultIdentity<User>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
@@ -50,7 +50,7 @@ namespace CarRentingSystem
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");            
+                app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
 

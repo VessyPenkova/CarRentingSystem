@@ -25,7 +25,7 @@ namespace CarRentingSystem.Controllers.Home
         {
             if (User.IsInRole(AdminRoleName))
             {
-                return RedirectToAction("Index", "Home", new { area = "Admin" });
+                return RedirectToAction("Index", "Admin", new { area = "Admin" });
             }
             var collectionOfLastShipmentsModel = await shipmentService.LastThreeShipments();
 

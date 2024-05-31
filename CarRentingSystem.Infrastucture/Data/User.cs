@@ -9,7 +9,7 @@ using static CarRentingSystem.Infrastucture.Constants.ModelsConstants;
 
 namespace CarRentingSystem.Infrastucture.Data
 {
-    public  class User : IdentityUser
+    public class User : IdentityUser
     {
         [Required]
         [MaxLength(UserFirstNameMaxLength)]

@@ -34,7 +34,7 @@ namespace CarRentingSystem.Infrastucture.Data
         [Comment("Delivery Address")]
         public string DeliveryAddress { get; set; } = string.Empty;
 
-       
+
         [Required]
         [MaxLength(ShipmentDescriptionMaxLength)]
         [Comment("Shipment description")]

@@ -31,7 +31,9 @@ namespace CarRentingSystem.Controllers.Drivers
                 return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("Index", "Home");
+            var model = new BecomeDriverFormModel();
+
+            return View(model);
         }
 
  
@@ -55,14 +57,14 @@ namespace CarRentingSystem.Controllers.Drivers
 
             if (await driverService.ExistsById(userId))
             {
-                TempData[MessageConstant.ErrorMessage] = "Phone number already exists. Enter another one.";
+                TempData[MessageConstant.ErrorMessage] = "You are already driver.";
 
                 return RedirectToAction("Index", "Home");
             }
 
             if (await driverService.DriverWithPhoneNumberExists(model.PhoneNumber))
             {
-                TempData[MessageConstant.ErrorMessage] = "The phone already exist";
+                TempData[MessageConstant.ErrorMessage] = "Phone number already exists. Enter another one.";
 
                 return RedirectToAction("Index", "Home");
             }

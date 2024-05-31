@@ -11,7 +11,7 @@ namespace CarRentingSystem.Areas.Admin.Controllers
         private readonly IUserService userServices;
         private readonly IMemoryCache cache;
 
-        public UsersController(IUserService _userServices,  IMemoryCache _cache)
+        public UsersController(IUserService _userServices, IMemoryCache _cache)
         {
             this.userServices = _userServices;
             this.cache = _cache;

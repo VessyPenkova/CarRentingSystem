@@ -4,14 +4,12 @@ using static CarRentingSystem.Areas.Admin.Constants.AdminConstants;
 
 namespace CarRentingSystem.Areas.Admin.Controllers
 {
-  
- 
-    public class AdminController : BaseController
+    [Area(AreaName)]
+    [Route("/Admin/[controller]/[Action]/{id?}")]
+    [Authorize(Roles = AdminRoleName)]
+
+    public class AdminController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
 
     }
 }

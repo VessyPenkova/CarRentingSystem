@@ -25,592 +25,592 @@ namespace CarRentingSystem.Infrastucture.Migrations
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("CarRentingSystem.Infrastucture.Data.Category", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasComment("Category Identifier");
+            {
+                b.Property<int>("CategoryId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int")
+                    .HasComment("Category Identifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"), 1L, 1);
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"), 1L, 1);
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasComment("Category name");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)")
+                    .HasComment("Category name");
 
-                    b.HasKey("CategoryId");
+                b.HasKey("CategoryId");
 
-                    b.ToTable("Categories");
+                b.ToTable("Categories");
 
-                    b.HasComment("Shipment category");
+                b.HasComment("Shipment category");
 
-                    b.HasData(
-                        new
-                        {
-                            CategoryId = 4,
-                            Name = "Luxury"
-                        },
-                        new
-                        {
-                            CategoryId = 5,
-                            Name = "Charter"
-                        },
-                        new
-                        {
-                            CategoryId = 1,
-                            Name = "Inter City"
-                        },
-                        new
-                        {
-                            CategoryId = 2,
-                            Name = "One Way"
-                        },
-                        new
-                        {
-                            CategoryId = 3,
-                            Name = "Round-Shipment"
-                        });
-                });
+                b.HasData(
+                    new
+                    {
+                        CategoryId = 4,
+                        Name = "Luxury"
+                    },
+                    new
+                    {
+                        CategoryId = 5,
+                        Name = "Charter"
+                    },
+                    new
+                    {
+                        CategoryId = 1,
+                        Name = "Inter City"
+                    },
+                    new
+                    {
+                        CategoryId = 2,
+                        Name = "One Way"
+                    },
+                    new
+                    {
+                        CategoryId = 3,
+                        Name = "Round-Shipment"
+                    });
+            });
 
             modelBuilder.Entity("CarRentingSystem.Infrastucture.Data.Driver", b =>
-                {
-                    b.Property<int>("DriverId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasComment("Driver identifier");
+            {
+                b.Property<int>("DriverId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int")
+                    .HasComment("Driver identifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DriverId"), 1L, 1);
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DriverId"), 1L, 1);
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)")
-                        .HasComment("Driver's phone");
+                b.Property<string>("PhoneNumber")
+                    .IsRequired()
+                    .HasMaxLength(15)
+                    .HasColumnType("nvarchar(15)")
+                    .HasComment("Driver's phone");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .HasComment("User Identifier");
+                b.Property<string>("UserId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(450)")
+                    .HasComment("User Identifier");
 
-                    b.HasKey("DriverId");
+                b.HasKey("DriverId");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("Drivers");
+                b.ToTable("Drivers");
 
-                    b.HasComment("Driver route");
+                b.HasComment("Driver route");
 
-                    b.HasData(
-                        new
-                        {
-                            DriverId = 2,
-                            PhoneNumber = "+359770770772",
-                            UserId = "bcb4f072-ecca-43c9-ab26-c060c6f364e4"
-                        },
-                        new
-                        {
-                            DriverId = 1,
-                            PhoneNumber = "+359770770770",
-                            UserId = "dea12856-c198-4129-b3f3-b893d8395082"
-                        });
-                });
+                b.HasData(
+                    new
+                    {
+                        DriverId = 2,
+                        PhoneNumber = "+359770770772",
+                        UserId = "bcb4f072-ecca-43c9-ab26-c060c6f364e4"
+                    },
+                    new
+                    {
+                        DriverId = 1,
+                        PhoneNumber = "+359770770770",
+                        UserId = "dea12856-c198-4129-b3f3-b893d8395082"
+                    });
+            });
 
             modelBuilder.Entity("CarRentingSystem.Infrastucture.Data.Shipment", b =>
-                {
-                    b.Property<int>("ShipmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasComment("Shipment Identifier");
+            {
+                b.Property<int>("ShipmentId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int")
+                    .HasComment("Shipment Identifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShipmentId"), 1L, 1);
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShipmentId"), 1L, 1);
 
-                    b.Property<int>("CategId")
-                        .HasColumnType("int")
-                        .HasComment("Category identifier");
+                b.Property<int>("CategId")
+                    .HasColumnType("int")
+                    .HasComment("Category identifier");
 
-                    b.Property<string>("DeliveryAddress")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)")
-                        .HasComment("Delivery Address");
+                b.Property<string>("DeliveryAddress")
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .HasColumnType("nvarchar(150)")
+                    .HasComment("Delivery Address");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
-                        .HasComment("Shipment description");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasColumnType("nvarchar(500)")
+                    .HasComment("Shipment description");
 
-                    b.Property<int>("DriverId")
-                        .HasColumnType("int")
-                        .HasComment("Driver identifier");
+                b.Property<int>("DriverId")
+                    .HasColumnType("int")
+                    .HasComment("Driver identifier");
 
-                    b.Property<string>("ImageUrlShipmentGoogleMaps")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasComment("Shipment image url");
+                b.Property<string>("ImageUrlShipmentGoogleMaps")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)")
+                    .HasComment("Shipment image url");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsActive")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("LoadingAddress")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)")
-                        .HasComment("Loading Address");
+                b.Property<string>("LoadingAddress")
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .HasColumnType("nvarchar(150)")
+                    .HasComment("Loading Address");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Price");
+                b.Property<decimal>("Price")
+                    .HasColumnType("decimal(18,2)")
+                    .HasComment("Price");
 
-                    b.Property<string>("RenterId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasComment("User id of the rentier");
+                b.Property<string>("RenterId")
+                    .HasColumnType("nvarchar(450)")
+                    .HasComment("User id of the rentier");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasComment("Title");
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)")
+                    .HasComment("Title");
 
-                    b.HasKey("ShipmentId");
+                b.HasKey("ShipmentId");
 
-                    b.HasIndex("CategId");
+                b.HasIndex("CategId");
 
-                    b.HasIndex("DriverId");
+                b.HasIndex("DriverId");
 
-                    b.HasIndex("RenterId");
+                b.HasIndex("RenterId");
 
-                    b.ToTable("Shipments");
+                b.ToTable("Shipments");
 
-                    b.HasComment("Shipment to book");
+                b.HasComment("Shipment to book");
 
-                    b.HasData(
-                        new
-                        {
-                            ShipmentId = 4,
-                            CategId = 5,
-                            DeliveryAddress = "Sofia Airport",
-                            Description = "This privet charter. We are here to meet al your expectations",
-                            DriverId = 1,
-                            ImageUrlShipmentGoogleMaps = "https://www.luxuryaircraftsolutions.com/wp-content/uploads/2020/05/image-226.png",
-                            IsActive = true,
-                            LoadingAddress = "Plovdiv Airport",
-                            Price = 2000.00m,
-                            Title = "Charter"
-                        },
-                        new
-                        {
-                            ShipmentId = 3,
-                            CategId = 4,
-                            DeliveryAddress = " Bul. Alexander Malinov, 78, BG, 2000",
-                            Description = "Busyness trip. This trip is private with a luxury limousine",
-                            DriverId = 1,
-                            ImageUrlShipmentGoogleMaps = "https://le-cdn.hibuwebsites.com/8978d127e39b497da77df2a4b91f33eb/dms3rep/multi/opt/RSshutterstock_120889072-1920w.jpg",
-                            IsActive = true,
-                            LoadingAddress = "Bul. Maria Luiza, 31, BG, 4000",
-                            Price = 316.80m,
-                            Title = "Private-Luxury"
-                        },
-                        new
-                        {
-                            ShipmentId = 1,
-                            CategId = 1,
-                            DeliveryAddress = "Antique Theater, str. Tsar Ivaylo 4, Plovdiv,4000, BG",
-                            Description = "Tourist in Plovdiv?, this trip is will satisfy your expectation.",
-                            DriverId = 1,
-                            ImageUrlShipmentGoogleMaps = "https://ekotaxi.bg/wp-content/uploads/2020/03/single_cab_redone-min-1-2048x1536.png",
-                            IsActive = true,
-                            LoadingAddress = "Bul. Kniyaginya Maria Luiza, 31, Plovdiv, 4000, BG",
-                            Price = 10.00m,
-                            RenterId = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
-                            Title = "One Way"
-                        },
-                        new
-                        {
-                            ShipmentId = 2,
-                            CategId = 3,
-                            DeliveryAddress = "Bul. Alexander Malinov, 78, BG,Sofia,  2000",
-                            Description = "Go back Plovdiv - Sofia in one hour. The driver will wait.",
-                            DriverId = 1,
-                            ImageUrlShipmentGoogleMaps = "https://content.fortune.com/wp-content/uploads/2014/09/170030873.jpg?resize=1200,600",
-                            IsActive = true,
-                            LoadingAddress = "Bul. Maria Luiza, 31, BG,Plovdiv,  4000",
-                            Price = 50.00m,
-                            Title = "Round"
-                        });
-                });
+                b.HasData(
+                    new
+                    {
+                        ShipmentId = 4,
+                        CategId = 5,
+                        DeliveryAddress = "Sofia Airport",
+                        Description = "This privet charter. We are here to meet al your expectations",
+                        DriverId = 1,
+                        ImageUrlShipmentGoogleMaps = "https://www.luxuryaircraftsolutions.com/wp-content/uploads/2020/05/image-226.png",
+                        IsActive = true,
+                        LoadingAddress = "Plovdiv Airport",
+                        Price = 2000.00m,
+                        Title = "Charter"
+                    },
+                    new
+                    {
+                        ShipmentId = 3,
+                        CategId = 4,
+                        DeliveryAddress = " Bul. Alexander Malinov, 78, BG, 2000",
+                        Description = "Busyness trip. This trip is private with a luxury limousine",
+                        DriverId = 1,
+                        ImageUrlShipmentGoogleMaps = "https://le-cdn.hibuwebsites.com/8978d127e39b497da77df2a4b91f33eb/dms3rep/multi/opt/RSshutterstock_120889072-1920w.jpg",
+                        IsActive = true,
+                        LoadingAddress = "Bul. Maria Luiza, 31, BG, 4000",
+                        Price = 316.80m,
+                        Title = "Private-Luxury"
+                    },
+                    new
+                    {
+                        ShipmentId = 1,
+                        CategId = 1,
+                        DeliveryAddress = "Antique Theater, str. Tsar Ivaylo 4, Plovdiv,4000, BG",
+                        Description = "Tourist in Plovdiv?, this trip is will satisfy your expectation.",
+                        DriverId = 1,
+                        ImageUrlShipmentGoogleMaps = "https://ekotaxi.bg/wp-content/uploads/2020/03/single_cab_redone-min-1-2048x1536.png",
+                        IsActive = true,
+                        LoadingAddress = "Bul. Kniyaginya Maria Luiza, 31, Plovdiv, 4000, BG",
+                        Price = 10.00m,
+                        RenterId = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
+                        Title = "One Way"
+                    },
+                    new
+                    {
+                        ShipmentId = 2,
+                        CategId = 3,
+                        DeliveryAddress = "Bul. Alexander Malinov, 78, BG,Sofia,  2000",
+                        Description = "Go back Plovdiv - Sofia in one hour. The driver will wait.",
+                        DriverId = 1,
+                        ImageUrlShipmentGoogleMaps = "https://content.fortune.com/wp-content/uploads/2014/09/170030873.jpg?resize=1200,600",
+                        IsActive = true,
+                        LoadingAddress = "Bul. Maria Luiza, 31, BG,Plovdiv,  4000",
+                        Price = 50.00m,
+                        Title = "Round"
+                    });
+            });
 
             modelBuilder.Entity("CarRentingSystem.Infrastucture.Data.User", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+            {
+                b.Property<string>("Id")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
+                b.Property<int>("AccessFailedCount")
+                    .HasColumnType("int");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("Email")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                b.Property<bool>("EmailConfirmed")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                b.Property<string>("FirstName")
+                    .IsRequired()
+                    .HasMaxLength(12)
+                    .HasColumnType("nvarchar(12)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsActive")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                b.Property<string>("LastName")
+                    .IsRequired()
+                    .HasMaxLength(15)
+                    .HasColumnType("nvarchar(15)");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                b.Property<bool>("LockoutEnabled")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                b.Property<DateTimeOffset?>("LockoutEnd")
+                    .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("NormalizedEmail")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("NormalizedUserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("PasswordHash")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("PhoneNumber")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                b.Property<bool>("PhoneNumberConfirmed")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("SecurityStamp")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
+                b.Property<bool>("TwoFactorEnabled")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("UserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                b.HasIndex("NormalizedEmail")
+                    .HasDatabaseName("EmailIndex");
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                b.HasIndex("NormalizedUserName")
+                    .IsUnique()
+                    .HasDatabaseName("UserNameIndex")
+                    .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                b.ToTable("AspNetUsers", (string)null);
 
-                    b.HasData(
-                        new
-                        {
-                            Id = "bcb4f072-ecca-43c9-ab26-c060c6f364e4",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "441f5f1b-20e8-40f3-ab31-86b72db1f740",
-                            Email = "admin@mail.com",
-                            EmailConfirmed = false,
-                            FirstName = "Adminiot",
-                            IsActive = true,
-                            LastName = "Adminov",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "admin@mail.com",
-                            NormalizedUserName = "admin@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAECbi3cXkEf+A92PM/7DddnbflRYX94T4zTH5R1MifIPpGeAGADR/c75XonZ5/CFx4g==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "25c2b9ef-0aa3-41b1-ae48-0afeddec9d4a",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@mail.com"
-                        },
-                        new
-                        {
-                            Id = "dea12856-c198-4129-b3f3-b893d8395082",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "2893c10a-765f-40de-9486-b056be4c2679",
-                            Email = "driver@mail.com",
-                            EmailConfirmed = false,
-                            FirstName = "Driviot",
-                            IsActive = true,
-                            LastName = "Drivilov",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "driver@mail.com",
-                            NormalizedUserName = "driver@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEI09SWX26uwumfJNOfKTpT0mQD984El0affgU7D49fthMWLwgq5+K+2AtaM2vGmhMQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "0ac5f1b1-a04c-441f-af03-ed2943f2c941",
-                            TwoFactorEnabled = false,
-                            UserName = "driver@mail.com"
-                        },
-                        new
-                        {
-                            Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "a97d1d41-2ab1-4cdc-9ca4-219fa33f4a9b",
-                            Email = "guest@mail.com",
-                            EmailConfirmed = false,
-                            FirstName = "Gestiot",
-                            IsActive = true,
-                            LastName = "Gestiotev",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "guest@mail.com",
-                            NormalizedUserName = "guest@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKDyh83CZhRmSJxTCr++hGMbciHTmZO6OH+k7f3yV8Pho9ITC+qvYj7tTOE+q0NtWw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "c811deac-bb8a-43a0-9bbc-7fb31732b0fa",
-                            TwoFactorEnabled = false,
-                            UserName = "guest@mail.com"
-                        });
-                });
+                b.HasData(
+                    new
+                    {
+                        Id = "bcb4f072-ecca-43c9-ab26-c060c6f364e4",
+                        AccessFailedCount = 0,
+                        ConcurrencyStamp = "441f5f1b-20e8-40f3-ab31-86b72db1f740",
+                        Email = "admin@mail.com",
+                        EmailConfirmed = false,
+                        FirstName = "Adminiot",
+                        IsActive = true,
+                        LastName = "Adminov",
+                        LockoutEnabled = false,
+                        NormalizedEmail = "admin@mail.com",
+                        NormalizedUserName = "admin@mail.com",
+                        PasswordHash = "AQAAAAEAACcQAAAAECbi3cXkEf+A92PM/7DddnbflRYX94T4zTH5R1MifIPpGeAGADR/c75XonZ5/CFx4g==",
+                        PhoneNumberConfirmed = false,
+                        SecurityStamp = "25c2b9ef-0aa3-41b1-ae48-0afeddec9d4a",
+                        TwoFactorEnabled = false,
+                        UserName = "admin@mail.com"
+                    },
+                    new
+                    {
+                        Id = "dea12856-c198-4129-b3f3-b893d8395082",
+                        AccessFailedCount = 0,
+                        ConcurrencyStamp = "2893c10a-765f-40de-9486-b056be4c2679",
+                        Email = "driver@mail.com",
+                        EmailConfirmed = false,
+                        FirstName = "Driviot",
+                        IsActive = true,
+                        LastName = "Drivilov",
+                        LockoutEnabled = false,
+                        NormalizedEmail = "driver@mail.com",
+                        NormalizedUserName = "driver@mail.com",
+                        PasswordHash = "AQAAAAEAACcQAAAAEI09SWX26uwumfJNOfKTpT0mQD984El0affgU7D49fthMWLwgq5+K+2AtaM2vGmhMQ==",
+                        PhoneNumberConfirmed = false,
+                        SecurityStamp = "0ac5f1b1-a04c-441f-af03-ed2943f2c941",
+                        TwoFactorEnabled = false,
+                        UserName = "driver@mail.com"
+                    },
+                    new
+                    {
+                        Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
+                        AccessFailedCount = 0,
+                        ConcurrencyStamp = "a97d1d41-2ab1-4cdc-9ca4-219fa33f4a9b",
+                        Email = "guest@mail.com",
+                        EmailConfirmed = false,
+                        FirstName = "Gestiot",
+                        IsActive = true,
+                        LastName = "Gestiotev",
+                        LockoutEnabled = false,
+                        NormalizedEmail = "guest@mail.com",
+                        NormalizedUserName = "guest@mail.com",
+                        PasswordHash = "AQAAAAEAACcQAAAAEKDyh83CZhRmSJxTCr++hGMbciHTmZO6OH+k7f3yV8Pho9ITC+qvYj7tTOE+q0NtWw==",
+                        PhoneNumberConfirmed = false,
+                        SecurityStamp = "c811deac-bb8a-43a0-9bbc-7fb31732b0fa",
+                        TwoFactorEnabled = false,
+                        UserName = "guest@mail.com"
+                    });
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+            {
+                b.Property<string>("Id")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("Name")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                b.Property<string>("NormalizedName")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                b.HasIndex("NormalizedName")
+                    .IsUnique()
+                    .HasDatabaseName("RoleNameIndex")
+                    .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", (string)null);
-                });
+                b.ToTable("AspNetRoles", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("RoleId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
+                b.ToTable("AspNetRoleClaims", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("UserId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
+                b.ToTable("AspNetUserClaims", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+            {
+                b.Property<string>("LoginProvider")
+                    .HasMaxLength(128)
+                    .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                b.Property<string>("ProviderKey")
+                    .HasMaxLength(128)
+                    .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ProviderDisplayName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("UserId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
+                b.ToTable("AspNetUserLogins", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+            {
+                b.Property<string>("UserId")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                b.Property<string>("RoleId")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UserId", "RoleId");
+                b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
+                b.ToTable("AspNetUserRoles", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+            {
+                b.Property<string>("UserId")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                b.Property<string>("LoginProvider")
+                    .HasMaxLength(128)
+                    .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                b.Property<string>("Name")
+                    .HasMaxLength(128)
+                    .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Value")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
+                b.ToTable("AspNetUserTokens", (string)null);
+            });
 
             modelBuilder.Entity("CarRentingSystem.Infrastucture.Data.Driver", b =>
-                {
-                    b.HasOne("CarRentingSystem.Infrastucture.Data.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("CarRentingSystem.Infrastucture.Data.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
             modelBuilder.Entity("CarRentingSystem.Infrastucture.Data.Shipment", b =>
-                {
-                    b.HasOne("CarRentingSystem.Infrastucture.Data.Category", "Category")
-                        .WithMany("Shipments")
-                        .HasForeignKey("CategId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+            {
+                b.HasOne("CarRentingSystem.Infrastucture.Data.Category", "Category")
+                    .WithMany("Shipments")
+                    .HasForeignKey("CategId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("CarRentingSystem.Infrastucture.Data.Driver", "Driver")
-                        .WithMany("Shipments")
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("CarRentingSystem.Infrastucture.Data.Driver", "Driver")
+                    .WithMany("Shipments")
+                    .HasForeignKey("DriverId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("CarRentingSystem.Infrastucture.Data.User", "Renter")
-                        .WithMany()
-                        .HasForeignKey("RenterId");
+                b.HasOne("CarRentingSystem.Infrastucture.Data.User", "Renter")
+                    .WithMany()
+                    .HasForeignKey("RenterId");
 
-                    b.Navigation("Category");
+                b.Navigation("Category");
 
-                    b.Navigation("Driver");
+                b.Navigation("Driver");
 
-                    b.Navigation("Renter");
-                });
+                b.Navigation("Renter");
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("CarRentingSystem.Infrastucture.Data.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("CarRentingSystem.Infrastucture.Data.User", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("CarRentingSystem.Infrastucture.Data.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("CarRentingSystem.Infrastucture.Data.User", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("CarRentingSystem.Infrastucture.Data.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                b.HasOne("CarRentingSystem.Infrastucture.Data.User", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("CarRentingSystem.Infrastucture.Data.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("CarRentingSystem.Infrastucture.Data.User", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("CarRentingSystem.Infrastucture.Data.Category", b =>
-                {
-                    b.Navigation("Shipments");
-                });
+            {
+                b.Navigation("Shipments");
+            });
 
             modelBuilder.Entity("CarRentingSystem.Infrastucture.Data.Driver", b =>
-                {
-                    b.Navigation("Shipments");
-                });
+            {
+                b.Navigation("Shipments");
+            });
 #pragma warning restore 612, 618
         }
     }

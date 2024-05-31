@@ -1467,7 +1467,7 @@
   background-image: var(--bs-gradient) !important;
 }
 
-.user-select-all {
+.ApplicationUser-select-all {
   -webkit-user-select: all !important;
   -moz-user-select: all !important;
   user-select: all !important;
