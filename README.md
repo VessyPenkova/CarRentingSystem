@@ -39,3 +39,5 @@ First Page
 ![alt tsxt](https://github.com/VessyPenkova/Sertificates/blob/main/Lowest%20Price.png?raw=true)
 
 ![alt tsxt](https://github.com/VessyPenkova/Sertificates/blob/main/RentingSystemAdd.png?raw=true)
+
+![alt tsxt](https://github.com/VessyPenkova/Sertificates/blob/main/RentingSystemRegisterPage.png)
