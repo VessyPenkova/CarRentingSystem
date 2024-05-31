@@ -30,4 +30,6 @@ Each category has specific roles and functionalities:
 The system is developed using C# with ASP.NET MVC, SQL Server, EF Core, and follows the MVC pattern. 
 
 First Page 
-![alt tsxt](https://github.com/VessyPenkova/Sertificates/blob/main/CarRentingSystemFirst%20Page.png?raw=true) 
+![alt tsxt](https://github.com/VessyPenkova/Sertificates/blob/main/CarRentingSystemFirst%20Page.png?raw=true)
+
+![alt tsxt](https://github.com/VessyPenkova/Sertificates/blob/main/Charter.png?raw=true)
