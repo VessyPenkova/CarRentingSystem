@@ -1,4 +1,4 @@
-The Car Renting System is an intuitive ASP.NET MVC web application designed to assist users in finding specific trips or transportation options sorted by category. 
+The Renting System is an intuitive ASP.NET MVC web application designed to assist users in finding specific trips or transportation options sorted by category. 
 It offers three user categories:
 
 The platform offers to Users, Car owners, Admins and 3rd parts parters, each with specific roles and functionalities.      
