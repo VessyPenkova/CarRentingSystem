@@ -1,13 +1,10 @@
-﻿using CarRentingSystem.Infrastucture.Data.Configuration;
-using CarRentingSystem.Infrastucture.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CarRentingSystem.Infrastucture.Data.Configuration
 {
     public class UserConfiguration : IEntityTypeConfiguration<User>
-    {     
+    {
         public void Configure(EntityTypeBuilder<User> builder)
         {
             var data = new ConfigureData();
@@ -21,4 +18,3 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
         }
     }
 }
-

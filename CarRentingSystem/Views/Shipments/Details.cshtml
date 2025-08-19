@@ -1,60 +1,88 @@
-﻿@model ShipmentDetailsServiceModel
+﻿@model CarRentingSystem.Core.Models.Shipment.ShipmentDetailsServiceModel
+@using System.Security.Claims
+@using static CarRentingSystem.Areas.Admin.Constants.AdminConstants
+
 @{
     ViewBag.Title = "Shipment Details";
+
+    var currentUserId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
+    var isOwner = !string.IsNullOrEmpty(Model.CreatorId) && Model.CreatorId == currentUserId;
+    var isAdmin = User?.IsInRole(AdminRoleName) ?? false;
+    var isRenter = !string.IsNullOrEmpty(Model.RenterId) && Model.RenterId == currentUserId;
 }
 
-<h2 style="background-color: #09223c; color: #ffd500;" class="text-center" >@ViewBag.Title</h2>
+<h2 class="text-center" style="background-color:#09223c;color:#ffd500;">@ViewBag.Title</h2>
 <hr />
 
-<div style=" background-color: #09223c; color: #ffd500; display:inline" class="container">
-    
-    <div style=" background-color: #09223c; color: #ffd500;" class="row" >
-        <div  class="col-4">
-            <img class="card-img-top" style="width: 20rem;"
-                 src="@Model.ImageUrlShipmentGoogleMaps" alt="Shipment Image">
+<div class="container" style="background-color:#09223c;color:#ffd500;">
+    <div class="row">
+        <div class="col-12 col-md-4 mb-3">
+            <img class="card-img-top" style="width:20rem;max-width:100%;"
+                 src="@Model.ImageUrlShipmentGoogleMaps" alt="Shipment Image" />
         </div>
-        <div style="background-color: #09223c; color: #ffd500;" class="card col-8 border-0" >
-            <p style="background-color: #09223c; color: #ffd500; font-size:25px;" ><u>@Model.Title</u></p>
+
+        <div class="card col-12 col-md-8 border-0" style="background-color:#09223c;color:#ffd500;">
+            <p style="font-size:25px;"><u>@Model.Title</u></p>
             <p>Pick up from: <b>@Model.LoadingAddress</b></p>
             <p>Arrive <b>@Model.DeliveryAddress</b></p>
-            <p>
-                Price:
-                <b>@String.Format("{0:f2}", Model.Price) BGN</b>
-            </p>
-            <p    style="background-color: #09223c; color: #ffd500;">@Model.Description</p>
-            <p    style="background-color: #09223c; color: #ffd500;">Category: <b>@Model.Category</b></p>
+            <p>Price: <b>@($"{Model.Price:f2}") BGN</b></p>
+            <p>@Model.Description</p>
+            <p>Category: <b>@Model.Category</b></p>
             <p><i>(@(Model.IsRented ? "Rented" : "Not Rented"))</i></p>
-            <div  style="background-color: #09223c; color: #ffd500;" class="form-inline">
-                @if (this.User.Identity.IsAuthenticated)
-                {
-                    <a style=" background-color: #09223c; color: #ffd500;"  class="btn btn-warning" asp-controller="Shipments" asp-action="Edit"
-                       asp-route-id="@Model.ShipmentId" >Edit</a>
-                    <a style=" background-color: #09223c; color: #ffd500;"  class="ml-2 btn btn-danger" asp-controller="Shipments" asp-action="Delete"
-                       asp-route-id="@Model.ShipmentId" >Delete</a>
-                    <a style=" background-color: #09223c; color: #ffd500;" class="ml-2 btn btn-green" asp-controller="Shipments" asp-action="Details"
-                       asp-route-id="@Model.ShipmentId">Details</a>
-                    @if (!Model.IsRented)
+
+            @if (User?.Identity?.IsAuthenticated ?? false)
+            {
+                <div class="form-inline">
+                    @* Edit/Delete: only creator or admin *@
+                    @if (isOwner || isAdmin)
                     {
-                        <form     style=" background-color: #09223c; color: #ffd500;" class="ml-2" asp-controller="Shipments"
-                              asp-action="Rent" asp-route-id="@Model.ShipmentId" method="post">
-                            <input style="background-color: #09223c; color: #ffd500;" class="btn btn-primary" type="submit" value="Rent"  />
+                        <a class="btn btn-warning"
+                           asp-controller="Shipments"
+                           asp-action="Edit"
+                           asp-route-id="@Model.ShipmentId">Edit</a>
+
+                        <form class="d-inline ms-2"
+                              asp-controller="Shipments"
+                              asp-action="Delete"
+                              asp-route-id="@Model.ShipmentId"
+                              method="post">
+                            <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                     }
-                    else
+
+                    @* Rent: only if not creator and not rented *@
+                    @if (!isOwner && !Model.IsRented)
                     {
-                        <form     style=" background-color: #09223c; color: #ffd500;" class="ml-2" asp-controller="Shipments" asp-action="Leave"
-                              asp-route-id="@Model.ShipmentId" method="post">
-                            <input style="background-color: #09223c; color: #ffd500;"class="btn btn-primary" type="submit" value="Leave"/>
+                        <form class="d-inline ms-2"
+                              asp-controller="Shipments"
+                              asp-action="Rent"
+                              asp-route-id="@Model.ShipmentId"
+                              method="post">
+                            <button type="submit" class="btn btn-primary">Rent</button>
                         </form>
                     }
-                }
-            </div>
+
+                    @* Leave: only the renter can see it *@
+                    @if (Model.IsRented && isRenter)
+                    {
+                        <form class="d-inline ms-2"
+                              asp-controller="Shipments"
+                              asp-action="Leave"
+                              asp-route-id="@Model.ShipmentId"
+                              method="post">
+                            <button type="submit" class="btn btn-primary">Leave</button>
+                        </form>
+                    }
+                </div>
+            }
+
             <p></p>
-            <div       style=" background-color: #09223c; color: #ffd500;width: 18rem;" class="card">
-                <div    style="background-color: #09223c; color: #ffd500;" class="card-body">
-                    <h5 style="background-color: #09223c; color: #ffd500;" class="card-title">Driver Info</h5>
-                    <p  style="background-color: #09223c; color: #ffd500;" class="card-text">Email:  @Model.Driver.Email</p>
-                    <p  style="background-color: #09223c; color: #ffd500;" class="card-text">Phone Number: @Model.Driver.PhoneNumber</p>
+
+            <div class="card" style="background-color:#09223c;color:#ffd500;width:18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Driver Info</h5>
+                    <p class="card-text">Email: @((Model.Driver?.Email) ?? "—")</p>
+                    <p class="card-text">Phone Number: @((Model.Driver?.PhoneNumber) ?? "—")</p>
                 </div>
             </div>
         </div>

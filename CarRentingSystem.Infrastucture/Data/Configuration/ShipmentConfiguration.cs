@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRentingSystem.Infrastucture.Data.Configuration
 {
@@ -12,29 +7,29 @@ namespace CarRentingSystem.Infrastucture.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Shipment> builder)
         {
+            builder.HasOne(s => s.Category)
+                   .WithMany(c => c.Shipments)
+                   .HasForeignKey(s => s.CategId)
+                   .OnDelete(DeleteBehavior.Restrict);
 
-            builder
-               .HasOne(sh => sh.Category)
-                .WithMany(c => c.Shipments)
-                .HasForeignKey(sh => sh.CategId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(s => s.Driver)
+                   .WithMany(d => d.Shipments)
+                   .HasForeignKey(s => s.DriverId)
+                   .OnDelete(DeleteBehavior.Restrict);
 
-            builder
-                .HasOne(sh => sh.Driver)
-                    .WithMany(d => d.Shipments)
-                    .HasForeignKey(sh => sh.DriverId)
-                    .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(s => s.Creator)
+                   .WithMany()
+                   .HasForeignKey(s => s.CreatorId)
+                   .OnDelete(DeleteBehavior.Restrict);
 
             var data = new ConfigureData();
-
-            builder.HasData(new Shipment[] 
-            { 
-                data.CharterShipment,
-                data.LuxuryShipment,
+            builder.HasData(new Shipment[]
+            {
                 data.OneWayShipment,
-                data.RoundShipment
+                data.RoundShipment,
+                data.LuxuryShipment,
+                data.CharterShipment
             });
         }
     }
 }
-

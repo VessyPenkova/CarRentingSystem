@@ -12,293 +12,285 @@ namespace CarRentingSystem.Core.Services.Shipments
     public class ShipmentService : IShipmentService
     {
         private readonly IRepository repo;
-
         private readonly IGuard guard;
+        private readonly ILogger<ShipmentService> logger;
 
-        private readonly ILogger logger;
-
-        public ShipmentService(
-            IRepository _repo,
-            IGuard _guard,
-            ILogger<ShipmentService> _logger)
+        public ShipmentService(IRepository repo, IGuard guard, ILogger<ShipmentService> logger)
         {
-            repo = _repo;
-            guard = _guard;
-            logger = _logger;
+            this.repo = repo;
+            this.guard = guard;
+            this.logger = logger;
         }
+
+        // ========== Queries ==========
 
         public async Task<bool> Exists(int shipmentId)
-        {
-            return await repo.AllReadonly<Shipment>()
-                .AnyAsync(cr => cr.ShipmentId == shipmentId);
-        }
+            => await repo.AllReadonly<Shipment>()
+                         .AnyAsync(s => s.ShipmentId == shipmentId);
 
         public async Task<ShipmentDetailsServiceModel> ShipmentDetailsByShipmentId(int shipmentId)
-        {
-            return await repo.AllReadonly<Shipment>()
-                .Where(sh => sh.ShipmentId == shipmentId)
-                .Select(sh => new ShipmentDetailsServiceModel()
-                {
-                    ShipmentId = shipmentId,
-                    LoadingAddress = sh.LoadingAddress,
-                    DeliveryAddress = sh.DeliveryAddress,
-                    Category = sh.Category.Name,
-                    Description = sh.Description,
-                    ImageUrlShipmentGoogleMaps = sh.ImageUrlShipmentGoogleMaps,
-                    IsRented = sh.RenterId != null,
-                    Price = sh.Price,
-                    Title = sh.Title,
-                    Driver = new Models.Drivers.DriverServiceModel()
-                    {
-                        Email = sh.Driver.User.Email,
-                        PhoneNumber = sh.Driver.PhoneNumber
-                    }
-                })
-                .FirstAsync();
-        }
-        public async Task<ShipmentQueryServiceModel> All(string? category = null, string? searchTerm = null,
-        ShipmentSorting sorting = ShipmentSorting.Newest, int currentPage = 1, int ShipmentsPerPage = 1)
+            => await repo.AllReadonly<Shipment>()
+                         .Where(s => s.ShipmentId == shipmentId)
+                         .Select(s => new ShipmentDetailsServiceModel
+                         {
+                             ShipmentId = s.ShipmentId,
+                             Title = s.Title,
+                             LoadingAddress = s.LoadingAddress,
+                             DeliveryAddress = s.DeliveryAddress,
+                             Description = s.Description,
+                             Category = s.Category.Name,
+                             ImageUrlShipmentGoogleMaps = s.ImageUrlShipmentGoogleMaps,
+                             Price = s.Price,
+                             IsRented = s.RenterId != null,
+                             RenterId = s.RenterId,
+                             CreatorId = s.CreatorId,
+                             Driver = s.Driver == null
+                                ? new DriverServiceModel() // empty when not assigned yet
+                                : new DriverServiceModel
+                                {
+                                    Email = s.Driver.User.Email,
+                                    PhoneNumber = s.Driver.PhoneNumber
+                                }
+                         })
+                         .FirstAsync();
+        //creatorId
+
+        public async Task<ShipmentQueryServiceModel> All(
+            string? category = null,
+            string? searchTerm = null,
+            ShipmentSorting sorting = ShipmentSorting.Newest,
+            int currentPage = 1,
+            int shipmentsPerPage = 1)
         {
             var result = new ShipmentQueryServiceModel();
+
             var shipments = repo.AllReadonly<Shipment>();
 
-
-            if (string.IsNullOrEmpty(category) == false)
+            if (!string.IsNullOrWhiteSpace(category))
             {
-                shipments = shipments
-                    .Where(cr => cr.Category.Name == category);
+                shipments = shipments.Where(s => s.Category.Name == category);
             }
 
-            if (string.IsNullOrEmpty(searchTerm) == false)
+            if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                searchTerm = $"%{searchTerm.ToLower()}%";
-
-                shipments = shipments
-                    .Where(r => EF.Functions.Like(r.Title.ToLower(), searchTerm) ||
-                        EF.Functions.Like(r.LoadingAddress.ToLower(), searchTerm) ||
-                        EF.Functions.Like(r.DeliveryAddress.ToLower(), searchTerm) ||
-                        EF.Functions.Like(r.Description.ToLower(), searchTerm));
+                var term = $"%{searchTerm.Trim().ToLower()}%";
+                shipments = shipments.Where(s =>
+                    EF.Functions.Like(s.Title.ToLower(), term) ||
+                    EF.Functions.Like(s.LoadingAddress.ToLower(), term) ||
+                    EF.Functions.Like(s.DeliveryAddress.ToLower(), term) ||
+                    EF.Functions.Like(s.Description.ToLower(), term));
             }
+
             shipments = sorting switch
             {
-                ShipmentSorting.Price => shipments
-                    .OrderBy(cr => cr.Price),
-                ShipmentSorting.NotRentedFirst => shipments
-                    .OrderBy(cr => cr.RenterId),
-                _ => shipments.OrderByDescending(cr => cr.ShipmentId)
+                ShipmentSorting.Price => shipments.OrderBy(s => s.Price),
+                ShipmentSorting.NotRentedFirst => shipments.OrderBy(s => s.RenterId),
+                _ => shipments.OrderByDescending(s => s.ShipmentId)
             };
 
             result.Shipments = await shipments
-                .Skip((currentPage - 1) * ShipmentsPerPage)
-                .Take(ShipmentsPerPage)
-                .Select(cr => new ShipmentServiceModel()
+                .Skip((currentPage - 1) * shipmentsPerPage)
+                .Take(shipmentsPerPage)
+                .Select(s => new ShipmentServiceModel
                 {
-                    Id = cr.ShipmentId,
-                    Title = cr.Title,
-                    LoadingAddress = cr.LoadingAddress,
-                    DeliveryAddress = cr.DeliveryAddress,
-                    ImageUrlShipmentGoogleMaps = cr.ImageUrlShipmentGoogleMaps,
-                    Price = cr.Price,
-                    IsRented = cr.RenterId != null,
+                    Id = s.ShipmentId,
+                    Title = s.Title,
+                    LoadingAddress = s.LoadingAddress,
+                    DeliveryAddress = s.DeliveryAddress,
+                    ImageUrlShipmentGoogleMaps = s.ImageUrlShipmentGoogleMaps,
+                    Price = s.Price,
+                    IsRented = s.RenterId != null
                 })
                 .ToListAsync();
 
             result.TotalShipmentCount = await shipments.CountAsync();
-
             return result;
         }
 
-
         public async Task<IEnumerable<ShipmentServiceModel>> AllShipmentsByDriverId(int driverId)
-        {
-            var shipments = await repo.AllReadonly<Shipment>()
-                .Where(c => c.DriverId == driverId)
-                .Select(c => new ShipmentServiceModel()
-                {
-                    Id = c.ShipmentId,
-                    LoadingAddress = c.LoadingAddress,
-                    DeliveryAddress = c.DeliveryAddress,
-                    Title = c.Title,
-                    ImageUrlShipmentGoogleMaps = c.ImageUrlShipmentGoogleMaps,
-                    Price = c.Price,
-                    IsRented = c.RenterId != null,
-                })
-                .ToListAsync();
-            return shipments;
-        }
+            => await repo.AllReadonly<Shipment>()
+                         .Where(s => s.DriverId == driverId)
+                         .Select(s => new ShipmentServiceModel
+                         {
+                             Id = s.ShipmentId,
+                             Title = s.Title,
+                             LoadingAddress = s.LoadingAddress,
+                             DeliveryAddress = s.DeliveryAddress,
+                             ImageUrlShipmentGoogleMaps = s.ImageUrlShipmentGoogleMaps,
+                             Price = s.Price,
+                             IsRented = s.RenterId != null
+                         })
+                         .ToListAsync();
+
         public async Task<IEnumerable<ShipmentServiceModel>> AllShipmentsByUserId(string userId)
-        {
-            var shipments = await repo.AllReadonly<Shipment>()
-                .Where(c => c.RenterId == userId)
-                .Select(c => new ShipmentServiceModel()
-                {
-                    Id = c.ShipmentId,
-                    Title = c.Title,
-                    LoadingAddress = c.LoadingAddress,
-                    DeliveryAddress = c.DeliveryAddress,
-                    ImageUrlShipmentGoogleMaps = c.ImageUrlShipmentGoogleMaps,
-                    Price = c.Price,
-                    IsRented = c.RenterId != null,
+            => await repo.AllReadonly<Shipment>()
+                         .Where(s => s.RenterId == userId)
+                         .Select(s => new ShipmentServiceModel
+                         {
+                             Id = s.ShipmentId,
+                             Title = s.Title,
+                             LoadingAddress = s.LoadingAddress,
+                             DeliveryAddress = s.DeliveryAddress,
+                             ImageUrlShipmentGoogleMaps = s.ImageUrlShipmentGoogleMaps,
+                             Price = s.Price,
+                             IsRented = s.RenterId != null
+                         })
+                         .ToListAsync();
 
-                })
-                .ToListAsync();
-            return shipments;
-        }
+        public async Task<IEnumerable<string>> AllCategoriesNames()
+            => await repo.AllReadonly<Category>()
+                         .OrderBy(c => c.Name)
+                         .Select(c => c.Name)
+                         .ToListAsync();
 
-
+        public async Task<IEnumerable<ShipmentCategoryServiceModel>> AllCategories()
+            => await repo.AllReadonly<Category>()
+                         .OrderBy(c => c.Name)
+                         .Select(c => new ShipmentCategoryServiceModel
+                         {
+                             CategoryId = c.CategoryId,
+                             Name = c.Name
+                         })
+                         .ToListAsync();
 
         public async Task<bool> CategoryExists(int categoryId)
-        {
-            return await repo.AllReadonly<Category>()
-                .AnyAsync(c => c.CategoryId == categoryId);
-        }
-        public async Task<IEnumerable<ShipmentCategoryServiceModel>> AllCategories()
-        {
-            return await repo.AllReadonly<Category>()
-                .OrderBy(c => c.Name)
-                .Select(c => new ShipmentCategoryServiceModel()
-                {
-                    CategoryId = c.CategoryId,
-                    Name = c.Name
-                })
-                .ToListAsync();
-        }
-        public async Task<IEnumerable<string>> AllCategoriesNames()
-        {
-            return await repo.AllReadonly<Category>()
-                .Select(c => c.Name)
-                .Distinct()
-                .ToListAsync();
-        }
+            => await repo.AllReadonly<Category>()
+                         .AnyAsync(c => c.CategoryId == categoryId);
+
         public async Task<int> GetShipmentCategoryId(int shipmentId)
-        {
-            return (await repo.GetByIdAsync<Shipment>(shipmentId)).CategId;
+            => (await repo.GetByIdAsync<Shipment>(shipmentId))!.CategId;
 
+        public async Task<IEnumerable<ShipmentIndexServiceModel>> LastThreeShipments()
+            => await repo.AllReadonly<Shipment>()
+                         .OrderByDescending(s => s.ShipmentId)
+                         .Select(s => new ShipmentIndexServiceModel
+                         {
+                             ShipmentId = s.ShipmentId,
+                             Title = s.Title,
+                             LoadingAddress = s.LoadingAddress,
+                             DeliveryAddress = s.DeliveryAddress,
+                             ImageUrlShipmentGoogleMaps = s.ImageUrlShipmentGoogleMaps
+                         })
+                         .Take(3)
+                         .ToListAsync();
+
+        // ========== Ownership / renting rules ==========
+
+        public async Task<bool> IsOwner(int shipmentId, string currentUserId)
+        {
+            var creatorId = await repo.AllReadonly<Shipment>()
+                                      .Where(s => s.ShipmentId == shipmentId)
+                                      .Select(s => s.CreatorId)
+                                      .FirstOrDefaultAsync();
+
+            return creatorId != null && creatorId == currentUserId;
         }
 
-        public async Task<int> Create(string title, string loadingAddress, string deliveryAddress,
-        string description, string imageUrlShipmentGoogleMaps, decimal price, int categoryId, int driverId)
+        public async Task<bool> IsRented(int shipmentId)
+            => (await repo.GetByIdAsync<Shipment>(shipmentId))!.RenterId != null;
+
+        public async Task<bool> IsRentedByUserWithId(int shipmentId, string currentUserId)
         {
-            var shipment = new Shipment()
+            var renterId = await repo.AllReadonly<Shipment>()
+                                     .Where(s => s.ShipmentId == shipmentId)
+                                     .Select(s => s.RenterId)
+                                     .FirstOrDefaultAsync();
+            return renterId != null && renterId == currentUserId;
+        }
+
+        public async Task Rent(int shipmentId, string currentUserId)
+        {
+            var entity = await repo.GetByIdAsync<Shipment>(shipmentId);
+            guard.AgainstNull(entity, "Shipment can not be found");
+
+            if (entity!.RenterId != null)
+                throw new ArgumentException("Route is not available right now, please try tomorrow");
+
+            entity.RenterId = currentUserId;
+            await repo.SaveChangesAsync();
+        }
+
+        public async Task Leave(int shipmentId)
+        {
+            var entity = await repo.GetByIdAsync<Shipment>(shipmentId);
+            guard.AgainstNull(entity, "Route can not be found");
+
+            entity!.RenterId = null;
+            await repo.SaveChangesAsync();
+        }
+
+        // ========== CRUD ==========
+
+        public async Task<int> Create(
+            string title,
+            string loadingAddress,
+            string deliveryAddress,
+            string description,
+            string imageUrlShipmentGoogleMaps,
+            decimal price,
+            int categoryId,
+            int? driverId,
+            string creatorUserId)
+        {
+            var entity = new Shipment
             {
+                Title = title,
                 LoadingAddress = loadingAddress,
                 DeliveryAddress = deliveryAddress,
-                CategId = categoryId,
                 Description = description,
                 ImageUrlShipmentGoogleMaps = imageUrlShipmentGoogleMaps,
                 Price = price,
-                Title = title,
-                DriverId = driverId,
+                CategId = categoryId,
+                DriverId = driverId,     // may be null until someone becomes driver
+                CreatorId = creatorUserId,
+                IsActive = true
             };
 
             try
             {
-                await repo.AddAsync(shipment);
+                await repo.AddAsync(entity);
                 await repo.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                logger.LogError(nameof(Create), ex);
+                logger.LogError(ex, "Create shipment failed");
                 throw new ApplicationException("Database failed to save info", ex);
             }
 
-            return shipment.ShipmentId;
+            return entity.ShipmentId;
         }
-        public async Task Edit(int shipmentId, string title, string loadingAddress, string deliveryAddress,
-        string description, string imageUrlShipmentGoogleMaps, decimal price, int categoryId)
-        {
-            var shipment = await repo.GetByIdAsync<Shipment>(shipmentId);
 
-            shipment.ShipmentId = shipmentId;
-            shipment.Description = description;
-            shipment.ImageUrlShipmentGoogleMaps = imageUrlShipmentGoogleMaps;
-            shipment.Price = price;
-            shipment.Title = title;
-            shipment.LoadingAddress = loadingAddress;
-            shipment.DeliveryAddress = deliveryAddress;
-            shipment.CategId = categoryId;
+        public async Task Edit(
+            int shipmentId,
+            string title,
+            string loadingAddress,
+            string deliveryAddress,
+            string description,
+            string imageUrlShipmentGoogleMaps,
+            decimal price,
+            int categoryId)
+        {
+            var entity = await repo.GetByIdAsync<Shipment>(shipmentId);
+            guard.AgainstNull(entity, "Shipment not found");
+
+            entity!.Title = title;
+            entity.LoadingAddress = loadingAddress;
+            entity.DeliveryAddress = deliveryAddress;
+            entity.Description = description;
+            entity.ImageUrlShipmentGoogleMaps = imageUrlShipmentGoogleMaps;
+            entity.Price = price;
+            entity.CategId = categoryId;
 
             await repo.SaveChangesAsync();
         }
+
         public async Task Delete(int shipmentId)
         {
-            var shipment = await repo.AllReadonly<Shipment>()
-                .AnyAsync(sh => sh.ShipmentId == shipmentId);
-            await repo.DeleteAsync<Shipment>(shipment);
+            var entity = await repo.GetByIdAsync<Shipment>(shipmentId);
+            guard.AgainstNull(entity, "Shipment not found");
+
+            await repo.DeleteAsync<Shipment>(shipmentId);  // explicit generic + id
             await repo.SaveChangesAsync();
         }
-
-
-        public async Task<bool> HasDriverWithId(int shipmentId, string currentUserId)
-        {
-            bool result = false;
-            var shipment = await repo.AllReadonly<Shipment>()
-                .Where(cr => cr.ShipmentId == shipmentId)
-                .Include(cr => cr.Driver)
-                .FirstOrDefaultAsync();
-
-            if (shipment?.Driver != null && shipment.Driver.UserId == currentUserId)
-            {
-                result = true;
-            }
-
-            return result;
-        }
-        public async Task<bool> IsRented(int shipmentId)
-        {
-            return (await repo.GetByIdAsync<Shipment>(shipmentId)).RenterId != null;
-        }
-        public async Task<bool> IsRentedByUserWithId(int shipmentId, string currentUserId)
-        {
-            bool result = false;
-            var shipment = await repo.AllReadonly<Shipment>()
-                .Where(cr => cr.ShipmentId == shipmentId)
-                .FirstOrDefaultAsync();
-
-            if (shipment != null && shipment.RenterId == currentUserId)
-            {
-                result = true;
-            }
-
-            return result;
-        }
-        public async Task<IEnumerable<ShipmentIndexServiceModel>> LastThreeShipments()
-        {
-            return await repo.AllReadonly<Shipment>()
-                .OrderByDescending(cr => cr.ShipmentId)
-                .Select(cr => new ShipmentIndexServiceModel()
-                {
-                    ShipmentId = cr.ShipmentId,
-                    Title = cr.Title,
-                    LoadingAddress = cr.LoadingAddress,
-                    DeliveryAddress = cr.DeliveryAddress,
-                    ImageUrlShipmentGoogleMaps = cr.ImageUrlShipmentGoogleMaps
-                })
-                .Take(3)
-                .ToListAsync();
-        }
-        public async Task Leave(int shipmentId)
-        {
-            var shipment = await repo.GetByIdAsync<Shipment>(shipmentId);
-            guard.AgainstNull(shipment, "Route can not be found");
-            shipment.RenterId = null;
-
-            await repo.SaveChangesAsync();
-        }
-        public async Task Rent(int shipmentId, string currentUserId)
-        {
-            var shipment = await repo.GetByIdAsync<Shipment>(shipmentId);
-
-            if (shipment != null && shipment.RenterId != null)
-            {
-                throw new ArgumentException("Route is not available right now, please try tomorrow");
-            }
-
-            guard.AgainstNull(shipment, "Route can not be found");
-            shipment.RenterId = currentUserId;
-
-            await repo.SaveChangesAsync();
-        }
-
     }
 }

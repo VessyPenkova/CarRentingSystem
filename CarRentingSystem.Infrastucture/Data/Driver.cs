@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static CarRentingSystem.Infrastucture.Constants.ModelsConstants;
 
 namespace CarRentingSystem.Infrastucture.Data
 {
-
     [Comment("Driver route")]
     public class Driver
     {
@@ -25,6 +23,7 @@ namespace CarRentingSystem.Infrastucture.Data
 
         [ForeignKey(nameof(UserId))]
         public User User { get; init; } = null!;
-        public List<Shipment> Shipments { get; set; } = new List<Shipment>();
+
+        public List<Shipment> Shipments { get; set; } = new();
     }
 }

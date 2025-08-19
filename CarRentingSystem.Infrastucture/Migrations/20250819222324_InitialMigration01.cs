@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarRentingSystem.Infrastucture.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration01 : Migration
+    public partial class InitialMigration01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -209,13 +209,20 @@ namespace CarRentingSystem.Infrastucture.Migrations
                     ImageUrlShipmentGoogleMaps = table.Column<string>(type: "nvarchar(max)", nullable: false, comment: "Shipment image url"),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false, comment: "Price"),
                     CategId = table.Column<int>(type: "int", nullable: false, comment: "Category identifier"),
-                    DriverId = table.Column<int>(type: "int", nullable: false, comment: "Driver identifier"),
+                    DriverId = table.Column<int>(type: "int", nullable: true, comment: "Driver identifier"),
                     RenterId = table.Column<string>(type: "nvarchar(450)", nullable: true, comment: "User id of the rentier"),
+                    CreatorId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "User id of the creator"),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Shipments", x => x.ShipmentId);
+                    table.ForeignKey(
+                        name: "FK_Shipments_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Shipments_AspNetUsers_RenterId",
                         column: x => x.RenterId,
@@ -241,9 +248,9 @@ namespace CarRentingSystem.Infrastucture.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "IsActive", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", 0, "b502e069-38c9-498c-b919-1af982e13e55", "guest@mail.com", false, "Gestiot", true, "Gestiotev", false, null, "guest@mail.com", "guest@mail.com", "AQAAAAIAAYagAAAAEL6chpiMYjs+n63AAhk4VgqtBSQ2D1oE5wveeSbuawGQZnTgumjUPc2a1muB5JlFIA==", null, false, "58c7b8b8-4f46-4c6f-8755-27948e5964bb", false, "guest@mail.com" },
-                    { "bcb4f072-ecca-43c9-ab26-c060c6f364e4", 0, "ef947748-e56d-4dd2-8ec0-e6641e835142", "admin@mail.com", false, "Adminiot", true, "Adminov", false, null, "admin@mail.com", "admin@mail.com", "AQAAAAIAAYagAAAAEALEtivMwKFaqriH9CyyqvfPhbnInomC3pzcGRBFWDbu964v4VEoqvcd6c30kIiOIw==", null, false, "0200891c-7066-47e6-9372-30a02df0887d", false, "admin@mail.com" },
-                    { "dea12856-c198-4129-b3f3-b893d8395082", 0, "e2ea19b4-6cb2-4955-b975-84924a84b813", "driver@mail.com", false, "Driviot", true, "Drivilov", false, null, "driver@mail.com", "driver@mail.com", "AQAAAAIAAYagAAAAEGNl0w92cHJXea0bIsRV1TbL3LXXIQPskSniI84FQmYT/GO+2XJrYuHA7CB786QKkA==", null, false, "93daef18-d041-4ed5-8d08-a57f233f6fcc", false, "driver@mail.com" }
+                    { "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", 0, "a6a4ee8b-dfca-4e7f-b53d-c3e827baefc8", "guest@mail.com", false, "Gestiot", true, "Gestiotev", false, null, "guest@mail.com", "guest@mail.com", "AQAAAAIAAYagAAAAEBajTkx4lYFgCslBykFK12ULYSkmnf/IKrARrTNkjx7oyCuuXgsFKFyMVRVox8NmzQ==", null, false, "a470c79f-10b2-4d5a-92ae-0d653047094d", false, "guest@mail.com" },
+                    { "bcb4f072-ecca-43c9-ab26-c060c6f364e4", 0, "f4c58fe7-3530-49ef-8ef0-98bbf3220fa1", "admin@mail.com", false, "Adminiot", true, "Adminov", false, null, "admin@mail.com", "admin@mail.com", "AQAAAAIAAYagAAAAEEqabBCM7Z/yC0xJm1VlTGLj80ZcDyacTzFjJu8dzIG4O2t+Snz/uoRJaEhns6QC+g==", null, false, "69b19889-ab38-4e2d-9a5a-a1c0c39ef41e", false, "admin@mail.com" },
+                    { "dea12856-c198-4129-b3f3-b893d8395082", 0, "3656f74c-bd9c-4b8e-833b-cb4ffd2ac3fe", "driver@mail.com", false, "Driviot", true, "Drivilov", false, null, "driver@mail.com", "driver@mail.com", "AQAAAAIAAYagAAAAENFOw1luDkvuR7M05ABeXnjgj76A3OPz5k/itUrPZzUqRe/jVbzUoP/2rjZqmz4/xQ==", null, false, "0998d9a1-4dd1-447d-8814-753305d4646e", false, "driver@mail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -269,13 +276,13 @@ namespace CarRentingSystem.Infrastucture.Migrations
 
             migrationBuilder.InsertData(
                 table: "Shipments",
-                columns: new[] { "ShipmentId", "CategId", "DeliveryAddress", "Description", "DriverId", "ImageUrlShipmentGoogleMaps", "IsActive", "LoadingAddress", "Price", "RenterId", "Title" },
+                columns: new[] { "ShipmentId", "CategId", "CreatorId", "DeliveryAddress", "Description", "DriverId", "ImageUrlShipmentGoogleMaps", "IsActive", "LoadingAddress", "Price", "RenterId", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, "Antique Theater, str. Tsar Ivaylo 4, Plovdiv,4000, BG", "Tourist in Plovdiv?, this trip is will satisfy your expectation.", 1, "https://ekotaxi.bg/wp-content/uploads/2020/03/single_cab_redone-min-1-2048x1536.png", true, "Bul. Kniyaginya Maria Luiza, 31, Plovdiv, 4000, BG", 10.00m, "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", "One Way" },
-                    { 2, 3, "Bul. Alexander Malinov, 78, BG,Sofia,  2000", "Go back Plovdiv - Sofia in one hour. The driver will wait.", 1, "https://content.fortune.com/wp-content/uploads/2014/09/170030873.jpg?resize=1200,600", true, "Bul. Maria Luiza, 31, BG,Plovdiv,  4000", 50.00m, null, "Round" },
-                    { 3, 4, " Bul. Alexander Malinov, 78, BG, 2000", "Busyness trip. This trip is private with a luxury limousine", 1, "https://le-cdn.hibuwebsites.com/8978d127e39b497da77df2a4b91f33eb/dms3rep/multi/opt/RSshutterstock_120889072-1920w.jpg", true, "Bul. Maria Luiza, 31, BG, 4000", 316.80m, null, "Private-Luxury" },
-                    { 4, 5, "Sofia Airport", "This privet charter. We are here to meet al your expectations", 1, "https://www.luxuryaircraftsolutions.com/wp-content/uploads/2020/05/image-226.png", true, "Plovdiv Airport", 2000.00m, null, "Charter" }
+                    { 1, 1, "bcb4f072-ecca-43c9-ab26-c060c6f364e4", "Antique Theater, str. Tsar Ivaylo 4, Plovdiv,4000, BG", "Tourist in Plovdiv?, this trip is will satisfy your expectation.", 1, "https://ekotaxi.bg/wp-content/uploads/2020/03/single_cab_redone-min-1-2048x1536.png", true, "Bul. Kniyaginya Maria Luiza, 31, Plovdiv, 4000, BG", 10.00m, "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", "One Way" },
+                    { 2, 3, "bcb4f072-ecca-43c9-ab26-c060c6f364e4", "Bul. Alexander Malinov, 78, BG,Sofia,  2000", "Go back Plovdiv - Sofia in one hour. The driver will wait.", 1, "https://content.fortune.com/wp-content/uploads/2014/09/170030873.jpg?resize=1200,600", true, "Bul. Maria Luiza, 31, BG,Plovdiv,  4000", 50.00m, null, "Round" },
+                    { 3, 4, "bcb4f072-ecca-43c9-ab26-c060c6f364e4", " Bul. Alexander Malinov, 78, BG, 2000", "Busyness trip. This trip is private with a luxury limousine", 1, "https://le-cdn.hibuwebsites.com/8978d127e39b497da77df2a4b91f33eb/dms3rep/multi/opt/RSshutterstock_120889072-1920w.jpg", true, "Bul. Maria Luiza, 31, BG, 4000", 316.80m, null, "Private-Luxury" },
+                    { 4, 5, "bcb4f072-ecca-43c9-ab26-c060c6f364e4", "Sofia Airport", "This privet charter. We are here to meet al your expectations", 1, "https://www.luxuryaircraftsolutions.com/wp-content/uploads/2020/05/image-226.png", true, "Plovdiv Airport", 2000.00m, null, "Charter" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -326,6 +333,11 @@ namespace CarRentingSystem.Infrastucture.Migrations
                 name: "IX_Shipments_CategId",
                 table: "Shipments",
                 column: "CategId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Shipments_CreatorId",
+                table: "Shipments",
+                column: "CreatorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Shipments_DriverId",

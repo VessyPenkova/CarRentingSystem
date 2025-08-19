@@ -6,16 +6,25 @@ namespace CarRentingSystem.Core.Models.Shipment
 {
     public  class ShipmentDetailsServiceModel: ShipmentIndexServiceModel
     {
-        public string Description { get; init; } = null!;
+        public int ShipmentId { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string LoadingAddress { get; set; } = string.Empty;
+        public string DeliveryAddress { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string ImageUrlShipmentGoogleMaps { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+        public bool IsRented { get; set; }
 
-        public string Category { get; init; } = null!;
+        public string CreatorId { get; set; } = null!;
 
-        public DriverServiceModel Driver { get; init; } = null!;
 
-        [DisplayName("Price")]
-        public decimal Price { get; init; }
 
-        [DisplayName("Is Rented")]
-        public bool IsRented { get; init; }
+        public DriverServiceModel? Driver { get; set; }
+
+        // If you use slugged info in routes:
+        public string GetInformation() => $"{Title}-{Category}".Replace(' ', '-');
+        public string? RenterId { get; set; }
+
     }
 }
