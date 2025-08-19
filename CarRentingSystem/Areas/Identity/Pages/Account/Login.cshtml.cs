@@ -1,98 +1,82 @@
-﻿#nullable disable
-
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using CarRentingSystem.Infrastucture.Data;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-using CarRentingSystem.Infrastucture.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace CarRentingSystem.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class LoginModel : PageModel
     {
         private readonly SignInManager<User> signInManager;
-        
-        public LoginModel(SignInManager<User> _signInManager)
+
+        public LoginModel(SignInManager<User> signInManager)
         {
-            signInManager = _signInManager;      
+            this.signInManager = signInManager;
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }//
+        public InputModel Input { get; set; } = new();
 
-     
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }//
+        public IList<AuthenticationScheme> ExternalLogins { get; private set; } = new List<AuthenticationScheme>();
 
-       
-        public string ReturnUrl { get; set; }//
+        public string? ReturnUrl { get; private set; }
 
-      
         [TempData]
-        public string ErrorMessage { get; set; }//
+        public string? ErrorMessage { get; set; }
 
-      
         public class InputModel
         {
-            
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }//
+            [Required, EmailAddress]
+            public string Email { get; set; } = string.Empty;
 
-          
-            [Required]
-            [DataType(DataType.Password)]//
-            public string Password { get; set; }//
+            [Required, DataType(DataType.Password)]
+            public string Password { get; set; } = string.Empty;
 
             [Display(Name = "Remember me?")]
-            public bool RememberMe { get; set; }//
+            public bool RememberMe { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(string? returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-            returnUrl ??= Url.Content("~/");
+            ReturnUrl = returnUrl ?? Url.Content("~/");
 
+            // Clear any existing external cookie
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-            ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            ReturnUrl = returnUrl ?? Url.Content("~/");
+            ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            ExternalLogins = (await signInManager
-                .GetExternalAuthenticationSchemesAsync()).ToList();
+            if (!ModelState.IsValid)
+                return Page();
 
-            if (ModelState.IsValid)
+            // You set UserName = Email at registration, so signing in by email works
+            var result = await signInManager.PasswordSignInAsync(
+                Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
+            if (result.Succeeded)
+                return LocalRedirect(ReturnUrl);
+
+            if (result.IsLockedOut)
             {
-                var result = await this.signInManager.PasswordSignInAsync(Input.Email, Input.Password,
-                    Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    return LocalRedirect(returnUrl);
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
-                }
+                ModelState.AddModelError(string.Empty, "Account locked out.");
+                return Page();
             }
 
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return Page();
         }
     }

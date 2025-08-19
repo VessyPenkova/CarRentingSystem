@@ -24,14 +24,26 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- LEFT side -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link text-warning" asp-controller="Shipments" asp-action="All">
                                 All Shipments
                             </a>
                         </li>
+
+                        @* Show "Add Shipment" next to All Shipments when logged in *@
+                        @if (User?.Identity?.IsAuthenticated ?? false)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" asp-controller="Shipments" asp-action="Add">
+                                    Add Shipment
+                                </a>
+                            </li>
+                        }
                     </ul>
 
+                    <!-- RIGHT side -->
                     <ul class="navbar-nav ms-auto">
                         @if (User?.Identity?.IsAuthenticated ?? false)
                         {
@@ -57,7 +69,6 @@
                             </li>
                         }
                     </ul>
-
                 </div>
             </div>
         </nav>

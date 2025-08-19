@@ -1,114 +1,107 @@
 ﻿@model AllShipmentsQueryModel
 @{
     ViewBag.Title = "All Shipments";
-   
+    var isLoggedIn = User?.Identity?.IsAuthenticated ?? false;
 }
 
-<h2 style="background-color: #09223c; color: #ffd500;" class="text-center">@ViewBag.Title</h2>
+<h2 class="text-center" style="background-color:#09223c;color:#ffd500;">@ViewBag.Title</h2>
 <hr />
 
-<form style="background-color: #09223c; color: #ffd500;" method="get">
-    <div style="background-color: #09223c; color: #ffd500;" class="row">
-        <div style="background-color: #09223c; color: #ffd500;" class="form-group col-md-3 d-flex justify-content-between">
-            <div style="background-color: #09223c; color: #ffd500;" class="form-group">
-                <label style="background-color: #09223c; color: #ffd500;" asp-for="Category"></label>
-                <select style="background-color: #09223c; color: #ffd500;"  asp-for="Category" class="form-control">
-                    <option style="background-color: #09223c; color: #ffd500;" value="">All</option>
+@if (isLoggedIn)
+{
+    <div class="mb-3 text-end">
+        <a asp-controller="Shipments" asp-action="Add" class="btn btn-primary">
+            Add Shipment
+        </a>
+    </div>
+}
+
+<form method="get" style="background-color:#09223c;color:#ffd500;">
+    <div class="row">
+        <div class="form-group col-md-3 d-flex justify-content-between">
+            <div class="form-group">
+                <label asp-for="Category"></label>
+                <select asp-for="Category" class="form-control">
+                    <option value="">All</option>
                     @foreach (var category in Model.Categories)
                     {
-                        <option style="background-color: #09223c; color: #ffd500;"  value="@category">@category</option>
+                        <option value="@category">@category</option>
                     }
                 </select>
             </div>
         </div>
+
         <style>
             .custom-form-control {
-                /* Add your custom styles here */
-               /* Example background color */
                 color: #ffd500;
                 border-color: #ffd500;
-                " /* Example text color */
             }
         </style>
 
-        <div  style="background-color: #09223c; color: #ffd500;" class="form-group col-md-3" >
-            <label style="background-color: #09223c; color: #ffd500;" asp-for="SearchTerm" ></label>
-            <input style="background-color: #09223c; color: #ffd500;" asp-for="SearchTerm"class="form-control" placeholder="...">
+        <div class="form-group col-md-3">
+            <label asp-for="SearchTerm"></label>
+            <input asp-for="SearchTerm" class="form-control" placeholder="..." />
         </div>
 
-        <div style="background-color: #09223c; color: #ffd500;" class="form-group col-md-3">
-            <div style="background-color: #09223c; color: #ffd500;" class="form-group">
-                <label style="background-color: #09223c; color: #ffd500;" asp-for="Sorting"></label>
-
-                <select style="background-color: #09223c; color: #ffd500;" asp-for="Sorting"class="form-control">
-                    <option style="background-color: #09223c; color: #ffd500;" value="0">Newest</option>
-                    <option style="background-color: #09223c; color: #ffd500;" value="1">Lowest price first</option>
-                    <option style="background-color: #09223c; color: #ffd500;" value="2">Not rented first</option>
+        <div class="form-group col-md-3">
+            <div class="form-group">
+                <label asp-for="Sorting"></label>
+                <select asp-for="Sorting" class="form-control">
+                    <option value="0">Newest</option>
+                    <option value="1">Lowest price first</option>
+                    <option value="2">Not rented first</option>
                 </select>
             </div>
         </div>
 
-        <div style="background-color: #09223c; color: #ffd500;" class="col-md-3" >
-
-            <div style="background-color: #09223c; color: #ffd500;" class="form-group mt-4 p-2">
-                <input style="background-color: #09223c; color: #ffd500;" type="submit" value="Search" class="btn-block" />
+        <div class="col-md-3">
+            <div class="form-group mt-4 p-2">
+                <input type="submit" value="Search" class="btn btn-primary w-100" />
             </div>
         </div>
-
     </div>
-
 </form>
 
 @{
     var previousPage = Model.CurrentPage - 1;
-    if (previousPage < 1)
-    {
-        previousPage = 1;
-    }
+    if (previousPage < 1) previousPage = 1;
 
-    var maxPage = Math.Ceiling((double)Model.TotalShipmentsCount /
-        AllShipmentsQueryModel.ShipmentsPerPage);
+    var maxPage = Math.Ceiling((double)Model.TotalShipmentsCount / AllShipmentsQueryModel.ShipmentsPerPage);
+    var shouldNextBeDisabled = Model.CurrentPage == maxPage || !Model.Shipments.Any();
 }
 
-<div style="background-color: #09223c; color: #ffd500;"  class="row mb-5">
-    <div style="background-color: #09223c; color: #ffd500;" class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
-        <a style="background-color: #09223c; color: #ffd500;" class="btn  @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+<div class="row mb-5" style="background-color:#09223c;color:#ffd500;">
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
            asp-controller="Shipments"
            asp-action="All"
            asp-route-currentPage="@previousPage"
            asp-route-category="@Model.Category"
            asp-route-searchTerm="@Model.SearchTerm"
-           asp-route-sorting="@((int)Model.Sorting)"><<</a>
+           asp-route-sorting="@((int)Model.Sorting)">&laquo;</a>
     </div>
 
-    @{
-        var shouldButtonBeDisabled = Model.CurrentPage == maxPage ||
-        !Model.Shipments.Any();
-    }
-
-    <div style="background-color: #09223c; color: #ffd500;" class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
-        <a style="background-color: #09223c; color: #ffd500;" class="btn
-
-           @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+        <a class="btn @(shouldNextBeDisabled ? "disabled" : string.Empty)"
            asp-controller="Shipments"
            asp-action="All"
            asp-route-currentPage="@(Model.CurrentPage + 1)"
            asp-route-category="@Model.Category"
            asp-route-searchTerm="@Model.SearchTerm"
-           asp-route-sorting="@((int)Model.Sorting)">>></a>
+           asp-route-sorting="@((int)Model.Sorting)">&raquo;</a>
     </div>
 </div>
 
 @if (!Model.Shipments.Any())
 {
-    <h2  style="background-color: #09223c; color: #ffd500;" class="text-center">No Cars found by the given criteria!</h2>
+    <h2 class="text-center" style="background-color:#09223c;color:#ffd500;">
+        No cars found by the given criteria!
+    </h2>
 }
 
-<div style="background-color: #09223c; color: #ffd500;" class="row">
+<div class="row" style="background-color:#09223c;color:#ffd500;">
     @foreach (var shipment in Model.Shipments)
     {
-        <partial style="background-color: #09223c; color: #ffd500;" name="_ShipmentPartial" model="@shipment"  />
+        <partial name="_ShipmentPartial" model="@shipment" />
     }
 </div>
-
-       
