@@ -3,80 +3,123 @@
 
 @{
     ViewData["Title"] = "Home Page";
-    bool first = true;
-    var shipments = Model.ToList();
+    var shipments = Model?.ToList() ?? new List<ShipmentIndexServiceModel>();
 }
 
-@if (Model.Count() == 0)
+@if (!shipments.Any())
 {
-    <div                style="background-color: #09223c; color: #ffd500;" class="mt-4 p-5" >
-        <h1             style="background-color: #09223c; color: #ffd500;"  class="display-4" >Welcome to the best place for renting car!</h1>
-        <p class="lead" style="background-color: #09223c; color: #ffd500;">
+    <div class="mt-4 p-5" style="background-color:#09223c;color:#ffd500;">
+        <h1 class="display-4">Welcome to the best place for renting car!</h1>
+        <p class="lead">
             There are no cars or routes in the system currently available
             so why don't you just add one?
         </p>
-        <hr            style="background-color: #09223c; color: #ffd500;" class="my-4">
-        <p             style="background-color: #09223c; color: #ffd500;" class="lead">
-            @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
+        <hr class="my-4" />
+        <p class="lead">
+            @if (User?.Identity?.IsAuthenticated == true)
             {
-                <a style=" background-color: #09223c; color: #ffd500;" asp-controller="Shipments" asp-action="Add" class="btn btn-primary
-                role="button">Add Shipment</a>
+                <a asp-controller="Shipments"
+                   asp-action="Add"
+                   class="btn btn-primary"
+                   role="button"
+                   style="background-color:#09223c;color:#ffd500;">
+                    Add Shipment
+                </a>
             }
         </p>
     </div>
 }
 
-<div style="background-color: #09223c; color: #ffd500;" class="mb-5"></div>
+<div class="mb-5" style="background-color:#09223c;color:#ffd500;"></div>
 <hr />
-<div style="background-color: #09223c; color: #ffd500;" id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-    <div  style="background-color: #09223c; color: #ffd500;" class="carousel-inner">
-        @for (int i = 0; i < shipments.Count(); i++)
-        {
-            var shipment = shipments[i];
-            <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
-                <img style="background-color: #09223c; color: #ffd500; height:500px;" class="d-block w-100"
-                     src="@shipment.ImageUrlShipmentGoogleMaps" alt="@shipment.Title">
-                <div style="background-color: #09223c; color: #ffd500;" class="carousel-caption d-none d-md-block">
-                    <h5>
-                        <a style="background-color: #09223c; color: #ffd500;" class="btn btn-primary" asp-controller="Shipments" asp-action="Details"
-                           asp-route-id="@shipment.ShipmentId"
-                           asp-route-information="@shipment.GetInformation()"> @shipment.Title</a>
-                    </h5>
+
+@if (shipments.Any())
+{
+    <div id="carouselExampleControls"
+         class="carousel slide"
+         data-bs-ride="carousel"
+         style="background-color:#09223c;color:#ffd500;">
+        <div class="carousel-inner">
+            @for (int i = 0; i < shipments.Count; i++)
+            {
+                var shipment = shipments[i];
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <img class="d-block w-100"
+                         style="height:500px;"
+                         src="@shipment.ImageUrlShipmentGoogleMaps"
+                         alt="@shipment.Title" />
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>
+                            <a class="btn btn-primary"
+                               asp-controller="Shipments"
+                               asp-action="Details"
+                               asp-route-id="@shipment.ShipmentId"
+                               asp-route-information="@shipment.GetInformation()"
+                               style="background-color:#09223c;color:#ffd500;">
+                                @shipment.Title
+                            </a>
+                        </h5>
+                    </div>
                 </div>
-            </div>
-       
-        }
+            }
+        </div>
+
+        <button class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleControls"
+                data-bs-slide="prev"
+                style="background-color:#09223c;color:#ffd500;">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+
+        <button class="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleControls"
+                data-bs-slide="next"
+                style="background-color:#09223c;color:#ffd500;">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-    <button     style="background-color: #09223c; color: #ffd500;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-        <span   style="background-color: #09223c; color: #ffd500;" class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span   style="background-color: #09223c; color: #ffd500;" class="visually-hidden">Previous</span>
-    </button>
-    <button     style="background-color: #09223c; color: #ffd500;" class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-        <span   style="background-color: #09223c; color: #ffd500;"  class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span   style="background-color: #09223c; color: #ffd500;"  class="visually-hidden">Next</span>
-    </button>
-</div>
-<div            style="background-color: #09223c; color: #ffd500;" class="mb-5"></div>
-<div            style="background-color: #09223c; color: #ffd500;" class="row">
-    <div        style="background-color: #09223c; color: #ffd500;" class="col-12 text-center">
-        <button style="background-color: #09223c; color: #ffd500;" class="btn btn-primary" id="statistics-button" >Show Statistics</button>
+}
+
+<div class="mb-5" style="background-color:#09223c;color:#ffd500;"></div>
+
+<div class="row" style="background-color:#09223c;color:#ffd500;">
+    <div class="col-12 text-center">
+        <button class="btn btn-primary" id="statistics-button" style="background-color:#09223c;color:#ffd500;">
+            Show Statistics
+        </button>
     </div>
 </div>
 
-<div            style="background-color: #09223c; color: #ffd500;" class="mt-4 p-5  d-none" id="statistics">
-    <div        style="background-color: #09223c; color: #ffd500;" class="row">
-        <h2     style="background-color: #09223c; color: #ffd500;" class="col-md-6 text-center" id="total-shipments"></h2>
-        <h2     style="background-color: #09223c; color: #ffd500;" class="col-md-6 text-center" id="total-rents"></h2>
+<div id="statistics" class="mt-4 p-5 d-none" style="background-color:#09223c;color:#ffd500;">
+    <div class="row">
+        <h2 id="total-shipments" class="col-md-6 text-center"></h2>
+        <h2 id="total-rents" class="col-md-6 text-center"></h2>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        $('#statistics-button').on('click', ev => {
-            $.get('https://localhost:7035/api/statistics', (data) => {
-                $('#total-Shipments').text(data.TotalExecutedShipments + " Shipments");
-                $('#total-rents').text(data.totalRents + " Rents");
-                $('#statistics')..removeClass('d-none');
+        $('#statistics-button').on('click', function () {
+            $.get('/api/statistics', function (data) {
+                // Be tolerant to casing differences from the API
+                const totalShipments =
+                    data.totalShipments ??
+                    data.totalExecutedShipments ??
+                    data.TotalShipments ??
+                    data.TotalExecutedShipments ?? 0;
+
+                const totalRents =
+                    data.totalRents ??
+                    data.TotalRents ?? 0;
+
+                $('#total-shipments').text(totalShipments + ' Shipments');
+                $('#total-rents').text(totalRents + ' Rents');
+
+                $('#statistics').removeClass('d-none');
                 $('#statistics-button').hide();
             });
         });

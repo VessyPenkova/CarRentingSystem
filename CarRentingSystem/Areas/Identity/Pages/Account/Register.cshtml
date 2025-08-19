@@ -4,44 +4,57 @@
     ViewData["Title"] = "Register";
 }
 
-<h1 style="background-color: #09223c; color: #ffd500;" class="text-center">@ViewData["Title"]</h1>
+<h1 class="text-center" style="background-color:#09223c;color:#ffd500;">@ViewData["Title"]</h1>
 
-<div class="row" style="background-color: #09223c; color: #ffd500;">
-    <div class="col-md-4 offset-md-4" style="background-color: #09223c; color: #ffd500;">
-        <form asp-route-returnUrl="@Model.ReturnUrl" style="background-color: #09223c; color: #ffd500;"  method="post">
+<div class="row" style="background-color:#09223c;color:#ffd500;">
+    <div class="col-md-4 offset-md-4">
+        <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
             <h4>Create a new account.</h4>
             <hr />
-            <div style="background-color: #09223c; color: #ffd500;"  asp-validation-summary="All" class="text-danger"></div>
-            <div style="background-color: #09223c; color: #ffd500;"  class="form-group">
-                <label style="background-color: #09223c; color: #ffd500;"  asp-for="Input.Email"></label>
-                <input style="background-color: #09223c; color: #ffd500;"  asp-for="Input.Email" class="form-control" />
-                <span  style="background-color: #09223c; color: #ffd500;"  asp-validation-for="Input.Email" class="text-danger"></span>
+
+            <!-- Validation summary -->
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <div class="form-group" style="background-color: #09223c; color: #ffd500;">
-                <label style="background-color: #09223c; color: #ffd500;"  asp-for="Input.Password"></label>
-                <input style="background-color: #09223c; color: #ffd500;"  asp-for="Input.Password" class="form-control" />
-                <span  style="background-color: #09223c; color: #ffd500;"  asp-validation-for="Input.Password" class="text-danger"></span>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" class="form-control" type="password" autocomplete="new-password" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
-            <div class="form-group" style="background-color: #09223c; color: #ffd500;">
-                <label style="background-color: #09223c; color: #ffd500;"  asp-for="Input.ConfirmPassword"></label>
-                <input style="background-color: #09223c; color: #ffd500;" asp-for="Input.ConfirmPassword" class="form-control" />
-                <span  style="background-color: #09223c; color: #ffd500;" asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+
+            <!-- Confirm password -->
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword"></label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" type="password" autocomplete="new-password" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <div class="form-group"style="background-color: #09223c; color: #ffd500;" >
-                <label style="background-color: #09223c; color: #ffd500;" asp-for="Input.FirstName"></label>
-                <input style="background-color: #09223c; color: #ffd500;" asp-for="Input.FirstName" class="form-control" />
-                <span  style="background-color: #09223c; color: #ffd500;" asp-validation-for="Input.FirstName" class="text-danger"></span>
+
+            <!-- First name -->
+            <div class="form-group">
+                <label asp-for="Input.FirstName"></label>
+                <input asp-for="Input.FirstName" class="form-control" />
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div>
-            <div class="form-group"style="background-color: #09223c; color: #ffd500;" >
-                <label style="background-color: #09223c; color: #ffd500;" asp-for="Input.LastName"></label>
-                <input style="background-color: #09223c; color: #ffd500;" asp-for="Input.LastName" class="form-control" />
-                <span  style="background-color: #09223c; color: #ffd500;" asp-validation-for="Input.LastName" class="text-danger"></span>
+
+            <!-- Last name -->
+            <div class="form-group">
+                <label asp-for="Input.LastName"></label>
+                <input asp-for="Input.LastName" class="form-control" />
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
-            <button    style="background-color: #09223c; color: #ffd500;" type="submit" class="btn btn-primary">Register</button>
+
+            <button type="submit" class="btn btn-primary">Register</button>
         </form>
     </div>
 </div>
 
 @section Scripts {
-    <partial style="background-color: #09223c; color: #ffd500;" name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }

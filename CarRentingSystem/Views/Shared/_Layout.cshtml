@@ -1,96 +1,82 @@
-﻿@using CarRentingSystem.Core.Constants
-﻿<!DOCTYPE html>
+﻿@* Views/Shared/_Layout.cshtml *@
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta style="background-color: #09223c; color: #ffd500;"  charset="utf-8" />
-    <meta style="background-color: #09223c; color: #ffd500;" name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <title> @ViewData["Title"] - Renting System</title>
-
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Renting System</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
-    <link rel="stylesheet"  href="~/CarRentingSystem.styles.css" asp-append-version="true" />
-    
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <hr/>
 </head>
-
-<body>
-   
-    <partial style="background-color: #09223c; color: #ffd500;" name="_UserMessages"  />
+<body style="background-color:#09223c;color:#ffd500;">
     <header>
-     
-        <nav style="background-color: #09223c; color: #ffd500;" class="navbar navbar-expand-sm navbar-toggleable-sm" border-bottom box-shadow mb-5">
-            <div style="background-color: #09223c; color: #ffd500;" class="container-fluid" >
-                <a style="background-color: #09223c; color: #ffd500;" class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Renting Worldwide</a>
-             
-                <button style="background-color: #09223c; color: #ffd500;" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                         aria-expanded="false" aria-label="Toggle navigation">
-                    <span style="background-color: #09223c; color: #ffd500;" class="navbar-toggler-icon" ></span>
+        <nav class="navbar navbar-expand-sm navbar-dark border-bottom box-shadow mb-3"
+             style="background-color:#09223c;">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index" style="color:#ffd500;">
+                    Renting Worldwide
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <hr />
-                <div style=" background-color: #09223c; color: #ffd500;" class="navbar-collapse collapse d-sm-inline-flex justify-content-between" >
-                    <ul style="background-color: #09223c; color: #ffd500;" class="navbar-nav flex-grow-1" >
-                        <li style="background-color: #09223c; color: #ffd500;" class="nav-item" >
-                            <a style=" background-color: #09223c; color: #ffd500;" class="nav-link" asp-area="" asp-controller="Shipments" asp-action="All">All Shipments</a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link text-warning" asp-controller="Shipments" asp-action="All">
+                                All Shipments
+                            </a>
                         </li>
-                      
-                        @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto">
+                        @if (User?.Identity?.IsAuthenticated ?? false)
                         {
-                            <li style="background-color: #09223c; color: #ffd500;" class="nav-item">
-                                <a style="background-color: #09223c; color: #ffd500;" class="nav-link" asp-area="" asp-controller="Shipments" asp-action="Mine">My Shipments</a>
-                            </li>
-                            <li style="background-color: #09223c; color: #ffd500;" class="nav-item">
-                                <a  style="background-color: #09223c; color: #ffd500;"  class="nav-link"asp-area="" asp-controller="Shipments" asp-action="Add">Add Shipment</a>
-                            </li>
-                            <li  style="background-color: #09223c; color: #ffd500;"  class="nav-item" >
-                                <a style="background-color: #09223c; color: #ffd500;"  class="nav-link" asp-area="" asp-controller="Drivers" asp-action="Become">Become Driver</a>
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" asp-area="" asp-controller="Account" asp-action="Logout">
+                                    Logout
+                                </a>
                             </li>
                         }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" asp-area="Identity" asp-page="/Account/Register">
+                                    Register
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" asp-area="Identity" asp-page="/Account/Login">
+                                    Login
+                                </a>
+                            </li>
+                            @* Alternatively, you can use the built-in partial:
+                           <partial name="_LoginPartial" /> *@
+                        }
                     </ul>
-                    <partial style="background-color: #09223c; color: #ffd500;" name="_LoginPartial" />
                 </div>
             </div>
         </nav>
-        <hr />
     </header>
-    <hr />
-    <div style="background-color: #09223c; color: #ffd500;" class="container">
-        <main style="background-color: #09223c; color: #ffd500;" role="main" class="pb-3">
+
+    <div class="container">
+        <main role="main" class="pb-3">
             @RenderBody()
         </main>
-        <hr />
     </div>
 
-    <footer  style="background-color: #09223c; color: #ffd500;" class=" footer text-muted">
-        <div style="background-color: #09223c; color: #ffd500;" class="container">
+    <footer class="border-top footer text-muted" style="background-color:#09223c;color:#ffd500;">
+        <div class="container" style="color:#ffd500;">
             &copy; @DateTime.UtcNow.Year - Renting System
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
-    @await RenderSectionAsync("Scripts", required: false)
-
-    @if (TempData[MessageConstant.SuccessMessage] != null)
-    {
-        <script defer>
-            message.showSuccess('@TempData[MessageConstant.SuccessMessage]');
-        </script>
-    }
-    @if (TempData[MessageConstant.ErrorMessage] != null)
-    {
-        <script defer>
-            message.showError('@TempData[MessageConstant.SuccessMessage]');
-        </script>
-    }
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
