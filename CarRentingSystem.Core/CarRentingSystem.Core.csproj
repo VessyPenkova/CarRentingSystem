@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Keep the path as-is if your project name really is "Infrastucture" -->
     <ProjectReference Include="..\CarRentingSystem.Infrastucture\CarRentingSystem.Infrastucture.csproj" />
   </ItemGroup>
 

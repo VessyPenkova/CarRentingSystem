@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace CarRentingSystem.Infrastucture.Migrations
 {
-    public partial class InitialMigration01 : Migration
+    /// <inheritdoc />
+    public partial class InitialMigartion_001 : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -237,9 +241,9 @@ namespace CarRentingSystem.Infrastucture.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "IsActive", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", 0, "a97d1d41-2ab1-4cdc-9ca4-219fa33f4a9b", "guest@mail.com", false, "Gestiot", true, "Gestiotev", false, null, "guest@mail.com", "guest@mail.com", "AQAAAAEAACcQAAAAEKDyh83CZhRmSJxTCr++hGMbciHTmZO6OH+k7f3yV8Pho9ITC+qvYj7tTOE+q0NtWw==", null, false, "c811deac-bb8a-43a0-9bbc-7fb31732b0fa", false, "guest@mail.com" },
-                    { "bcb4f072-ecca-43c9-ab26-c060c6f364e4", 0, "441f5f1b-20e8-40f3-ab31-86b72db1f740", "admin@mail.com", false, "Adminiot", true, "Adminov", false, null, "admin@mail.com", "admin@mail.com", "AQAAAAEAACcQAAAAECbi3cXkEf+A92PM/7DddnbflRYX94T4zTH5R1MifIPpGeAGADR/c75XonZ5/CFx4g==", null, false, "25c2b9ef-0aa3-41b1-ae48-0afeddec9d4a", false, "admin@mail.com" },
-                    { "dea12856-c198-4129-b3f3-b893d8395082", 0, "2893c10a-765f-40de-9486-b056be4c2679", "driver@mail.com", false, "Driviot", true, "Drivilov", false, null, "driver@mail.com", "driver@mail.com", "AQAAAAEAACcQAAAAEI09SWX26uwumfJNOfKTpT0mQD984El0affgU7D49fthMWLwgq5+K+2AtaM2vGmhMQ==", null, false, "0ac5f1b1-a04c-441f-af03-ed2943f2c941", false, "driver@mail.com" }
+                    { "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", 0, "428c6b4d-850d-437c-8e3d-a3e9fe60855b", "guest@mail.com", false, "Gestiot", true, "Gestiotev", false, null, "guest@mail.com", "guest@mail.com", "AQAAAAIAAYagAAAAEHN6+qoMfbPz6p3p2mMZSigcYdWHDknDesh4Q45RbQT23TV3edknLnPWSmK+V+SEsw==", null, false, "94f8b555-e77f-4046-87f3-14c19f544b2e", false, "guest@mail.com" },
+                    { "bcb4f072-ecca-43c9-ab26-c060c6f364e4", 0, "51aa5357-b10a-476f-8b13-301cac8bf11f", "admin@mail.com", false, "Adminiot", true, "Adminov", false, null, "admin@mail.com", "admin@mail.com", "AQAAAAIAAYagAAAAEB6s0LTk8cR4/1UYS9HEomuTX+nwCsYa1Lq4wd5Ye/C7RfSQTm9yuZ85SljGcyzONA==", null, false, "b05fa5be-bc9f-4417-bff7-9de66c2174c0", false, "admin@mail.com" },
+                    { "dea12856-c198-4129-b3f3-b893d8395082", 0, "65630ecf-965c-4615-b21f-c64c25195172", "driver@mail.com", false, "Driviot", true, "Drivilov", false, null, "driver@mail.com", "driver@mail.com", "AQAAAAIAAYagAAAAEPW2khYd5jwqrKjxHyhQiUW9iQUdWpzIvcQbUtmmKb3Uk0FT8PGS1h5BgUee7o2hrg==", null, false, "99686383-87d6-49fb-847d-b00547e965c8", false, "driver@mail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -257,12 +261,11 @@ namespace CarRentingSystem.Infrastucture.Migrations
             migrationBuilder.InsertData(
                 table: "Drivers",
                 columns: new[] { "DriverId", "PhoneNumber", "UserId" },
-                values: new object[] { 1, "+359770770770", "dea12856-c198-4129-b3f3-b893d8395082" });
-
-            migrationBuilder.InsertData(
-                table: "Drivers",
-                columns: new[] { "DriverId", "PhoneNumber", "UserId" },
-                values: new object[] { 2, "+359770770772", "bcb4f072-ecca-43c9-ab26-c060c6f364e4" });
+                values: new object[,]
+                {
+                    { 1, "+359770770770", "dea12856-c198-4129-b3f3-b893d8395082" },
+                    { 2, "+359770770772", "bcb4f072-ecca-43c9-ab26-c060c6f364e4" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Shipments",
@@ -335,6 +338,7 @@ namespace CarRentingSystem.Infrastucture.Migrations
                 column: "RenterId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
