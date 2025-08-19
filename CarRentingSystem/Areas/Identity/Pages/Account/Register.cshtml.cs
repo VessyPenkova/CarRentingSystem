@@ -68,38 +68,43 @@ namespace CarRentingSystem.Areas.Identity.Pages.Account
 
         public void OnGetAsync(string? returnUrl = null)
         {
-            ReturnUrl = returnUrl;
+            ReturnUrl = returnUrl ?? Url.Content("~/");
         }
 
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var user = new User
-                {
-                    UserName = Input.Email,
-                    Email = Input.Email,
-                    FirstName = Input.FirstName,
-                    LastName = Input.LastName
-                };
-
-                var result = await this.userManager.CreateAsync(user, Input.Password);
-
-                if (result.Succeeded)
-                {
-                    await this.signInManager.SignInAsync(user, isPersistent: false);
-                    // Clear the users cache for the "All Users" page
-                    this.cache.Remove(AdminConstants.UsersCacheKey);
-                    return LocalRedirect("~/Login");
-                }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                ReturnUrl = returnUrl;
+                return Page();
             }
 
+            var user = new User
+            {
+                UserName = Input.Email,
+                Email = Input.Email,
+                FirstName = Input.FirstName,
+                LastName = Input.LastName
+            };
+
+            var result = await userManager.CreateAsync(user, Input.Password);
+
+            if (result.Succeeded)
+            {
+                // Auto sign-in, then go to the original page (or home)
+                await signInManager.SignInAsync(user, isPersistent: false);
+                cache.Remove(AdminConstants.UsersCacheKey);
+                return LocalRedirect(returnUrl);   // <-- fixed (no ~/Login)
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            ReturnUrl = returnUrl;
             return Page();
         }
     }

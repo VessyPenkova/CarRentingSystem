@@ -1,88 +1,83 @@
-﻿@page
-@model LoginModel
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Renting System</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body style="background-color:#09223c;color:#ffd500;">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark border-bottom box-shadow mb-3"
+             style="background-color:#09223c;">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index"
+                   style="color:#ffd500;">Renting Worldwide</a>
 
-@{
-    ViewData["Title"] = "Log in";
-}
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-<h1>@ViewData["Title"]</h1>
-<div class="row" style="background-color: #09223c; color: #ffd500;">
-    <div class="col-md-4" style="background-color: #09223c; color: #ffd500;">
-        <section style="background-color: #09223c; color: #ffd500;">
-            <form style="background-color: #09223c; color: #ffd500;"  id="account" method="post">
-                <h2>Use a local account to log in.</h2>
-                <hr />
-                <div style="background-color: #09223c; color: #ffd500;" -validation-summary="ModelOnly" class="text-danger"></div>
-                <div style="background-color: #09223c; color: #ffd500;"  class="form-group">
-                    <label style="background-color: #09223c; color: #ffd500;"  asp-for="Input.Email"></label>
-                    <input style="background-color: #09223c; color: #ffd500;"  asp-for="Input.Email" class="form-control" />
-                    <span  style="background-color: #09223c; color: #ffd500;" asp-validation-for="Input.Email" class="text-danger"></span>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link text-warning" asp-controller="Shipments" asp-action="All">
+                                All Shipments
+                            </a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning"
+                                   asp-area="Identity"
+                                   asp-page="/Account/Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-warning"
+                                   asp-area="Identity"
+                                   asp-page="/Account/Login">Login</a>
+                            </li>
+                            <!-- Or simply use the partial:
+                            <partial name="_LoginPartial" />
+                            -->
+                        }
+                    </ul>
                 </div>
-                <div class="form-group" style="background-color: #09223c; color: #ffd500;">
-                    <label style="background-color: #09223c; color: #ffd500;" asp-for="Input.Password"></label>
-                    <input style="background-color: #09223c; color: #ffd500;" asp-for="Input.Password" class="form-control" />
-                    <span  style="background-color: #09223c; color: #ffd500;" asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <div class="form-group" style="background-color: #09223c; color: #ffd500;">
-                    <div class="checkbox" style="background-color: #09223c; color: #ffd500;">
-                        <label asp-for="Input.RememberMe">
-                            <input asp-for="Input.RememberMe" />
-                            @Html.DisplayNameFor(m => m.Input.RememberMe)
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group"   style="background-color: #09223c; color: #ffd500;">
-                    <button type="submit" style="background-color: #09223c; color: #ffd500;"  class="btn btn-primary">Log in</button>
-                </div>
-                <div class="form-group" style="background-color: #09223c; color: #ffd500;">
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" style="background-color: #09223c; color: #ffd500;" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
-                </div>
-            </form>
-        </section>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-                                article
-                                about setting up this ASP.NET application to support logging in via external services
-                            </a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>
- </div >
 
+    <footer class="border-top footer text-muted" style="background-color:#09223c;color:#ffd500;">
+        <div class="container" style="color:#ffd500;">
+            &copy; @DateTime.UtcNow.Year - Renting System
+        </div>
+    </footer>
 
-@section Scripts {
-        <partial style="background-color: #09223c; color: #ffd500;" name="_ValidationScriptsPartial" />
-}
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

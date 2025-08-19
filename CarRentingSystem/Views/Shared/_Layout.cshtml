@@ -36,27 +36,28 @@
                         @if (User?.Identity?.IsAuthenticated ?? false)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-warning" asp-area="" asp-controller="Account" asp-action="Logout">
-                                    Logout
-                                </a>
+                                <form asp-area="Identity"
+                                      asp-page="/Account/Logout"
+                                      asp-route-returnUrl="~/"
+                                      method="post"
+                                      class="d-inline">
+                                    <button type="submit" class="nav-link btn btn-link text-warning">
+                                        Logout
+                                    </button>
+                                </form>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-warning" asp-area="Identity" asp-page="/Account/Register">
-                                    Register
-                                </a>
+                                <a class="nav-link text-warning" asp-area="Identity" asp-page="/Account/Register">Register</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-warning" asp-area="Identity" asp-page="/Account/Login">
-                                    Login
-                                </a>
+                                <a class="nav-link text-warning" asp-area="Identity" asp-page="/Account/Login">Login</a>
                             </li>
-                            @* Alternatively, you can use the built-in partial:
-                           <partial name="_LoginPartial" /> *@
                         }
                     </ul>
+
                 </div>
             </div>
         </nav>

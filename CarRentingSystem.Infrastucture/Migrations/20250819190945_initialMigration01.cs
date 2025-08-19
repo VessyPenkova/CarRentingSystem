@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarRentingSystem.Infrastucture.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigartion_001 : Migration
+    public partial class initialMigration01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -241,9 +241,9 @@ namespace CarRentingSystem.Infrastucture.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "IsActive", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", 0, "428c6b4d-850d-437c-8e3d-a3e9fe60855b", "guest@mail.com", false, "Gestiot", true, "Gestiotev", false, null, "guest@mail.com", "guest@mail.com", "AQAAAAIAAYagAAAAEHN6+qoMfbPz6p3p2mMZSigcYdWHDknDesh4Q45RbQT23TV3edknLnPWSmK+V+SEsw==", null, false, "94f8b555-e77f-4046-87f3-14c19f544b2e", false, "guest@mail.com" },
-                    { "bcb4f072-ecca-43c9-ab26-c060c6f364e4", 0, "51aa5357-b10a-476f-8b13-301cac8bf11f", "admin@mail.com", false, "Adminiot", true, "Adminov", false, null, "admin@mail.com", "admin@mail.com", "AQAAAAIAAYagAAAAEB6s0LTk8cR4/1UYS9HEomuTX+nwCsYa1Lq4wd5Ye/C7RfSQTm9yuZ85SljGcyzONA==", null, false, "b05fa5be-bc9f-4417-bff7-9de66c2174c0", false, "admin@mail.com" },
-                    { "dea12856-c198-4129-b3f3-b893d8395082", 0, "65630ecf-965c-4615-b21f-c64c25195172", "driver@mail.com", false, "Driviot", true, "Drivilov", false, null, "driver@mail.com", "driver@mail.com", "AQAAAAIAAYagAAAAEPW2khYd5jwqrKjxHyhQiUW9iQUdWpzIvcQbUtmmKb3Uk0FT8PGS1h5BgUee7o2hrg==", null, false, "99686383-87d6-49fb-847d-b00547e965c8", false, "driver@mail.com" }
+                    { "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", 0, "b502e069-38c9-498c-b919-1af982e13e55", "guest@mail.com", false, "Gestiot", true, "Gestiotev", false, null, "guest@mail.com", "guest@mail.com", "AQAAAAIAAYagAAAAEL6chpiMYjs+n63AAhk4VgqtBSQ2D1oE5wveeSbuawGQZnTgumjUPc2a1muB5JlFIA==", null, false, "58c7b8b8-4f46-4c6f-8755-27948e5964bb", false, "guest@mail.com" },
+                    { "bcb4f072-ecca-43c9-ab26-c060c6f364e4", 0, "ef947748-e56d-4dd2-8ec0-e6641e835142", "admin@mail.com", false, "Adminiot", true, "Adminov", false, null, "admin@mail.com", "admin@mail.com", "AQAAAAIAAYagAAAAEALEtivMwKFaqriH9CyyqvfPhbnInomC3pzcGRBFWDbu964v4VEoqvcd6c30kIiOIw==", null, false, "0200891c-7066-47e6-9372-30a02df0887d", false, "admin@mail.com" },
+                    { "dea12856-c198-4129-b3f3-b893d8395082", 0, "e2ea19b4-6cb2-4955-b975-84924a84b813", "driver@mail.com", false, "Driviot", true, "Drivilov", false, null, "driver@mail.com", "driver@mail.com", "AQAAAAIAAYagAAAAEGNl0w92cHJXea0bIsRV1TbL3LXXIQPskSniI84FQmYT/GO+2XJrYuHA7CB786QKkA==", null, false, "93daef18-d041-4ed5-8d08-a57f233f6fcc", false, "driver@mail.com" }
                 });
 
             migrationBuilder.InsertData(

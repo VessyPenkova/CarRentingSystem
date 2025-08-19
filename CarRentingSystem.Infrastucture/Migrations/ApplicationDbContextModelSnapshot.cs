@@ -324,7 +324,7 @@ namespace CarRentingSystem.Infrastucture.Migrations
                         {
                             Id = "bcb4f072-ecca-43c9-ab26-c060c6f364e4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "51aa5357-b10a-476f-8b13-301cac8bf11f",
+                            ConcurrencyStamp = "ef947748-e56d-4dd2-8ec0-e6641e835142",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Adminiot",
@@ -333,9 +333,9 @@ namespace CarRentingSystem.Infrastucture.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@mail.com",
                             NormalizedUserName = "admin@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEB6s0LTk8cR4/1UYS9HEomuTX+nwCsYa1Lq4wd5Ye/C7RfSQTm9yuZ85SljGcyzONA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEALEtivMwKFaqriH9CyyqvfPhbnInomC3pzcGRBFWDbu964v4VEoqvcd6c30kIiOIw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b05fa5be-bc9f-4417-bff7-9de66c2174c0",
+                            SecurityStamp = "0200891c-7066-47e6-9372-30a02df0887d",
                             TwoFactorEnabled = false,
                             UserName = "admin@mail.com"
                         },
@@ -343,7 +343,7 @@ namespace CarRentingSystem.Infrastucture.Migrations
                         {
                             Id = "dea12856-c198-4129-b3f3-b893d8395082",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "65630ecf-965c-4615-b21f-c64c25195172",
+                            ConcurrencyStamp = "e2ea19b4-6cb2-4955-b975-84924a84b813",
                             Email = "driver@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Driviot",
@@ -352,9 +352,9 @@ namespace CarRentingSystem.Infrastucture.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "driver@mail.com",
                             NormalizedUserName = "driver@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPW2khYd5jwqrKjxHyhQiUW9iQUdWpzIvcQbUtmmKb3Uk0FT8PGS1h5BgUee7o2hrg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGNl0w92cHJXea0bIsRV1TbL3LXXIQPskSniI84FQmYT/GO+2XJrYuHA7CB786QKkA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "99686383-87d6-49fb-847d-b00547e965c8",
+                            SecurityStamp = "93daef18-d041-4ed5-8d08-a57f233f6fcc",
                             TwoFactorEnabled = false,
                             UserName = "driver@mail.com"
                         },
@@ -362,7 +362,7 @@ namespace CarRentingSystem.Infrastucture.Migrations
                         {
                             Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "428c6b4d-850d-437c-8e3d-a3e9fe60855b",
+                            ConcurrencyStamp = "b502e069-38c9-498c-b919-1af982e13e55",
                             Email = "guest@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Gestiot",
@@ -371,9 +371,9 @@ namespace CarRentingSystem.Infrastucture.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "guest@mail.com",
                             NormalizedUserName = "guest@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHN6+qoMfbPz6p3p2mMZSigcYdWHDknDesh4Q45RbQT23TV3edknLnPWSmK+V+SEsw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEL6chpiMYjs+n63AAhk4VgqtBSQ2D1oE5wveeSbuawGQZnTgumjUPc2a1muB5JlFIA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "94f8b555-e77f-4046-87f3-14c19f544b2e",
+                            SecurityStamp = "58c7b8b8-4f46-4c6f-8755-27948e5964bb",
                             TwoFactorEnabled = false,
                             UserName = "guest@mail.com"
                         });
