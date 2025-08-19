@@ -55,16 +55,21 @@ namespace CarRentingSystem.Controllers.Shipments
         [HttpGet]
         public async Task<IActionResult> Add()
         {
+            // If you REQUIRE only non-drivers to create shipments, remove this block.
+            // If you REQUIRE drivers to create shipments, keep the redirect:
+            // if (!await driverService.ExistsById(User.Id()))
+            //     return RedirectToAction(nameof(DriversController.Become), "Drivers");
+
             var model = new ShipmentCoreFormModel
             {
                 ShipmentCategories = await shipmentService.AllCategories()
             };
+
             return View(model);
         }
 
-
-
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(ShipmentCoreFormModel model)
         {
             if (!await shipmentService.CategoryExists(model.CategoryId))
@@ -78,7 +83,7 @@ namespace CarRentingSystem.Controllers.Shipments
                 return View(model);
             }
 
-            // creator is always the current user; no driver at creation
+            // Creator is the current user; no driver assignment at create time
             int newShipmentId = await shipmentService.Create(
                 model.Title,
                 model.LoadingAddress,
@@ -87,8 +92,8 @@ namespace CarRentingSystem.Controllers.Shipments
                 model.ImageUrlShipmentGoogleMaps,
                 model.Price,
                 model.CategoryId,
-                creatorUserId: User.Id(),
-                driverId: null);
+                driverId: null,
+                creatorUserId: User.Id());
 
             TempData["message"] = "You have created new shipment!";
 
@@ -105,15 +110,17 @@ namespace CarRentingSystem.Controllers.Shipments
 
 
 
-        [HttpGet, AllowAnonymous]
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int id, string information)
         {
             if (!await shipmentService.Exists(id))
+            {
                 return RedirectToAction(nameof(All));
+            }
 
             var model = await shipmentService.ShipmentDetailsByShipmentId(id);
 
-            if (!string.Equals(information, model.GetInformation(), StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(information, model.GetInformation(), System.StringComparison.OrdinalIgnoreCase))
             {
                 TempData["ErrorMessage"] = "Don't touch!";
                 return RedirectToAction("Index", "Home");
@@ -280,8 +287,25 @@ namespace CarRentingSystem.Controllers.Shipments
         [HttpGet]
         public async Task<IActionResult> Mine()
         {
-            var shipments = await shipmentService.AllShipmentsByUserId(User.Id());
-            return View(shipments);
+            if (User.IsInRole(AdminRoleName))
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            IEnumerable<ShipmentServiceModel> myShipments;
+            var userId = User.Id();
+
+            if (await driverService.ExistsById(userId))
+            {
+                var currentDriverId = await driverService.GetDriverId(userId);
+                myShipments = await shipmentService.AllShipmentsByDriverId(currentDriverId);
+            }
+            else
+            {
+                myShipments = await shipmentService.AllShipmentsByUserId(userId);
+            }
+
+            return View(myShipments);
         }
 
 

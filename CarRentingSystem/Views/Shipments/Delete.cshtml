@@ -1,33 +1,24 @@
-﻿@model ShipmentDetailsServiceModel
-
+﻿@model CarRentingSystem.Models.Shipments.ShipmentDetailsViewModel
 @{
     ViewBag.Title = "Delete Shipment";
 }
 
-<h2                   style="background-color: #09223c; color: #ffd500;" class="text-center" >@ViewBag.Title</h2>
+<h2 class="text-center" style="background-color:#09223c;color:#ffd500;">@ViewBag.Title</h2>
 <hr />
 
-<form                  style="background-color: #09223c; color: #ffd500;" asp-action="Delete">
-    <div               style="background-color: #09223c; color: #ffd500;" accesskey="" class="row">
-        <div           style="background-color: #09223c; color: #ffd500;" class="col-md-4">
-            <img class="card-img-top" src="@Model.ImageUrlShipmentGoogleMaps" alt="Shipment Image">
-        </div>
-        <div           style="background-color: #09223c; color: #ffd500;" class="col-md-8" >
-            <div       style="background-color: #09223c; color: #ffd500;" class="form-group">
-                <label style="background-color: #09223c; color: #ffd500;" asp-for="Title" class="control-label"></label>
-                <input style="background-color: #09223c; color: #ffd500;" asp-for="Title" class="form-control" disabled="disabled" />
-            </div>
-            <div       style="background-color: #09223c; color: #ffd500;" class="form-group">
-                <label style="background-color: #09223c; color: #ffd500;" asp-for="LoadingAddress" class="control-label" ></label>
-                <input style="background-color: #09223c; color: #ffd500;" asp-for="LoadingAddress" class="form-control" disabled="disabled" />
-            </div>
-            <div       style="background-color: #09223c; color: #ffd500;" class="form-group">
-                <label style="background-color: #09223c; color: #ffd500;" asp-for="DeliveryAddress" class="control-label" ></label>
-                <input style="background-color: #09223c; color: #ffd500;" asp-for="DeliveryAddress" class="form-control" disabled="disabled" />
-            </div>
-            <div       style="background-color: #09223c; color: #ffd500;" class="form-group">
-                <input style="background-color: #09223c; color: #ffd500;" type="submit" value="Delete" class="btn btn-primary"/>
-            </div>
-        </div>
+<div class="row" style="background-color:#09223c;color:#ffd500;">
+    <div class="col-md-6">
+        <img class="img-fluid" src="@Model.ImageUrlShipmentGoogleMapsUrl" alt="@Model.Title" />
     </div>
-</form>
+    <div class="col-md-6">
+        <h4>@Model.Title</h4>
+        <p><strong>From:</strong> @Model.LoadingAddress</p>
+        <p><strong>To:</strong> @Model.DeliveryAddress</p>
+
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
