@@ -5,7 +5,8 @@ using CarRentingSystem.SeleniumTests.Pages.Layout;
 
 namespace CarRentingSystem.SeleniumTests.Tests
 {
-    public sealed class LoginTests : TestBase
+    [TestFixture, Order(1)]
+    public sealed class B_LoginTests : TestBase
     {
         // Your existing, already-registered account:
         private const string ExistingEmail = "TransportCompanyPIMK_Test01@pimk.com";

@@ -6,7 +6,8 @@ using CarRentingSystem.SeleniumTests.TestData;
 
 namespace CarRentingSystem.SeleniumTests.Tests
 {
-    public sealed class RegisterTests : TestBase
+    [TestFixture, Order(0)]
+    public sealed class A_RegisterTests : TestBase
     {
         [Test, Category("ui"), Category("smoke")]
         public void Register_WithValidData_SignsInAndLandsOnHome()
