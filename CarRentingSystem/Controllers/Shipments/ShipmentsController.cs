@@ -1,12 +1,8 @@
-﻿using CarRentingSystem.Controllers.Drivers;
-using CarRentingSystem.Core.Contracts.Drivers;
+﻿using CarRentingSystem.Core.Contracts.Drivers;
 using CarRentingSystem.Core.Contracts.Shipments;
 using CarRentingSystem.Core.Extensions;
 using CarRentingSystem.Core.Models.Shipment;
-using CarRentingSystem.Core.Services.Drivers;
-using CarRentingSystem.Core.Services.Shipments;
 using CarRentingSystem.Extensions;
-using CarRentingSystem.Infrastucture.Data;
 using CarRentingSystem.Models.Shipments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -212,6 +208,7 @@ namespace CarRentingSystem.Controllers.Shipments
                 return RedirectToAction(nameof(All));
             }
 
+            // Only the creator (owner) or an admin can delete
             if (!User.IsInRole(AdminRoleName) &&
                 !await shipmentService.IsOwner(id, User.Id()))
             {
@@ -222,6 +219,7 @@ namespace CarRentingSystem.Controllers.Shipments
 
             var model = new ShipmentDetailsViewModel
             {
+                Id = sh.ShipmentId, // IMPORTANT: needed so the form posts the id
                 Title = sh.Title,
                 LoadingAddress = sh.LoadingAddress,
                 DeliveryAddress = sh.DeliveryAddress,
@@ -231,8 +229,11 @@ namespace CarRentingSystem.Controllers.Shipments
             return View(model);
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, ShipmentDetailsViewModel _)
+
+        // POST /Shipments/Delete/{id}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (!await shipmentService.Exists(id))
             {

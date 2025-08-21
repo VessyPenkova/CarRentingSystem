@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarRentingSystem.Core", "Ca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRentitngSystem.WebApi", "CarRentitngSystem.WebApi\CarRentitngSystem.WebApi.csproj", "{51549E90-215D-4332-955E-BD6695EE34A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRentingSystem.SeleniumTests", "CarRentingSystem.SeleniumTests\CarRentingSystem.SeleniumTests.csproj", "{E0D02B2B-FB8E-4E11-BAC8-70994626C02D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRentingSystem.PlaywrightTests", "CarRentingSystem.PlaywrightTests\CarRentingSystem.PlaywrightTests.csproj", "{4A71508F-03A4-4EEB-9CB4-D22EA5DC5E88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{51549E90-215D-4332-955E-BD6695EE34A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51549E90-215D-4332-955E-BD6695EE34A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51549E90-215D-4332-955E-BD6695EE34A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0D02B2B-FB8E-4E11-BAC8-70994626C02D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0D02B2B-FB8E-4E11-BAC8-70994626C02D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0D02B2B-FB8E-4E11-BAC8-70994626C02D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0D02B2B-FB8E-4E11-BAC8-70994626C02D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A71508F-03A4-4EEB-9CB4-D22EA5DC5E88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A71508F-03A4-4EEB-9CB4-D22EA5DC5E88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A71508F-03A4-4EEB-9CB4-D22EA5DC5E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A71508F-03A4-4EEB-9CB4-D22EA5DC5E88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
