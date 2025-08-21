@@ -1,28 +1,25 @@
 ﻿using NUnit.Framework;
-using OpenQA.Selenium;
 using CarRentingSystem.SeleniumTests.Fixtures;
 using CarRentingSystem.SeleniumTests.Pages.Identity;
 using CarRentingSystem.SeleniumTests.Pages.Layout;
-using CarRentingSystem.SeleniumTests.Utils;
+using CarRentingSystem.SeleniumTests.TestData;
 
-namespace CarRentingSystem.SeleniumTests.Tests;
-
-public sealed class RegisterTests : TestBase
+namespace CarRentingSystem.SeleniumTests.Tests
 {
-    [Test, Category("ui"), Category("smoke")]
-    public void Register_WithValidData_SignsInAndLandsOnHome()
+    public sealed class RegisterTests : TestBase
     {
-        var reg = new RegisterPage(Driver, BaseUrl);
-        reg.Navigate("/");
-        var email = TestData.UniqueEmail();
-        var pwd = TestData.StrongPassword();
+        [Test, Category("ui"), Category("smoke")]
+        public void Register_WithValidData_SignsInAndLandsOnHome()
+        {
+            var reg = new RegisterPage(Driver, BaseUrl);
+            reg.Open(); // /Identity/Account/Register
 
-        reg.Fill(email, "Test", "User", pwd, pwd);
-        reg.Submit();
+            var data = RegisterTestData.Valid();
+            reg.Fill(data.Email, data.FirstName, data.LastName, data.Password, data.ConfirmPassword);
+            reg.SubmitNow();
 
-        // User should be logged in (Logout visible)
-        var nav = new Navbar(Driver);
-        WaitUntil(d => nav.IsLoggedIn);
-        Assert.That(nav.IsLoggedIn, Is.True);
+            var nav = new Navbar(Driver);
+            Assert.That(nav.WaitForLoggedIn(20), Is.True, "Expected to be logged-in after register, but navbar did not show a Manage/Logout control in time.");
+        }
     }
 }

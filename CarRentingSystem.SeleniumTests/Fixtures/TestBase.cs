@@ -1,40 +1,93 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.IO;
+using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 
-namespace CarRentingSystem.SeleniumTests.Fixtures;
-
-[TestFixture, Parallelizable(ParallelScope.Self)]
-public abstract class TestBase
+namespace CarRentingSystem.SeleniumTests.Fixtures
 {
-    protected ChromeDriver Driver = null!;
-    protected WebDriverWait Wait = null!;
-    protected string BaseUrl = null!;
-
-    [SetUp]
-    public void SetUp()
+    public abstract class TestBase
     {
-        BaseUrl = Environment.GetEnvironmentVariable("TEST_BASE_URL")
-                  ?? "https://localhost:7237";
+        protected IWebDriver Driver = null!;
+        protected string BaseUrl = ServerFixture.BaseUrl;
 
-        var opts = new ChromeOptions();
-        opts.AddArgument("--headless=new");
-        opts.AddArgument("--window-size=1920,1200");
-        opts.AddArgument("--ignore-certificate-errors");
+        [SetUp]
+        public virtual void SetUp()
+        {
+            Driver = WebDriverFactory.CreateChrome();
+        }
 
-        Driver = new ChromeDriver(opts);
-        Wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(15));
+        [TearDown]
+        public virtual void TearDown()
+        {
+            // If failed, capture diagnostics
+            var outcome = TestContext.CurrentContext.Result.Outcome.Status;
+            if (outcome == TestStatus.Failed)
+            {
+                TryDumpArtifacts();
+            }
+
+            try { Driver?.Quit(); } catch { }
+            try { Driver?.Dispose(); } catch { }
+        }
+
+        protected void WaitUntil(Func<IWebDriver, bool> condition, int seconds = 10)
+        {
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(seconds));
+            wait.Until(d => condition(d));
+        }
+
+        private void TryDumpArtifacts()
+        {
+            try
+            {
+                var dir = Path.Combine(TestContext.CurrentContext.WorkDirectory, "artifacts");
+                Directory.CreateDirectory(dir);
+
+                // Screenshot
+                if (Driver is ITakesScreenshot taker)
+                {
+                    var shot = taker.GetScreenshot();
+                    var png = Path.Combine(dir, $"{Sanitize(TestContext.CurrentContext.Test.Name)}.png");
+
+                    // Works across Selenium versions
+                    File.WriteAllBytes(png, shot.AsByteArray);
+
+                    TestContext.AddTestAttachment(png, "Screenshot on failure");
+                }
+
+                // HTML
+                var htmlPath = Path.Combine(dir, $"{Sanitize(TestContext.CurrentContext.Test.Name)}.html");
+                File.WriteAllText(htmlPath, Driver.PageSource);
+                TestContext.AddTestAttachment(htmlPath, "HTML on failure");
+
+                // URL
+                TestContext.WriteLine("Failing URL: " + Driver.Url);
+            }
+            catch { /* best effort */ }
+        }
+
+        private static string Sanitize(string name)
+        {
+            foreach (var c in Path.GetInvalidFileNameChars())
+                name = name.Replace(c, '_');
+            return name;
+        }
     }
 
-    [TearDown]
-    public void TearDown()
+    internal static class WebDriverFactory
     {
-        try { Driver?.Quit(); } catch { /* ignore */ }
-        Driver?.Dispose();
+        public static IWebDriver CreateChrome()
+        {
+            var opts = new ChromeOptions { AcceptInsecureCertificates = true };
+            // opts.AddArgument("--headless=new"); // uncomment for headless runs
+            opts.AddArgument("--window-size=1280,900");
+            opts.AddArgument("--ignore-certificate-errors");
+            opts.AddArgument("--no-sandbox");
+            opts.AddArgument("--disable-dev-shm-usage");
+            return new ChromeDriver(opts);
+        }
     }
-
-    protected void Go(string relative) => Driver.Navigate().GoToUrl($"{BaseUrl}{relative}");
-    protected void WaitUntil(Func<IWebDriver, bool> cond) => Wait.Until(cond);
-    protected bool Exists(By by) => Driver.FindElements(by).Any();
 }

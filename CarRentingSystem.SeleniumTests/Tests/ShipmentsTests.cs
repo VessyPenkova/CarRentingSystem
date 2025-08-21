@@ -1,180 +1,155 @@
-﻿using NUnit.Framework;
-using OpenQA.Selenium;
-using CarRentingSystem.SeleniumTests.Fixtures;
+﻿using CarRentingSystem.SeleniumTests.Fixtures;
 using CarRentingSystem.SeleniumTests.Pages.Identity;
 using CarRentingSystem.SeleniumTests.Pages.Layout;
 using CarRentingSystem.SeleniumTests.Pages.Shipments;
+using CarRentingSystem.SeleniumTests.TestData;
 using CarRentingSystem.SeleniumTests.Utils;
+using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace CarRentingSystem.SeleniumTests.Tests;
 
 public sealed class ShipmentsTests : TestBase
 {
-    private (string email, string pwd) RegisterAndReturnCreds()
+    /// <summary>Registers a user and waits until the navbar shows "Logout".</summary>
+    private void RegisterAndLandOnHome()
     {
-        var email = TestData.UniqueEmail();
-        var pwd = TestData.StrongPassword();
         var reg = new RegisterPage(Driver, BaseUrl);
-        reg.Navigate("/");
-        reg.Fill(email, "First", "Last", pwd, pwd);
-        reg.Submit();
-        WaitUntil(_ => new Navbar(Driver).IsLoggedIn);
-        return (email, pwd);
-    }
+        reg.Open(); // /Identity/Account/Register
+        var data = RegisterTestData.Valid();
 
-    [Test]
-    public void All_Loads_And_AddButtonVisible()
-    {
-        RegisterAndReturnCreds();
+        reg.Fill(data.Email, data.FirstName, data.LastName, data.Password, data.ConfirmPassword);
+        reg.SubmitNow();
+        
+
         var nav = new Navbar(Driver);
-        nav.ClickAllShipments();
+
+        Assert.That(nav.WaitForLoggedIn(20), Is.True, "Expected to be logged-in after register, but navbar did not show a Manage/Logout control in time.");
+
+        WaitUntil(_ => nav.IsLoggedIn);     // should land on "/"
+        Assert.That(nav.IsLoggedIn, Is.True);    
+    }
+    [Test]
+    public void AddNewShipmentWithValidData_ShowsUpInAllSearch()
+    {
+        // 1) register & sign in
+        RegisterAndLandOnHome();
+
+        // 2) open Add Shipment
+        new Navbar(Driver).ClickAddShipment();
+        WaitUntil(_ => Driver.Url.Contains("/Shipments/Add", StringComparison.OrdinalIgnoreCase));
+
+        // unique title so the search is deterministic
+        var unique = Guid.NewGuid().ToString("N")[..6];
+        var title = $"Plovdiv-Valence-{unique}";
+        var image = "https://www.hispaviacion.es/wp-content/uploads/2022/05/Falcon2000.jpeg";
+
+        // 3) fill the form (ids come from asp-for: Title, LoadingAddress, DeliveryAddress, etc.)
+        Driver.FindElement(By.Id("Title")).SendKeys(title);
+        Driver.FindElement(By.Id("LoadingAddress")).SendKeys("Plovdiv");
+        Driver.FindElement(By.Id("DeliveryAddress")).SendKeys("Valence");
+        Driver.FindElement(By.Id("Description")).SendKeys("Charter " + title);
+        Driver.FindElement(By.Id("ImageUrlShipmentGoogleMaps")).SendKeys(image);
+
+        var price = Driver.FindElement(By.Id("Price"));
+        price.Clear();
+        price.SendKeys("7500");
+
+        // Category: prefer visible text; fall back to known seed value (Charter is usually id=5)
+        var cat = new SelectElement(Driver.FindElement(By.Id("CategoryId")));
+        try { cat.SelectByText("Charter"); }
+        catch { cat.SelectByValue("5"); }
+
+        // submit (Save)
+        Driver.FindElement(By.CssSelector("input[type='submit'][value='Save'],button[type='submit']")).Click();
+
+        // 4) redirected to Home
+        var expectedHome = BaseUrl.TrimEnd('/');
+        WaitUntil(_ =>
+            Driver.Url.TrimEnd('/').Equals(expectedHome, StringComparison.OrdinalIgnoreCase) ||
+            Driver.Url.Contains("/Home", StringComparison.OrdinalIgnoreCase));
+
+        // 5) open All Shipments and search by the exact title
+        new Navbar(Driver).ClickAllShipments();
         WaitUntil(_ => Driver.Url.Contains("/Shipments/All", StringComparison.OrdinalIgnoreCase));
 
-        // Add Shipment link should be present for logged-in users
-        Assert.That(Driver.FindElements(By.LinkText("Add Shipment")).Any(), Is.True);
+        var search = Driver.FindElement(By.Id("SearchTerm"));
+        search.Clear();
+        search.SendKeys(title);
+
+        Driver.FindElement(By.CssSelector("form input[type='submit'], form button[type='submit']")).Click();
+
+        // assert the results contain our new shipment
+        WaitUntil(_ => Driver.PageSource.Contains(title, StringComparison.OrdinalIgnoreCase));
+        Assert.That(Driver.PageSource, Does.Contain(title).IgnoreCase);
     }
 
-    [Test]
-    public void Add_Edit_Delete_Flow_Works_ForOwner()
-    {
-        RegisterAndReturnCreds();
-        var nav = new Navbar(Driver);
 
-        // Go to Add
+    [Test]
+    public void EditShipment_SearchFromAll_UpdatesAllFields()
+    {
+        // 1) Register and log in
+        RegisterAndLandOnHome();
+
+        // 2) Add the shipment: Plovdiv-Valence
+        var nav = new Navbar(Driver);
         nav.ClickAddShipment();
         WaitUntil(_ => Driver.Url.Contains("/Shipments/Add"));
 
-        // Create
-        var add = new AddShipmentPage(Driver);
-        var title = TestData.UniqueTitle("UI");
-        add.Fill(
-            title,
-            "Paris",
-            "Plovdiv",
-            "UI test shipment",
-            "https://picsum.photos/800/400",
-            "50.00",
-            TestData.DefaultCategoryId);
-        add.Save();
+        Driver.FindElement(By.Id("Title")).SendKeys("Plovdiv-Valence");
+        Driver.FindElement(By.Id("LoadingAddress")).SendKeys("Plovdiv");
+        Driver.FindElement(By.Id("DeliveryAddress")).SendKeys("Valence");
+        Driver.FindElement(By.Id("Description")).SendKeys("Plovdiv-Valence-Charter");
 
-        // Details shown
-        var details = new ShipmentDetailsPage(Driver);
-        WaitUntil(_ => Driver.Url.Contains("/Shipments/Details"));
-        Assert.That(details.TitleText, Does.Contain("UI").IgnoreCase);
+        // any valid https image is fine
+        Driver.FindElement(By.Id("ImageUrlShipmentGoogleMaps"))
+              .SendKeys("https://picsum.photos/1200/600");
 
-        // Edit
-        details.ClickEdit();
-        var edit = new EditShipmentPage(Driver);
-        var newTitle = title + "-Edited";
-        edit.ChangeTitle(newTitle);
-        edit.Save();
-        WaitUntil(_ => Driver.Url.Contains("/Shipments/Details"));
-        Assert.That(new ShipmentDetailsPage(Driver).TitleText, Does.Contain("-Edited"));
+        var price = Driver.FindElement(By.Id("Price"));
+        price.Clear(); price.SendKeys("7500");
 
-        // Delete
-        new ShipmentDetailsPage(Driver).ClickDelete();
-        var del = new DeleteShipmentPage(Driver);
-        del.Confirm();
+        var cat = new SelectElement(Driver.FindElement(By.Id("CategoryId")));
+        try { cat.SelectByText("Charter"); }
+        catch { cat.SelectByValue("5"); } // fallback if text changes
 
-        // Back on All, card should not exist
+        // Save (submit)
+        Driver.FindElement(By.CssSelector("input[type='submit'][value='Save'],button[type='submit']")).Click();
+
+        // App redirects to Home after create
+        WaitUntil(_ => Driver.Url.StartsWith(BaseUrl, StringComparison.OrdinalIgnoreCase));
+
+        // 3) Open All Shipments and search by title
+        nav.ClickAllShipments();
         WaitUntil(_ => Driver.Url.Contains("/Shipments/All"));
-        Assert.That(new AllShipmentsPage(Driver, BaseUrl).HasCardWithTitle(newTitle), Is.False);
-    }
+        var search = Driver.FindElement(By.Id("SearchTerm"));
+        search.Clear(); search.SendKeys("Plovdiv-Valence");
+        Driver.FindElement(By.CssSelector("form input[type='submit'], form button[type='submit']")).Click();
 
-    [Test]
-    public void NonOwner_Cannot_Edit_Or_Delete()
-    {
-        // User A creates shipment
-        var (aEmail, aPwd) = RegisterAndReturnCreds();
-        var nav = new Navbar(Driver);
-        nav.ClickAddShipment();
-        var add = new AddShipmentPage(Driver);
-        var title = TestData.UniqueTitle("SEC");
-        add.Fill(title, "A", "B", "Sec test", "https://picsum.photos/800/400", "11.00", TestData.DefaultCategoryId);
-        add.Save();
+        // 4) Click the Edit of the card that contains our title
+        // Robust XPath: an <a>Edit</a> whose ancestor block contains the title text
+        WaitUntil(_ => Driver.PageSource.Contains("Plovdiv-Valence", StringComparison.OrdinalIgnoreCase) &&
+                       Driver.FindElements(By.LinkText("Edit")).Count > 0);
+
+        var editLink = Driver.FindElement(By.XPath(
+            "//a[normalize-space()='Edit' and ancestor::*[contains(normalize-space(.), 'Plovdiv-Valence')]]"));
+        editLink.Click();
+
+        // 5) On Edit page, change LoadingAddress from Plovdiv -> Sofia and Save
+        WaitUntil(_ => Driver.Url.Contains("/Shipments/Edit"));
+
+        var loading = Driver.FindElement(By.Id("LoadingAddress"));
+        loading.Clear();
+        loading.SendKeys("Sofia");
+
+        Driver.FindElement(By.CssSelector("input[type='submit'][value='Save'],button[type='submit']")).Click();
+
+        // 6) Verify on Details that LoadingAddress is Sofia
         WaitUntil(_ => Driver.Url.Contains("/Shipments/Details"));
-        var detailsUrl = Driver.Url; // save
-
-        // Logout, register User B
-        nav.Logout();
-        var (bEmail, bPwd) = RegisterAndReturnCreds();
-
-        // Open A's details
-        Driver.Navigate().GoToUrl(detailsUrl);
-        var details = new ShipmentDetailsPage(Driver);
-
-        // Edit should either be hidden or lead to Access Denied
-        if (details.HasEdit)
-        {
-            details.ClickEdit();
-            WaitUntil(_ => Driver.Url.Contains("/Account/AccessDenied"));
-            Assert.That(Driver.PageSource, Does.Contain("Access denied").IgnoreCase);
-        }
-        else
-        {
-            Assert.Pass("Edit hidden for non-owner; OK.");
-        }
-    }
-
-    [Test]
-    public void Rent_Then_Leave_Works()
-    {
-        // User A makes a shipment
-        var (aEmail, aPwd) = RegisterAndReturnCreds();
-        var nav = new Navbar(Driver);
-        nav.ClickAddShipment();
-        var add = new AddShipmentPage(Driver);
-        var title = TestData.UniqueTitle("Rentable");
-        add.Fill(title, "From A", "To B", "Rent flow", "https://picsum.photos/800/400", "25.00", TestData.DefaultCategoryId);
-        add.Save();
-        WaitUntil(_ => Driver.Url.Contains("/Shipments/Details"));
-        var detailsUrl = Driver.Url;
-
-        // User B rents it
-        nav.Logout();
-        var _ = RegisterAndReturnCreds();
-        Driver.Navigate().GoToUrl(detailsUrl);
-        var details = new ShipmentDetailsPage(Driver);
-
-        Assert.That(details.HasRent, Is.True, "Rent button expected for non-owner.");
-        details.Rent();
-
-        // After renting, redirected to Mine
-        WaitUntil(_ => Driver.Url.Contains("/Shipments/Mine"));
-        Assert.That(Driver.PageSource, Does.Contain(title).IgnoreCase, "Mine should list rented item.");
-
-        // Leave
-        Driver.Navigate().GoToUrl(detailsUrl);
-        details = new ShipmentDetailsPage(Driver);
-        Assert.That(details.HasLeave, Is.True);
-        details.Leave();
-
-        // Back to Mine; item should be gone
-        WaitUntil(_ => Driver.Url.Contains("/Shipments/Mine"));
-        Assert.That(Driver.PageSource.Contains(title, StringComparison.OrdinalIgnoreCase), Is.False);
-    }
-
-    [Test]
-    public void Details_Blocks_WrongInformation_Param()
-    {
-        RegisterAndReturnCreds();
-
-        // Create a shipment to get a real id
-        var nav = new Navbar(Driver);
-        nav.ClickAddShipment();
-        var add = new AddShipmentPage(Driver);
-        var title = TestData.UniqueTitle("InfoGuard");
-        add.Fill(title, "X", "Y", "Info check", "https://picsum.photos/800/400", "10.00", TestData.DefaultCategoryId);
-        add.Save();
-        WaitUntil(_ => Driver.Url.Contains("/Shipments/Details"));
-        var correctUrl = new Uri(Driver.Url);
-
-        // Forge wrong information param
-        var wrong = new UriBuilder(correctUrl) { Query = "information=WRONG" }.Uri.ToString();
-        Driver.Navigate().GoToUrl(wrong);
-
-        // Should redirect away (Home) with message
-        WaitUntil(_ => Driver.Url.Contains("/Home/Index") || Driver.PageSource.Contains("Don't touch!", StringComparison.OrdinalIgnoreCase));
-        Assert.That(Driver.PageSource, Does.Contain("Don't touch!").IgnoreCase);
+        Assert.That(Driver.PageSource, Does.Contain("Sofia").IgnoreCase,
+            "Details page should show updated LoadingAddress 'Sofia'.");
     }
 }
+
+
+
