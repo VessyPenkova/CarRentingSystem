@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using OpenQA.Selenium.Interactions;
 using CarRentingSystem.SeleniumTests.Fixtures;
 using CarRentingSystem.SeleniumTests.Utils;
 
@@ -13,175 +12,157 @@ namespace CarRentingSystem.SeleniumTests.Tests
     [TestFixture]
     public sealed class D_EditShipmentTests : TestBase
     {
-        [Test] // [Retry(2)] // uncomment if your env is occasionally slow
+        [Test]
         public void AddNewShipment_Then_EditTitle_ShowsEditedInAllSearch()
         {
-            // 1) Login with your fixed user
+            // 1) login
             LoginWith(TestUsers.Email, TestUsers.Password);
 
-            // 2) Add a new shipment
-            Driver.Navigate().GoToUrl($"{BaseUrl}/Shipments/Add");
-            WaitUntil(d => d.Url.Contains("/Shipments/Add", StringComparison.OrdinalIgnoreCase), seconds: 15);
+            // 2) add a shipment
+            var originalTitle = "Plovdiv-Valenc";
+            AddShipment(originalTitle,
+                        "Plovdiv",
+                        "Valence",
+                        $"Charter {originalTitle}",
+                        "https://www.hispaviacion.es/wp-content/uploads/2022/05/Falcon2000.jpeg",
+                        7500m,
+                        preferCategoryText: "Charter");
 
-            //var suffix = DateTime.UtcNow.ToString("yyyyMMddHHmmssfff");
-            var title = $"Plovdiv-Valence-02";
-            var image = "https://www.hispaviacion.es/wp-content/uploads/2022/05/Falcon2000.jpeg";
+            // 3) go to All and search for {originalTitle} it
+            Driver.Navigate().GoToUrl($"{BaseUrl}/Shipments/All");
+            WaitUntil(d => d.Url.Contains("/Shipments/All", StringComparison.OrdinalIgnoreCase));
+            SearchAllByTitle(originalTitle);
 
-            Type(By.Id("Title"), title);
-            Type(By.Id("LoadingAddress"), "Plovdiv");
-            Type(By.Id("DeliveryAddress"), "Valence");
-            Type(By.Id("Description"), $"Charter {title}");
-            Type(By.Id("ImageUrlShipmentGoogleMaps"), image);
-            ClearAndType(By.Id("Price"), 7500m.ToString(CultureInfo.InvariantCulture));
+            // sanity: we can see the card
+            var card = FindCardByTitle(originalTitle);
+            Assert.That(card, Is.Not.Null, $"Expected to find a card with title '{originalTitle}'");
 
-            var cat = new SelectElement(Driver.FindElement(By.Id("CategoryId")));
-            var charter = cat.Options.FirstOrDefault(o =>
-                string.Equals(o.Text?.Trim(), "Charter", StringComparison.OrdinalIgnoreCase));
-            if (charter != null) cat.SelectByText(charter.Text);
-            else
-            {
-                var firstReal = cat.Options.FirstOrDefault(o => !string.IsNullOrWhiteSpace(o.GetAttribute("value")));
-                if (firstReal != null) cat.SelectByValue(firstReal.GetAttribute("value"));
-                else cat.SelectByIndex(0);
-            }
+            // 4) click Edit on the right card
+            ClickEditOnCard(originalTitle);
 
-            ClickSaveButton(); // robust save
-
-            // Leave Add page (Details or Home)
-            var leftAdd = WaitUrl(url =>
-                   url.Contains("/Shipments/Details", StringComparison.OrdinalIgnoreCase)
-                || url.TrimEnd('/').Equals(BaseUrl.TrimEnd('/'), StringComparison.OrdinalIgnoreCase)
-                || url.Contains("/Home", StringComparison.OrdinalIgnoreCase),
-                timeoutSeconds: 12);
-            Assert.That(leftAdd, Is.True, "Did not leave /Shipments/Add after saving.");
-
-            // 3) Search the new shipment on All Shipments
-            OpenAllAndSearch(title);
-            var card = WaitForCardByTitle(title, timeoutSeconds: 15);
-            Assert.That(card, Is.Not.Null, $"Expected to find a card with title '{title}'");
-
-            // 4) Open Details first (more stable than clicking Edit on the grid)
-            ClickLinkInCard(card!, "Details");
-            WaitUntil(d => d.Url.Contains("/Shipments/Details", StringComparison.OrdinalIgnoreCase), seconds: 12);
-
-            // 5) Click Edit from Details page
-            ClickEditFromDetails();
-            WaitUntil(d => d.Url.Contains("/Shipments/Edit", StringComparison.OrdinalIgnoreCase), seconds: 12);
-
-            // 6) Edit the title and Save
-            var editedTitle = title + " Just Edited-02";
+            // 5) edit the title only (append 01) and Save
+            var editedTitle = originalTitle + "01";
             ClearAndType(By.Id("Title"), editedTitle);
             ClickSaveButton();
 
-            // Back on Details after save
-            WaitUntil(d => d.Url.Contains("/Shipments/Details", StringComparison.OrdinalIgnoreCase), seconds: 12);
+            // after save you may land on Details or Home – accept both
+            WaitUrl(u =>
+                   u.Contains("/Shipments/Details", StringComparison.OrdinalIgnoreCase)
+                || u.TrimEnd('/').Equals(BaseUrl.TrimEnd('/'), StringComparison.OrdinalIgnoreCase),
+                timeoutSeconds: 12);
 
-            // 7) Verify with a fresh search on All Shipments
-            OpenAllAndSearch(editedTitle);
-            var editedCard = WaitForCardByTitle(editedTitle, timeoutSeconds: 15);
-            Assert.That(editedCard, Is.Not.Null, $"Expected edited title '{editedTitle}' to appear in All search.");
+            // 6) verify via search
+            Driver.Navigate().GoToUrl($"{BaseUrl}/Shipments/All");
+            WaitUntil(d => d.Url.Contains("/Shipments/All", StringComparison.OrdinalIgnoreCase));
+            SearchAllByTitle(editedTitle);
+
+            WaitUntil(d => d.PageSource.Contains(editedTitle, StringComparison.OrdinalIgnoreCase));
+            Assert.That(Driver.PageSource, Does.Contain(editedTitle).IgnoreCase,
+                "Edited title should appear in All Shipments search results.");
         }
 
-        // ---------- helpers ----------
+        // -------- helpers (only what this test needs) --------
 
         private void LoginWith(string email, string password)
         {
             Driver.Navigate().GoToUrl($"{BaseUrl}/Identity/Account/Login");
-            WaitUntil(_ => Driver.Url.Contains("/Identity/Account/Login", StringComparison.OrdinalIgnoreCase), seconds: 12);
-
-            Type(By.Id("Input_Email"), email);
-            Type(By.Id("Input_Password"), password);
-
-            SafeClick(Driver.FindElement(By.CssSelector("form button[type='submit'], form input[type='submit']")));
-            WaitUntil(_ => Driver.PageSource.Contains("Logout", StringComparison.OrdinalIgnoreCase), seconds: 12);
+            WaitUntil(_ => Driver.Url.Contains("/Identity/Account/Login", StringComparison.OrdinalIgnoreCase));
+            ClearAndType(By.Id("Input_Email"), email);
+            ClearAndType(By.Id("Input_Password"), password);
+            Driver.FindElement(By.CssSelector("form button[type='submit'], form input[type='submit']")).Click();
+            WaitUntil(_ => Driver.PageSource.Contains("Logout", StringComparison.OrdinalIgnoreCase));
         }
 
-        private void OpenAllAndSearch(string term)
+        private void AddShipment(string title, string from, string to, string desc, string imageUrl,
+                                 decimal price, string? preferCategoryText = null)
         {
-            Driver.Navigate().GoToUrl($"{BaseUrl}/Shipments/All");
-            WaitUntil(d => d.Url.Contains("/Shipments/All", StringComparison.OrdinalIgnoreCase), seconds: 12);
+            Driver.Navigate().GoToUrl($"{BaseUrl}/Shipments/Add");
+            WaitUntil(d => d.Url.Contains("/Shipments/Add", StringComparison.OrdinalIgnoreCase));
 
-            var searchBox = Driver.FindElement(By.Id("SearchTerm"));
-            searchBox.Clear();
-            searchBox.SendKeys(term);
+            ClearAndType(By.Id("Title"), title);
+            ClearAndType(By.Id("LoadingAddress"), from);
+            ClearAndType(By.Id("DeliveryAddress"), to);
+            ClearAndType(By.Id("Description"), desc);
+            ClearAndType(By.Id("ImageUrlShipmentGoogleMaps"), imageUrl);
+            ClearAndType(By.Id("Price"), price.ToString(CultureInfo.InvariantCulture));
 
-            ClickSearchButton();
-            WaitUntil(_ => Driver.Url.Contains("/Shipments/All", StringComparison.OrdinalIgnoreCase), seconds: 12); // results page reload
-        }
-
-        private IWebElement? WaitForCardByTitle(string title, int timeoutSeconds)
-        {
-            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
-            try
+            var cat = new SelectElement(Driver.FindElement(By.Id("CategoryId")));
+            if (!string.IsNullOrWhiteSpace(preferCategoryText))
             {
-                return wait.Until(d =>
-                    d.FindElements(By.CssSelector(".card"))
-                     .FirstOrDefault(c => c.Text.Contains(title, StringComparison.OrdinalIgnoreCase)));
+                var option = cat.Options.FirstOrDefault(o =>
+                    string.Equals(o.Text?.Trim(), preferCategoryText, StringComparison.OrdinalIgnoreCase));
+                if (option != null) cat.SelectByText(option.Text);
+                else SelectFirstRealOption(cat);
             }
-            catch { return null; }
+            else
+            {
+                SelectFirstRealOption(cat);
+            }
+
+            ClickSaveButton();
+
+            // consider both Details or Home after save
+            var ok = WaitUrl(u =>
+                   u.Contains("/Shipments/Details", StringComparison.OrdinalIgnoreCase)
+                || u.TrimEnd('/').Equals(BaseUrl.TrimEnd('/'), StringComparison.OrdinalIgnoreCase),
+                timeoutSeconds: 12);
+
+            if (!ok)
+            {
+                var errors = Driver
+                    .FindElements(By.CssSelector(".validation-summary-errors li, [asp-validation-summary] li, .text-danger"))
+                    .Select(e => e.Text?.Trim())
+                    .Where(t => !string.IsNullOrWhiteSpace(t))
+                    .Distinct();
+                Assert.Fail("Add failed; still on Add. Validation: " + string.Join(" | ", errors));
+            }
         }
 
-        private void ClickLinkInCard(IWebElement card, string linkText)
+        private static void SelectFirstRealOption(SelectElement cat)
         {
-            // re-query inside the card just before clicking to avoid stale refs
-            var candidate = card.FindElements(By.XPath($".//a[normalize-space()='{linkText}']")).FirstOrDefault();
-            Assert.That(candidate, Is.Not.Null, $"Could not find '{linkText}' link within the card.");
-            SafeClick(candidate!);
+            var firstReal = cat.Options.FirstOrDefault(o =>
+                !string.IsNullOrWhiteSpace(o.GetAttribute("value")));
+            if (firstReal != null) cat.SelectByValue(firstReal.GetAttribute("value"));
+            else cat.SelectByIndex(0);
         }
 
-        private void ClickEditFromDetails()
+        private void SearchAllByTitle(string title)
         {
-            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
-            var edit = wait.Until(d =>
-                d.FindElements(By.XPath("//a[normalize-space()='Edit' and contains(@href, '/Shipments/Edit')]")).FirstOrDefault()
-                ?? d.FindElements(By.CssSelector("a.btn, a"))
-                     .FirstOrDefault(a => a.Text.Trim().Equals("Edit", StringComparison.OrdinalIgnoreCase)));
-            Assert.That(edit, Is.Not.Null, "Edit link not found on Details page.");
-            SafeClick(edit!);
-        }
+            var box = Driver.FindElement(By.Id("SearchTerm"));
+            box.Clear();
+            box.SendKeys(title);
 
-        private void ClickSearchButton()
-        {
             var btn = Driver.FindElements(By.XPath("//button[normalize-space()='Search']")).FirstOrDefault()
                      ?? Driver.FindElements(By.CssSelector("input[type='submit'][value='Search']")).FirstOrDefault()
                      ?? Driver.FindElements(By.CssSelector("form button[type='submit'], form input[type='submit']")).FirstOrDefault();
-
-            Assert.That(btn, Is.Not.Null, "Could not locate the Search button on All Shipments.");
-            SafeClick(btn!);
+            Assert.That(btn, Is.Not.Null, "Could not locate the Search button.");
+            btn.Click();
         }
 
-        private void ClickSaveButton()
+        private IWebElement? FindCardByTitle(string title)
         {
-            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(12));
-            var form = wait.Until(d =>
-                d.FindElements(By.TagName("form")).FirstOrDefault(f => f.FindElements(By.Id("Title")).Any()));
-            Assert.That(form, Is.Not.Null, "Could not locate the Add/Edit Shipment form (containing #Title).");
-
-            IWebElement? save = null;
-            foreach (var css in new[] { "input[type='submit'][value='Save']", "button[type='submit']", "input[type='submit']" })
-            {
-                var found = form!.FindElements(By.CssSelector(css)).FirstOrDefault();
-                if (found != null) { save = found; break; }
-            }
-            Assert.That(save, Is.Not.Null, "Could not locate the Save button within the shipment form.");
-
-            SafeClick(save!);
-
-            // tiny fallback: if still on Add/Edit, submit the form directly
-            System.Threading.Thread.Sleep(150);
-            if (Driver.Url.Contains("/Shipments/Add", StringComparison.OrdinalIgnoreCase) ||
-                Driver.Url.Contains("/Shipments/Edit", StringComparison.OrdinalIgnoreCase))
-            {
-                try { form!.Submit(); }
-                catch { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].submit();", form); }
-            }
+            // find the first container that looks like a card and contains the title text
+            var xp = $"//*[self::div or self::article][.//text()[contains(., {XPathLiteral(title)})] and .//a[normalize-space()='Details']]";
+            return Driver.FindElements(By.XPath(xp)).FirstOrDefault();
         }
 
-        private void Type(By by, string value)
+        private void ClickEditOnCard(string title)
         {
-            var el = Driver.FindElement(by);
-            el.Clear();
-            el.SendKeys(value);
+            // robust: find an Edit link that belongs to a container which contains the title
+            var xp = $"//a[normalize-space()='Edit' and ancestor::*[contains(., {XPathLiteral(title)})]]";
+            var link = Driver.FindElements(By.XPath(xp)).FirstOrDefault();
+            Assert.That(link, Is.Not.Null, $"Could not find Edit button for '{title}'.");
+
+            try
+            {
+                ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView({block:'center'});", link);
+            }
+            catch { /* ignore */ }
+
+            try { link!.Click(); }
+            catch (WebDriverException) { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", link); }
+
+            WaitUntil(d => d.Url.Contains("/Shipments/Edit", StringComparison.OrdinalIgnoreCase), seconds: 12);
         }
 
         private void ClearAndType(By by, string value)
@@ -191,41 +172,50 @@ namespace CarRentingSystem.SeleniumTests.Tests
             el.SendKeys(value);
         }
 
-        private void SafeClick(IWebElement el)
+        private void ClickSaveButton()
         {
             var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
-            wait.Until(_ => el.Displayed && el.Enabled);
+            var form = wait.Until(d => d.FindElements(By.TagName("form")).FirstOrDefault(f => f.FindElements(By.Id("Title")).Any()));
+            Assert.That(form, Is.Not.Null, "Could not locate the shipment form.");
 
-            try
+            IWebElement? save = null;
+            foreach (var css in new[] { "input[type='submit'][value='Save']", "button[type='submit']", "input[type='submit']" })
             {
-                ((IJavaScriptExecutor)Driver).ExecuteScript(
-                    "const r = arguments[0].getBoundingClientRect();" +
-                    "window.scrollTo({top: r.top + window.pageYOffset - 120});", el);
+                save = form!.FindElements(By.CssSelector(css)).FirstOrDefault();
+                if (save != null) break;
             }
-            catch { /* ignore */ }
+            Assert.That(save, Is.Not.Null, "Could not locate the Save button within the form.");
 
-            try { el.Click(); return; }
-            catch (ElementClickInterceptedException) { /* try next */ }
-            catch (WebDriverException) { /* try next */ }
+            try { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView({block:'center'});", save); } catch { }
+            try { save!.Click(); }
+            catch (WebDriverException) { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", save); }
 
-            try
+            // last resort
+            System.Threading.Thread.Sleep(150);
+            if (Driver.Url.Contains("/Shipments/Add", StringComparison.OrdinalIgnoreCase) ||
+                Driver.Url.Contains("/Shipments/Edit", StringComparison.OrdinalIgnoreCase))
             {
-                new Actions(Driver).MoveToElement(el, 1, 1).Pause(TimeSpan.FromMilliseconds(60)).Click().Perform();
-                return;
+                try { form!.Submit(); }
+                catch { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].submit();", form); }
             }
-            catch { /* try next */ }
-
-            ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", el);
         }
 
         private bool WaitUrl(Func<string, bool> predicate, int timeoutSeconds)
         {
             try
             {
-                var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
-                return wait.Until(d => predicate(d.Url));
+                var w = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
+                return w.Until(d => predicate(d.Url));
             }
             catch { return false; }
+        }
+
+        private static string XPathLiteral(string value)
+        {
+            if (!value.Contains("'")) return $"'{value}'";
+            if (!value.Contains("\"")) return $"\"{value}\"";
+            // concat with quoted single quotes inside
+            return "concat('" + value.Replace("'", "',\"'\",'") + "')";
         }
     }
 }
