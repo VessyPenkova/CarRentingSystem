@@ -1,11 +1,8 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using NUnit.Framework;
+﻿using CarRentingSystem.SeleniumTests.Fixtures;
+using CarRentingSystem.SeleniumTests.Utils;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using CarRentingSystem.SeleniumTests.Fixtures;
-using CarRentingSystem.SeleniumTests.Utils;
+using System.Globalization;
 
 namespace CarRentingSystem.SeleniumTests.Tests
 {
@@ -19,7 +16,8 @@ namespace CarRentingSystem.SeleniumTests.Tests
             LoginWith(TestUsers.Email, TestUsers.Password);
 
             // 2) add a shipment
-            var originalTitle = "Plovdiv-Valenc";
+            var originalTitle = "Plovdiv-Valence";
+
             AddShipment(originalTitle,
                         "Plovdiv",
                         "Valence",
