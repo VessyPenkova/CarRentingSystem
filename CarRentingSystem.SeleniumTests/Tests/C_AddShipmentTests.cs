@@ -1,11 +1,12 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
+﻿using CarRentingSystem.SeleniumTests.Fixtures;
+using CarRentingSystem.SeleniumTests.Pages.Layout;
+using CarRentingSystem.SeleniumTests.Utils;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using CarRentingSystem.SeleniumTests.Fixtures;
-using CarRentingSystem.SeleniumTests.Utils;
+using System;
+using System.Globalization;
+using System.Linq;
 
 namespace CarRentingSystem.SeleniumTests.Tests
 {
@@ -29,7 +30,7 @@ namespace CarRentingSystem.SeleniumTests.Tests
             // 3) Fill the form (ids from asp-for in your partial)
             Type(By.Id("Title"), title);
             Type(By.Id("LoadingAddress"), "Plovdiv");
-            Type(By.Id("DeliveryAddress"), "Valence");
+            Type(By.Id("DeliveryAddress"), "Madrid");
             Type(By.Id("Description"), $"Charter {title}");
             Type(By.Id("ImageUrlShipmentGoogleMaps"), image);
 
@@ -86,6 +87,9 @@ namespace CarRentingSystem.SeleniumTests.Tests
             WaitUntil(d => d.PageSource.Contains(title, StringComparison.OrdinalIgnoreCase));
             Assert.That(Driver.PageSource, Does.Contain(title).IgnoreCase,
                 "Newly added shipment should appear in All Shipments search results.");
+
+
+            Logout();
         }
 
         // ---------- helpers ----------
@@ -189,6 +193,28 @@ namespace CarRentingSystem.SeleniumTests.Tests
                 return wait.Until(d => predicate(d.Url));
             }
             catch { return false; }
+        }
+
+
+        // ---- helper ----
+        private void Logout()
+        {
+            // Go to a page that has the navbar
+            Driver.Navigate().GoToUrl(BaseUrl + "/");
+
+            var nav = new Navbar(Driver);
+            if (!nav.IsLoggedIn) return;   // already logged out
+
+            // Try page-object logout first
+            try
+            {
+                nav.Logout();
+            }
+            finally
+            {
+                // Wait until navbar reflects logged-out state
+                WaitUntil(_ => !new Navbar(Driver).IsLoggedIn);
+            }
         }
     }
 }

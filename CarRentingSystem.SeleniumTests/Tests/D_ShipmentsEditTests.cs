@@ -20,7 +20,7 @@ namespace CarRentingSystem.SeleniumTests.Tests
 
             AddShipment(originalTitle,
                         "Plovdiv",
-                        "Valence",
+                        "Paris",
                         $"Charter {originalTitle}",
                         "https://www.hispaviacion.es/wp-content/uploads/2022/05/Falcon2000.jpeg",
                         7500m,

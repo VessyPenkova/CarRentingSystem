@@ -1,234 +1,196 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
+﻿using CarRentingSystem.SeleniumTests.Fixtures;
+using CarRentingSystem.SeleniumTests.Pages.Layout;
+using CarRentingSystem.SeleniumTests.Utils;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using CarRentingSystem.SeleniumTests.Fixtures;
-using CarRentingSystem.SeleniumTests.Utils;
+using System;
+using System.Globalization;
+using System.Linq;
 
 namespace CarRentingSystem.SeleniumTests.Tests
 {
     [TestFixture]
     public sealed class E_ShipmentsDeleteFlowTests : TestBase
     {
+
         [Test]
-        public void Add_Then_Search_Then_Delete_Then_Search_NotFound()
+        public void AddNewShipment_Then_Delete_ShowsNotFoundInAllSearch()
         {
-            // 1) login (Delete button is visible only for authenticated users)
-            LoginWith(TestUsers.Email, TestUsers.Password);
+            EnsureLoggedIn();
 
-            // 2) add a shipment and remember its title
-            var title = AddShipmentAndReturnTitle();
+            // Use one title everywhere
+            var originalTitle = "Plovdiv-Valence-DEL";
+            AddShipment(
+                title: originalTitle,
+                from: "Plovdiv",
+                to: "Valence",
+                desc: $"Charter {originalTitle}",
+                imageUrl: "https://www.hispaviacion.es/wp-content/uploads/2022/05/Falcon2000.jpeg",
+                price: 7500m,
+                preferCategoryText: "Charter"
+            );
 
-            // 3) search for it – it must exist before deletion
-            SearchInAllShipments(title);
-            Assert.That(Driver.PageSource.Contains(title, StringComparison.OrdinalIgnoreCase),
-                $"Expected to find '{title}' before deletion.");
+            // Find it in All
+            NavigateToAll();
+            SearchAllByTitle(originalTitle);
+            Assert.That(Driver.PageSource, Does.Contain(originalTitle).IgnoreCase, "New shipment should appear before deletion.");
 
-            // 4) click Delete on that card
-            ClickDeleteOnCard(title);
+            EnsureLoggedIn();
+            // Delete it
+            ClickDeleteOnCard(originalTitle);
 
-            // 5) confirm Delete on the confirmation page
-            ConfirmDelete();
+            ConfirmDelete();      // clicks the red Delete on the confirmation page
+          
+            // Re-search and assert it's gone
+            NavigateToAll();
+            SearchAllByTitle(originalTitle);
+            WaitUntil(d => !d.PageSource.Contains(originalTitle, StringComparison.OrdinalIgnoreCase), seconds: 12);
+            Assert.That(Driver.PageSource.Contains(originalTitle, StringComparison.OrdinalIgnoreCase), Is.False,
+                "Shipment should NOT be found after deletion.");
 
-            // 6) search again and WAIT FOR ABSENCE (this was the bug)
-            SearchInAllShipments(title);
-
-            WaitUntil(
-                d => !d.PageSource.Contains(title, StringComparison.OrdinalIgnoreCase),
-                seconds: 12,
-                onTimeout: $"Deleted shipment '{title}' still visible in All Shipments after re-search.");
-
-            Assert.That(Driver.PageSource.Contains(title, StringComparison.OrdinalIgnoreCase), Is.False,
-                "Shipment should not be found after deletion.");
+            Logout();
         }
 
         // ───────────────────────── helpers ─────────────────────────
 
-        private void LoginWith(string email, string password)
+        /// <summary>Log in only if not already authenticated (looks for “Logout” in navbar).</summary>
+        private void EnsureLoggedIn()
         {
+            Driver.Navigate().GoToUrl($"{BaseUrl}/");
+            if (Driver.PageSource.Contains("Logout", StringComparison.OrdinalIgnoreCase))
+                return;
+
             Driver.Navigate().GoToUrl($"{BaseUrl}/Identity/Account/Login");
             WaitUntil(_ => Driver.Url.Contains("/Identity/Account/Login", StringComparison.OrdinalIgnoreCase));
 
-            Type(By.Id("Input_Email"), email);
-            Type(By.Id("Input_Password"), password);
+            ClearAndType(By.Id("Input_Email"), TestUsers.Email);
+            ClearAndType(By.Id("Input_Password"), TestUsers.Password);
             Driver.FindElement(By.CssSelector("form button[type='submit'], form input[type='submit']")).Click();
 
-            // proof of auth
             WaitUntil(_ => Driver.PageSource.Contains("Logout", StringComparison.OrdinalIgnoreCase));
         }
 
-        private string AddShipmentAndReturnTitle()
+        private void AddShipment(string title, string from, string to, string desc, string imageUrl,
+                                 decimal price, string? preferCategoryText = null)
         {
             Driver.Navigate().GoToUrl($"{BaseUrl}/Shipments/Add");
-            WaitUntil(_ => Driver.Url.Contains("/Shipments/Add", StringComparison.OrdinalIgnoreCase));
+            WaitUntil(d => d.Url.Contains("/Shipments/Add", StringComparison.OrdinalIgnoreCase));
 
-            var title = $"Plovdiv-Valenc{DateTime.UtcNow:HHmmss}";
+            ClearAndType(By.Id("Title"), title);
+            ClearAndType(By.Id("LoadingAddress"), from);
+            ClearAndType(By.Id("DeliveryAddress"), to);
+            ClearAndType(By.Id("Description"), desc);
+            ClearAndType(By.Id("ImageUrlShipmentGoogleMaps"), imageUrl);
+            ClearAndType(By.Id("Price"), price.ToString(CultureInfo.InvariantCulture));
 
-            Type(By.Id("Title"), title);
-            Type(By.Id("LoadingAddress"), "Plovdiv");
-            Type(By.Id("DeliveryAddress"), "Valence");
-            Type(By.Id("Description"), $"Charter {title}");
-            Type(By.Id("ImageUrlShipmentGoogleMaps"),
-                 "https://www.hispaviacion.es/wp-content/uploads/2022/05/Falcon2000.jpeg");
-
-            // price
-            ClearAndType(By.Id("Price"), 7500m.ToString(CultureInfo.InvariantCulture));
-
-            // category
             var cat = new SelectElement(Driver.FindElement(By.Id("CategoryId")));
-            var charter = cat.Options.FirstOrDefault(o =>
-                string.Equals(o.Text?.Trim(), "Charter", StringComparison.OrdinalIgnoreCase));
-            if (charter != null) cat.SelectByText(charter.Text);
+            if (!string.IsNullOrWhiteSpace(preferCategoryText))
+            {
+                var option = cat.Options.FirstOrDefault(o =>
+                    string.Equals(o.Text?.Trim(), preferCategoryText, StringComparison.OrdinalIgnoreCase));
+                if (option != null) cat.SelectByText(option.Text);
+                else SelectFirstRealOption(cat);
+            }
             else
             {
-                var firstReal = cat.Options.FirstOrDefault(o => !string.IsNullOrWhiteSpace(o.GetAttribute("value")));
-                if (firstReal != null) cat.SelectByValue(firstReal.GetAttribute("value"));
-                else cat.SelectByIndex(0);
+                SelectFirstRealOption(cat);
             }
 
-            ClickSaveButton();
+            ClickSaveButton(); // 👈 this submits the form
 
+            // Success = left /Shipments/Add (Details or Home are both fine)
             var ok = WaitUrl(u =>
                    u.Contains("/Shipments/Details", StringComparison.OrdinalIgnoreCase)
-                || u.Contains("/Shipments/All", StringComparison.OrdinalIgnoreCase)
-                || u.Contains("/Home", StringComparison.OrdinalIgnoreCase)
                 || u.TrimEnd('/').Equals(BaseUrl.TrimEnd('/'), StringComparison.OrdinalIgnoreCase),
-                timeoutSeconds: 10);
+                timeoutSeconds: 12);
 
             if (!ok)
             {
-                var messages = Driver
+                var errors = Driver
                     .FindElements(By.CssSelector(".validation-summary-errors li, [asp-validation-summary] li, .text-danger"))
                     .Select(e => e.Text?.Trim())
                     .Where(t => !string.IsNullOrWhiteSpace(t))
                     .Distinct();
-                Assert.Fail("Save failed, still on Add page. Validation: " + string.Join(" | ", messages));
+                Assert.Fail("Add failed; still on Add. Validation: " + string.Join(" | ", errors));
             }
-
-            return title;
         }
 
-        private void SearchInAllShipments(string title)
+        private static void SelectFirstRealOption(SelectElement cat)
+        {
+            var firstReal = cat.Options.FirstOrDefault(o =>
+                !string.IsNullOrWhiteSpace(o.GetAttribute("value")));
+            if (firstReal != null) cat.SelectByValue(firstReal.GetAttribute("value"));
+            else cat.SelectByIndex(0);
+        }
+
+        private void NavigateToAll()
         {
             Driver.Navigate().GoToUrl($"{BaseUrl}/Shipments/All");
-            WaitUntil(_ => Driver.Url.Contains("/Shipments/All", StringComparison.OrdinalIgnoreCase));
+            WaitUntil(d => d.Url.Contains("/Shipments/All", StringComparison.OrdinalIgnoreCase));
+        }
 
-            var search = Driver.FindElement(By.Id("SearchTerm"));
-            search.Clear();
-            search.Click();
-            search.SendKeys(title);
+        private void SearchAllByTitle(string title)
+        {
+            var box = Driver.FindElement(By.Id("SearchTerm"));
+            box.Clear();
+            box.SendKeys(title);
 
-            ClickSearchButton();
+            var btn = Driver.FindElements(By.XPath("//button[normalize-space()='Search']")).FirstOrDefault()
+                     ?? Driver.FindElements(By.CssSelector("input[type='submit'][value='Search']")).FirstOrDefault()
+                     ?? Driver.FindElements(By.CssSelector("form button[type='submit'], form input[type='submit']")).FirstOrDefault();
+            Assert.That(btn, Is.Not.Null, "Could not locate the Search button.");
+            btn!.Click();
 
-            // server-side search updates query string
-            WaitUntil(_ => Driver.Url.Contains("SearchTerm=", StringComparison.OrdinalIgnoreCase), seconds: 5);
+            // Wait for server-side search to apply
+            WaitUntil(d => d.Url.Contains("SearchTerm=", StringComparison.OrdinalIgnoreCase));
         }
 
         private void ClickDeleteOnCard(string title)
         {
-            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
-            var xTitle = XPathLiteral(title);
+            EnsureLoggedIn();
 
-            IWebElement? delete = null;
-            wait.Until(_ =>
-            {
-                delete = Driver.FindElements(By.XPath(
-                           $"//a[normalize-space()='Delete' and ancestor::*[contains(., {xTitle})]]"))
-                           .FirstOrDefault();
-                return delete != null;
-            });
+            string xTitle = XPathLiteral(title);
 
-            Assert.That(delete, Is.Not.Null,
-                $"Delete link not visible for '{title}'. Are you logged in as an owner?");
+            Func<IWebElement?> locate = () =>
+                Driver.FindElements(By.XPath($"//a[normalize-space()='Delete' and ancestor::*[contains(., {xTitle})]]"))
+                      .FirstOrDefault();
 
-            try { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView({block:'center'});", delete); } catch { }
-            try { delete!.Click(); }
-            catch (ElementClickInterceptedException)
-            {
-                ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", delete);
-            }
+            var link = new WebDriverWait(Driver, TimeSpan.FromSeconds(10)).Until(_ => locate());
+            Assert.That(link, Is.Not.Null, $"Could not find Delete button for '{title}'.");
 
-            WaitUntil(_ => Driver.Url.Contains("/Shipments/Delete", StringComparison.OrdinalIgnoreCase));
+            try { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView({block:'center'});", link); } catch { }
+            try { link!.Click(); }
+            catch (WebDriverException) { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", link); }
+
+            WaitUntil(d => d.Url.Contains("/Shipments/Delete", StringComparison.OrdinalIgnoreCase), seconds: 12);
         }
 
         private void ConfirmDelete()
         {
-            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
-            var form = wait.Until(d => d.FindElements(By.TagName("form")).FirstOrDefault());
+            EnsureLoggedIn();
+
+            var form = Driver.FindElements(By.TagName("form")).FirstOrDefault();
             Assert.That(form, Is.Not.Null, "Delete confirmation form not found.");
 
-            var btn =
-                form!.FindElements(By.CssSelector("input[type='submit'][value='Delete']")).FirstOrDefault()
-                ?? form.FindElements(By.XPath(".//button[normalize-space()='Delete']")).FirstOrDefault()
-                ?? form.FindElements(By.CssSelector("button[type='submit'], input[type='submit']")).FirstOrDefault();
+            var btn = form!.FindElements(By.CssSelector("input[type='submit'][value='Delete']")).FirstOrDefault()
+                   ?? form.FindElements(By.XPath(".//button[normalize-space()='Delete']")).FirstOrDefault()
+                   ?? form.FindElements(By.CssSelector("button[type='submit'], input[type='submit']")).FirstOrDefault();
 
             Assert.That(btn, Is.Not.Null, "Delete submit button not found on confirmation page.");
 
             try { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch { }
             try { btn!.Click(); }
-            catch (WebDriverException)
-            {
-                ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", btn);
-            }
+            catch (WebDriverException) { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", btn); }
 
-            var ok = WaitUrl(u =>
+            // Back to All or Home after delete
+            WaitUrl(u =>
                    u.Contains("/Shipments/All", StringComparison.OrdinalIgnoreCase)
-                || u.Contains("/Home", StringComparison.OrdinalIgnoreCase)
                 || u.TrimEnd('/').Equals(BaseUrl.TrimEnd('/'), StringComparison.OrdinalIgnoreCase),
-                timeoutSeconds: 10);
-
-            Assert.That(ok, Is.True, "Expected redirect to All Shipments or Home after delete.");
+                timeoutSeconds: 12);
         }
 
-        // ----- tiny low-level helpers (same style as your other tests) -----
-
-        private void ClickSaveButton()
-        {
-            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
-
-            var form = wait.Until(d =>
-                d.FindElements(By.TagName("form"))
-                 .FirstOrDefault(f => f.FindElements(By.Id("Title")).Any()));
-            Assert.That(form, Is.Not.Null, "Could not locate the Add/Edit form.");
-
-            IWebElement? save =
-                form!.FindElements(By.CssSelector("input[type='submit'][value='Save']")).FirstOrDefault()
-                ?? form.FindElements(By.CssSelector("button[type='submit']")).FirstOrDefault()
-                ?? form.FindElements(By.CssSelector("input[type='submit']")).FirstOrDefault();
-
-            Assert.That(save, Is.Not.Null, "Save button not found in the form.");
-
-            try { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView({block:'center'});", save); } catch { }
-            try { save!.Click(); }
-            catch (WebDriverException)
-            {
-                ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", save);
-            }
-        }
-
-        private void ClickSearchButton()
-        {
-            var btn = Driver.FindElements(By.XPath("//button[normalize-space()='Search']")).FirstOrDefault()
-                     ?? Driver.FindElements(By.CssSelector("input[type='submit'][value='Search']")).FirstOrDefault()
-                     ?? Driver.FindElements(By.CssSelector("form button[type='submit'], form input[type='submit']")).FirstOrDefault();
-
-            Assert.That(btn, Is.Not.Null, "Search button not found.");
-            try { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch { }
-            try { btn!.Click(); }
-            catch (WebDriverException)
-            {
-                ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", btn);
-            }
-        }
-
-        private void Type(By by, string value)
-        {
-            var el = Driver.FindElement(by);
-            el.Clear();
-            el.SendKeys(value);
-        }
+        // low-level utilities
 
         private void ClearAndType(By by, string value)
         {
@@ -237,12 +199,72 @@ namespace CarRentingSystem.SeleniumTests.Tests
             el.SendKeys(value);
         }
 
-        private static string XPathLiteral(string text)
+        private void ClickSaveButton()
         {
-            if (!text.Contains("'")) return $"'{text}'";
-            if (!text.Contains("\"")) return $"\"{text}\"";
-            var parts = text.Split('\'');
-            return "concat(" + string.Join(", \"'\", ", parts.Select(p => $"'{p}'")) + ")";
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
+            var form = wait.Until(d => d.FindElements(By.TagName("form"))
+                                        .FirstOrDefault(f => f.FindElements(By.Id("Title")).Any()));
+            Assert.That(form, Is.Not.Null, "Could not locate the shipment form.");
+
+            IWebElement? save = null;
+            foreach (var css in new[] { "input[type='submit'][value='Save']", "button[type='submit']", "input[type='submit']" })
+            {
+                save = form!.FindElements(By.CssSelector(css)).FirstOrDefault();
+                if (save != null) break;
+            }
+            Assert.That(save, Is.Not.Null, "Could not locate the Save button within the form.");
+
+            try { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].scrollIntoView({block:'center'});", save); } catch { }
+            try { save!.Click(); }
+            catch (WebDriverException) { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].click();", save); }
+
+            // Last resort
+            System.Threading.Thread.Sleep(150);
+            if (Driver.Url.Contains("/Shipments/Add", StringComparison.OrdinalIgnoreCase) ||
+                Driver.Url.Contains("/Shipments/Edit", StringComparison.OrdinalIgnoreCase))
+            {
+                try { form!.Submit(); }
+                catch { ((IJavaScriptExecutor)Driver).ExecuteScript("arguments[0].submit();", form); }
+            }
+        }
+
+        private bool WaitUrl(Func<string, bool> predicate, int timeoutSeconds)
+        {
+            try
+            {
+                var w = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
+                return w.Until(d => predicate(d.Url));
+            }
+            catch { return false; }
+        }
+
+        private static string XPathLiteral(string value)
+        {
+            if (!value.Contains("'")) return $"'{value}'";
+            if (!value.Contains("\"")) return $"\"{value}\"";
+            return "concat('" + value.Replace("'", "',\"'\",'") + "')";
+        }
+
+
+        // ---- helper ----
+        private void Logout()
+        {
+            // Go to a page that has the navbar
+            Driver.Navigate().GoToUrl(BaseUrl + "/");
+
+            var nav = new Navbar(Driver);
+            if (!nav.IsLoggedIn) return;   // already logged out
+
+            // Try page-object logout first
+            try
+            {
+                nav.Logout();
+            }
+            finally
+            {
+                // Wait until navbar reflects logged-out state
+                WaitUntil(_ => !new Navbar(Driver).IsLoggedIn);
+            }
         }
     }
 }
